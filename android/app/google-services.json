@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "788673720759",
+    "project_id": "kaiu-8295c",
+    "storage_bucket": "kaiu-8295c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788673720759:android:b8337c72a976707e3e3832",
+        "android_client_info": {
+          "package_name": "com.example.kaiu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAp3naexhEQ9xVdwTzsyD4z8UC3xyMyECI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
