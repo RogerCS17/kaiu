@@ -1,7 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
-import 'package:kaiu/pages/employee_obsoleto.dart';
-import "package:kaiu/services/database.dart";
+import 'package:kaiu/src/ui/pages/employee_obsoleto.dart';
+import 'package:kaiu/src/core/services/database.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

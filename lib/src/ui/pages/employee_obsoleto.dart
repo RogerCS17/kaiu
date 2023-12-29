@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:fluttertoast/fluttertoast.dart";
-import "package:kaiu/services/database.dart";
+import 'package:kaiu/src/core/services/database.dart';
 import "package:random_string/random_string.dart";
 
 class Employee extends StatefulWidget {
