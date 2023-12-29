@@ -53,8 +53,6 @@ class _HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     "Name: " + ds["Name"],
@@ -62,6 +60,7 @@ class _HomeState extends State<Home> {
                                         color: Colors.blue,
                                         fontWeight: FontWeight.bold),
                                   ),
+                                  Spacer(),
                                   GestureDetector(
                                     onTap: () {
                                       namecontroller.text = ds["Name"];
@@ -73,7 +72,19 @@ class _HomeState extends State<Home> {
                                       Icons.edit,
                                       color: Colors.orange,
                                     ),
-                                  )
+                                  ),
+                                  SizedBox(
+                                    width: 5.0,
+                                  ),
+                                  GestureDetector(
+                                      onTap: () async {
+                                        await DatabaseMethods()
+                                            .deleteEmployeeDetail(ds["id"]);
+                                      },
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: Colors.orange,
+                                      ))
                                 ],
                               ),
                               Text(
@@ -247,23 +258,25 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20,),
-                  ElevatedButton(
-                    onPressed: () async{
-                      Map<String, dynamic> updateInfo = {
-                        "Name": namecontroller.text,
-                        "Age": agecontroller.text,
-                        "Location": locationcontroller.text,
-                        "id": id,
-                      };
-                      await DatabaseMethods().updateEmployeeDetail(id, updateInfo).then((value){
-                        print(value);
-                        Navigator.pop(context);
-                      });
-                  }, 
-                    child: Text("Acción")
+                  SizedBox(
+                    height: 20,
                   ),
-
+                  ElevatedButton(
+                      onPressed: () async {
+                        Map<String, dynamic> updateInfo = {
+                          "Name": namecontroller.text,
+                          "Age": agecontroller.text,
+                          "Location": locationcontroller.text,
+                          "id": id,
+                        };
+                        await DatabaseMethods()
+                            .updateEmployeeDetail(id, updateInfo)
+                            .then((value) {
+                          print(value);
+                          Navigator.pop(context);
+                        });
+                      },
+                      child: Text("Acción")),
                 ],
               ),
             ),
