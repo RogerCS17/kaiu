@@ -12,6 +12,7 @@ class ThemeController {
   //¿Que es Value Notifier?
   ValueNotifier<bool> brightness = ValueNotifier<bool>(true);
 
+  //Getter
   bool get brightnessValue => brightness.value;
 
   Color background() =>

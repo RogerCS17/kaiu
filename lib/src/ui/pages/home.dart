@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/data.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
-import 'package:kaiu/src/ui/pages/UltraSelector.dart';
-import 'package:kaiu/src/ui/widget/logo.dart';
+import 'package:kaiu/src/ui/pages/ultra_selector.dart';
+import 'package:kaiu/src/ui/widget/Buttons/simple_button.dart';
+import 'package:kaiu/src/ui/widget/Logo/logo.dart';
 
 class Home extends StatelessWidget {
   final themeController = ThemeController.instance;
@@ -17,6 +18,7 @@ class Home extends StatelessWidget {
           return Scaffold(
             backgroundColor: theme.background(),
             appBar: AppBar(
+              //Botones de Acción Barra Superior. 
               actions: [
                 IconButton(
                     onPressed: () {
@@ -26,6 +28,7 @@ class Home extends StatelessWidget {
                         ? Icon(Icons.wb_sunny)
                         : Icon(Icons.nightlight_round))
               ],
+              //Configuraciones de la Barra Superior
               backgroundColor: theme.background(),
               title: Text(
                 "Página Inicio",
@@ -35,6 +38,7 @@ class Home extends StatelessWidget {
                 color: theme.textPrimary(),
               ),
             ),
+            //Cuerpo de la Página. 
             body: SizedBox(
               height: double.infinity,
               width: double.infinity,
@@ -42,7 +46,7 @@ class Home extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Logo(),
+                  Logo(), //Logo Widget
                   Flexible(
                     child: Container(
                       padding: EdgeInsets.only(top: 20, bottom: 12),
@@ -64,21 +68,12 @@ class Home extends StatelessWidget {
                         style:
                             TextStyle(fontSize: 18, color: theme.textPrimary()),
                       )),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => UltraSelector()));
-                        //themeController.toggleTheme();
-                      },
-                      child: Text(
-                        "Comenzar",
-                        style: TextStyle(color: Colors.white),
-                      )),
+                  SimpleButton( //Simple Button Widget
+                    title: "Comenzar",
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => UltraSelector()));
+                    },
+                  ),
                   Container(
                       padding: EdgeInsets.only(
                         left: 12,

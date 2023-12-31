@@ -12,6 +12,7 @@ class UltraSelector extends StatelessWidget {
         builder: ((context, value, child) {
           return Scaffold(
             backgroundColor: theme.background(),
+            //Teclado sin Dimensión
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
               actions: [

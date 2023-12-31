@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
+import 'package:kaiu/src/ui/configure.dart';
 
 class Logo extends StatelessWidget {
   const Logo({super.key});
 
   @override
   Widget build(BuildContext context) {
+    //Traemos una Instancia del Controlador de Tema
     final theme = ThemeController.instance;
     return Row(
+      //Filas Centradas
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        //Texto Simple
         Container(
           padding: EdgeInsets.only(left: 7, right: 7),
           child: Text(
@@ -20,10 +24,11 @@ class Logo extends StatelessWidget {
                 color: theme.textPrimary()),
           ),
         ),
+        //Texto Bordeado
         Container(
           padding: EdgeInsets.only(left: 16, right: 16),
           decoration: BoxDecoration(
-              color: Colors.red, borderRadius: BorderRadius.circular(17)),
+              color: Configure.ultraRed, borderRadius: BorderRadius.circular(17)),
           child: Text(
             "U",
             textAlign: TextAlign.center,
