@@ -1,0 +1,1 @@
+enum StatusNetwork{connected, noInternet, exception}

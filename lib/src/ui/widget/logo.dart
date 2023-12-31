@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:kaiu/src/core/controllers/theme_controller.dart';
 
 class Logo extends StatelessWidget {
-  final String letter;
-  const Logo({super.key, this.letter = ""});
+  const Logo({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = ThemeController.instance;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -14,15 +15,18 @@ class Logo extends StatelessWidget {
           child: Text(
             "Kai",
             style: TextStyle(
-                fontSize: 50, fontWeight: FontWeight.bold, color: Colors.black),
+                fontSize: 50,
+                fontWeight: FontWeight.bold,
+                color: theme.textPrimary()),
           ),
         ),
         Container(
-          padding: EdgeInsets.only(left: 15, right: 15),
+          padding: EdgeInsets.only(left: 16, right: 16),
           decoration: BoxDecoration(
-              color: Colors.red, borderRadius: BorderRadius.circular(10)),
+              color: Colors.red, borderRadius: BorderRadius.circular(17)),
           child: Text(
             "U",
+            textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 45, fontWeight: FontWeight.bold, color: Colors.white),
           ),
