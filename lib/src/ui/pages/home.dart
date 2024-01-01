@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/data.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
+import 'package:kaiu/src/core/services/database.dart';
 import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
 import 'package:kaiu/src/ui/widget/Buttons/simple_button.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
@@ -18,7 +19,7 @@ class Home extends StatelessWidget {
           return Scaffold(
             backgroundColor: theme.background(),
             appBar: AppBar(
-              //Botones de Acción Barra Superior. 
+              //Botones de Acción Barra Superior.
               actions: [
                 IconButton(
                     onPressed: () {
@@ -38,7 +39,7 @@ class Home extends StatelessWidget {
                 color: theme.textPrimary(),
               ),
             ),
-            //Cuerpo de la Página. 
+            //Cuerpo de la Página.
             body: SizedBox(
               height: double.infinity,
               width: double.infinity,
@@ -68,10 +69,18 @@ class Home extends StatelessWidget {
                         style:
                             TextStyle(fontSize: 18, color: theme.textPrimary()),
                       )),
-                  SimpleButton( //Simple Button Widget
+                  SimpleButton(
+                    //Simple Button Widget
                     title: "Comenzar",
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => UltraPageView()));
+                    onPressed: (){
+                      // final DatabaseMethods _databaseMethods =
+                      //     DatabaseMethods();
+                      // print(await _databaseMethods.getImageUrl(
+                      //     "gs://kaiu-8295c.appspot.com/UltraImages/ultraman.jpg"));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UltraPageView()));
                     },
                   ),
                   Container(
