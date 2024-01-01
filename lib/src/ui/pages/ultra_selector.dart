@@ -50,9 +50,7 @@ class UltraSelector extends StatelessWidget {
                           1.55, // Mantén la relación de aspecto
                       child: Padding(
                         padding: EdgeInsets.all(5.0),
-                        child: ultra?.network ?? false
-                            ? Image.network(ultra?.imgPath ?? "", fit: BoxFit.fill,)
-                            : Image.asset(ultra?.imgPath ?? "", fit: BoxFit.fill,)
+                        child: Image.network(ultra?.imgPath ?? "", fit: BoxFit.fill,)
                       ),
                     ),
                   ),

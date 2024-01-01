@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
-import 'package:kaiu/src/ui/pages/ultra_page.dart';
+import 'package:kaiu/src/ui/pages/ultra_selector.dart';
 
 class UltraPageView extends StatefulWidget {
   const UltraPageView({super.key});
@@ -19,10 +19,8 @@ class _UltraPageViewState extends State<UltraPageView> {
         scrollDirection: Axis.vertical,
         children: [
           //Bucle que genera una determinada cantidad de páginas
-          //for (int i = 0; i<=2; i++) //En vez de dos debe ser la cantidad de elementos en la colección actual. 
-          UltraSelector(ultra: Ultra(name: "@Ultraman", imgPath: "assets/ultraman.jpg", network: false)), //Página Individual. - //Los atributos deben ser traidos de Firebase. 
-          UltraSelector(ultra: Ultra(name: "@UltraSeven", imgPath: "assets/ultraseven.jpg", network: false)), //Página Individual. - //Los atributos deben ser traidos de Firebase. 
-          UltraSelector(ultra: Ultra(name: "@Ultraman Jack", imgPath: "assets/ultraman_jack.jpg", network: false)), //Página Individual. - //Los atributos deben ser traidos de Firebase. 
+          for (int i = 0; i<3; i++) //En vez de dos debe ser la cantidad de elementos en la colección actual. 
+          UltraSelector(ultra: Ultra(name: "Nombre Coleccion", imgPath: "Imagen/Link", )), 
         ],
       ),
     );
