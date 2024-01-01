@@ -54,6 +54,12 @@ class _HomeState extends State<Home> {
                             children: [
                               Row(
                                 children: [
+                                  CircleAvatar(
+                                    radius:
+                                        50, // Puedes ajustar el tamaño según tus necesidades
+                                    backgroundImage: 
+                                    NetworkImage('URL_DE_LA_IMAGEN'),
+                                  ),
                                   Text(
                                     "Name: " + ds["Name"],
                                     style: TextStyle(
