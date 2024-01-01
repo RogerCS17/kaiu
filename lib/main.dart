@@ -13,12 +13,12 @@ void main() async {
   );
     runApp(
     
-    DevicePreview(
-     enabled: true,
-     builder: (context) => MyApp(),
-    ),
+    // DevicePreview(
+    //  enabled: true,
+    //  builder: (context) => MyApp(),
+    // ),
     
-    // MyApp()
+    MyApp()
   );
 }
 

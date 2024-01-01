@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
+import 'package:kaiu/src/core/models/ultra.dart';
 
 class UltraSelector extends StatelessWidget {
-  const UltraSelector({super.key});
+  final Ultra? ultra;
+  const UltraSelector({super.key, this.ultra});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +22,9 @@ class UltraSelector extends StatelessWidget {
                     onPressed: () {
                       theme.changeTheme();
                     },
-                    icon: theme.brightnessValue 
-                          ? Icon(Icons.wb_sunny) 
-                          : Icon(Icons.nightlight_round)
-                )
+                    icon: theme.brightnessValue
+                        ? Icon(Icons.wb_sunny)
+                        : Icon(Icons.nightlight_round))
               ],
               backgroundColor: theme.background(),
               title: Text(
@@ -45,13 +46,13 @@ class UltraSelector extends StatelessWidget {
                     margin: EdgeInsets.all(20.0),
                     elevation: 7,
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height/1.55, // Mantén la relación de aspecto
+                      height: MediaQuery.of(context).size.height /
+                          1.55, // Mantén la relación de aspecto
                       child: Padding(
                         padding: EdgeInsets.all(5.0),
-                        child: Image.asset(
-                          "assets/ultraman.jpg",
-                          fit: BoxFit.fill,
-                        ),
+                        child: ultra?.network ?? false
+                            ? Image.network(ultra?.imgPath ?? "", fit: BoxFit.fill,)
+                            : Image.asset(ultra?.imgPath ?? "", fit: BoxFit.fill,)
                       ),
                     ),
                   ),
@@ -73,12 +74,11 @@ class UltraSelector extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "@Ultraman",
+                    ultra?.name ?? "",
                     style: TextStyle(
-                      color: theme.textPrimary(),
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w200
-                    ),
+                        color: theme.textPrimary(),
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w200),
                   ),
                 ],
               ),

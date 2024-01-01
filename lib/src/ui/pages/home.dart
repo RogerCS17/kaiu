@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/data.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
-import 'package:kaiu/src/ui/pages/ultra_selector.dart';
+import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
 import 'package:kaiu/src/ui/widget/Buttons/simple_button.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
 
@@ -71,7 +71,7 @@ class Home extends StatelessWidget {
                   SimpleButton( //Simple Button Widget
                     title: "Comenzar",
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => UltraSelector()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => UltraPageView()));
                     },
                   ),
                   Container(
