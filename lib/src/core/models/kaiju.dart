@@ -37,22 +37,3 @@ class Kaiju {
     this.imgHab = '-',
   });
 }
-
-final List<Kaiju> ultraEnemies = [
-  Kaiju(
-    name: "Bemular",
-    ultra: "@Ultraman",
-  ),
-  Kaiju(
-    name: "Alien Baltan",
-    ultra: "@Ultraman",
-  ),
-  Kaiju(
-    name: "King Joe",
-    ultra: "@UltraSeven",
-  ),
-  Kaiju(
-    name: "Bemstar",
-    ultra: "@Ultraman Jack",
-  ),
-];

@@ -14,12 +14,12 @@ class UltraPageView extends StatefulWidget {
 
 class _UltraPageViewState extends State<UltraPageView> {
   final PageController _pageController = PageController();
-  final DatabaseMethods _databaseMethods = DatabaseMethods();
+  final databaseMethod  = DatabaseMethods.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream: _databaseMethods.getUltraDetails(),
+        stream: databaseMethod.getUltraDetails(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
             List<Ultra> ultras = snapshot.data!.docs.map((doc) {

@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
+import 'package:kaiu/src/core/services/database.dart';
 
 class KaijuGalery extends StatefulWidget {
   final String ultraName; //Nombre del Ultra
@@ -12,18 +14,54 @@ class KaijuGalery extends StatefulWidget {
 
 class _KaijuGaleryState extends State<KaijuGalery> {
   final theme = ThemeController.instance; //Controlador de Tema
+  final databaseMethod  = DatabaseMethods.instance;
 
   String searchKaiju = ""; //Cadena Escrita que Filtra el Kaiju
   List<Kaiju> selectedKaiju = []; //Todos los Kaijus Seleccionados
-  List<Kaiju> filterKaijuNames =[]; //Los Kaijus resultantes posterior al filtrado
+  List<Kaiju> filterKaijuNames =
+      []; //Los Kaijus resultantes posterior al filtrado
 
   @override
   void initState() {
     super.initState();
-    selectedKaiju = ultraEnemies
+    _loadKaijuData().then((kaijuList) {
+      setState(() {
+        selectedKaiju = kaijuList
         .where((element) => element.ultra == widget.ultraName)
         .toList();
-    filterKaijuNames = selectedKaiju;
+        filterKaijuNames = selectedKaiju;
+      });
+    });
+    // selectedKaiju = ultraEnemies
+    //     .where((element) => element.ultra == widget.ultraName)
+    //     .toList();
+    // print(selectedKaiju);
+    // filterKaijuNames = selectedKaiju;
+  }
+
+  Future<List<Kaiju>> _loadKaijuData() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await databaseMethod.getKaijuDetails();
+      if (snapshot.docs.isNotEmpty) {
+        List<Kaiju> kaijuList = snapshot.docs.map((doc) {
+          Map<String, dynamic> data = doc.data();
+          return Kaiju(
+            name: data["name"],
+            ultra: data["ultra"],
+          );
+        }).toList();
+
+        return kaijuList;
+      } else {
+        // Si no hay documentos, devuelve una lista vacía
+        return [];
+      }
+    } catch (error) {
+      print('Error al cargar datos: $error');
+      // Puedes manejar el error según tus necesidades, y aquí también puedes devolver una lista vacía o null
+      return [];
+    }
   }
 
   void _filterContainers(String query) {
@@ -59,15 +97,15 @@ class _KaijuGaleryState extends State<KaijuGalery> {
           Padding(
             padding: EdgeInsets.all(16.0),
             child: TextField(
-              style: TextStyle(color:theme.textPrimary()),
+              style: TextStyle(color: theme.textPrimary()),
               onChanged: _filterContainers,
               decoration: InputDecoration(
-                  labelText: "Buscar Kaiju",
-                  labelStyle: TextStyle(color: theme.textPrimary()),
-                  prefixIcon: Icon(Icons.search),
-                  prefixIconColor: theme.textPrimary(),
-                  suffixIconColor: theme.textPrimary().withOpacity(0.5),
-                  ),
+                labelText: "Buscar Kaiju",
+                labelStyle: TextStyle(color: theme.textPrimary()),
+                prefixIcon: Icon(Icons.search),
+                prefixIconColor: theme.textPrimary(),
+                suffixIconColor: theme.textPrimary().withOpacity(0.5),
+              ),
             ),
           ),
           Expanded(

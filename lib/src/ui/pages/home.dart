@@ -8,6 +8,7 @@ import 'package:kaiu/src/ui/widget/Logo/logo.dart';
 
 class Home extends StatelessWidget {
   final themeController = ThemeController.instance;
+  final databaseMethod = DatabaseMethods.instance;
   Home({super.key});
 
   @override
@@ -27,7 +28,10 @@ class Home extends StatelessWidget {
                     },
                     icon: theme.brightnessValue
                         ? Icon(Icons.wb_sunny)
-                        : Icon(Icons.nightlight_round))
+                        : Icon(Icons.nightlight_round)),
+                IconButton(onPressed: ()async{
+                  print(await databaseMethod.getImageUrl("gs://kaiu-8295c.appspot.com/kaijuicon.png"));
+                }, icon: Icon(Icons.document_scanner))
               ],
               //Configuraciones de la Barra Superior
               backgroundColor: theme.background(),
@@ -72,7 +76,7 @@ class Home extends StatelessWidget {
                   SimpleButton(
                     //Simple Button Widget
                     title: "Comenzar",
-                    onPressed: (){
+                    onPressed: () {
                       // final DatabaseMethods _databaseMethods =
                       //     DatabaseMethods();
                       // print(await _databaseMethods.getImageUrl(

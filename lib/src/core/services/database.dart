@@ -11,9 +11,18 @@ class DatabaseMethods {
   //       .doc(id)
   //       .set(employeeInfoMap);
   // }
+  DatabaseMethods._();
 
+  static final instance = DatabaseMethods._();
+
+  // En StreamBuidler
   Stream<QuerySnapshot<Map<String, dynamic>>> getUltraDetails() {
     return FirebaseFirestore.instance.collection("Ultra").snapshots();
+  }
+
+  // En InitState
+  Future<QuerySnapshot<Map<String, dynamic>>> getKaijuDetails() async{
+    return await FirebaseFirestore.instance.collection("Kaiju").get();
   }
   
   Future<String> getImageUrl(String imagePath) async {
