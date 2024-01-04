@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/core/services/database.dart';
+import 'package:kaiu/src/ui/pages/kaiju_galery.dart';
 import 'package:kaiu/src/ui/pages/ultra_selector.dart';
 
 class UltraPageView extends StatefulWidget {
@@ -26,7 +27,7 @@ class _UltraPageViewState extends State<UltraPageView> {
               Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
               return Ultra(
                 name: data['name'],
-                imgPath: data['imgPath'],
+                imgPath: "assets/test_image.png",
                 // Agrega otros atributos según tu modelo Ultra
               );
             }).toList();
@@ -36,7 +37,15 @@ class _UltraPageViewState extends State<UltraPageView> {
               scrollDirection: Axis.vertical,
               itemCount: ultras.length,
               itemBuilder: (context, index) {
-                return UltraSelector(ultra: ultras[index]);
+                return UltraSelector(
+                  ultra: ultras[index],
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => KaijuGalery(ultraName: ultras[index].name!)),
+                    );
+                  },
+                );
               },
             );
           } else if (snapshot.hasError) {
