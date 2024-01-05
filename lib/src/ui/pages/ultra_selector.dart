@@ -78,23 +78,27 @@ class UltraSelector extends StatelessWidget {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    onPressed: onPressed,
-                    child: Text(
-                      "◀ Lista Kaiju ▶",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  Text(
-                    ultra?.name ?? "",
-                    style: TextStyle(
-                      color: theme.textPrimary(),
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w200,
-                    ),
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                        ),
+                        onPressed: onPressed,
+                        child: Text(
+                          "◀ Lista Kaiju ▶",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      Text(
+                        ultra?.name ?? "",
+                        style: TextStyle(
+                          color: theme.textPrimary(),
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w200,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

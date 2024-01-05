@@ -14,7 +14,7 @@ class KaijuGalery extends StatefulWidget {
 
 class _KaijuGaleryState extends State<KaijuGalery> {
   final theme = ThemeController.instance; //Controlador de Tema
-  final databaseMethod  = DatabaseMethods.instance;
+  final databaseMethod = DatabaseMethods.instance;
 
   String searchKaiju = ""; //Cadena Escrita que Filtra el Kaiju
   List<Kaiju> selectedKaiju = []; //Todos los Kaijus Seleccionados
@@ -27,8 +27,8 @@ class _KaijuGaleryState extends State<KaijuGalery> {
     _loadKaijuData().then((kaijuList) {
       setState(() {
         selectedKaiju = kaijuList
-        .where((element) => element.ultra == widget.ultraName)
-        .toList();
+            .where((element) => element.ultra == widget.ultraName)
+            .toList();
         filterKaijuNames = selectedKaiju;
       });
     });
@@ -49,6 +49,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
           return Kaiju(
             name: data["name"],
             ultra: data["ultra"],
+            img: data["img"],
           );
         }).toList();
 
@@ -147,15 +148,43 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                         child: Column(
                           children: [
                             // Imagen del Kaiju.
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(
-                                    10), //Editar borde de imagen superior izquierdo
-                                topRight: Radius.circular(
-                                    10), //Editar borde de imagen superior derecho
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height / 6,
+                              width: MediaQuery.of(context).size.height / 2,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(
+                                      10), //Editar borde de imagen superior izquierdo
+                                  topRight: Radius.circular(
+                                      10), //Editar borde de imagen superior derecho
+                                ),
+                                child: Image.network(
+                                  filterKaijuNames[index].img![0],
+                                  fit: BoxFit.cover, 
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    } else {
+                                      // Muestra el indicador de carga mientras la imagen se está cargando
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  (loadingProgress
+                                                          .expectedTotalBytes ??
+                                                      1)
+                                              : null,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
                               ),
-                              child: Container(
-                                  child: Text(filterKaijuNames[index].name)),
                             ),
                             Expanded(child: Container()),
                             // Nombre del Kaiju.
@@ -163,7 +192,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                               filterKaijuNames[index].name,
                               style: TextStyle(
                                 // Sombra para el texto - Se debe Resaltar.
-                                shadows: [
+                                shadows: const [
                                   Shadow(
                                     color: Colors.red,
                                     offset: Offset(0, 0),

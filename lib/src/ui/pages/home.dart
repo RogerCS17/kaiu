@@ -30,7 +30,7 @@ class Home extends StatelessWidget {
                         ? Icon(Icons.wb_sunny)
                         : Icon(Icons.nightlight_round)),
                 IconButton(onPressed: ()async{
-                  print(await databaseMethod.getImageUrl("gs://kaiu-8295c.appspot.com/kaijuicon.png"));
+                  print(await databaseMethod.getImageUrl("gs://kaiu-8295c.appspot.com/UltraImages/ultraseven.jpg"));
                 }, icon: Icon(Icons.document_scanner))
               ],
               //Configuraciones de la Barra Superior

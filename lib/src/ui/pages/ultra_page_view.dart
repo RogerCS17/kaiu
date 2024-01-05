@@ -18,6 +18,7 @@ class _UltraPageViewState extends State<UltraPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, //Teclado sin Dimensión
       body: StreamBuilder(
         stream: databaseMethod.getUltraDetails(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -27,7 +28,7 @@ class _UltraPageViewState extends State<UltraPageView> {
               Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
               return Ultra(
                 name: data['name'],
-                imgPath: "assets/test_image.png",
+                imgPath: data["imgPath"],
                 // Agrega otros atributos según tu modelo Ultra
               );
             }).toList();

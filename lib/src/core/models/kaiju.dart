@@ -5,7 +5,7 @@ class Kaiju {
   final String name;
   final String subtitle;
   final String description;
-  final List<String>? img;
+  final List<dynamic>? img;
   final Color color;
 
   //Detalles Secundarios
