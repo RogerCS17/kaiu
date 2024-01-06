@@ -6,7 +6,7 @@ class Kaiju {
   final String subtitle;
   final String description;
   final List<dynamic>? img;
-  final Color color;
+  final String colorHex; // Falta
 
   //Detalles Secundarios
   final String aliasOf;
@@ -26,7 +26,7 @@ class Kaiju {
     this.description = "-",
     this.img,
     this.kaijuHabs,
-    this.color = Colors.black,
+    this.colorHex = "-",
     this.aliasOf = '-',
     this.height = '-',
     this.weight = '-',

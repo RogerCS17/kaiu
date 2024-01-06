@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/core/services/database.dart';
+import 'package:kaiu/src/ui/pages/kaiju_details.dart';
 
 class KaijuGalery extends StatefulWidget {
   final String ultraName; //Nombre del Ultra
@@ -39,6 +41,8 @@ class _KaijuGaleryState extends State<KaijuGalery> {
     // filterKaijuNames = selectedKaiju;
   }
 
+
+
   Future<List<Kaiju>> _loadKaijuData() async {
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
@@ -47,10 +51,15 @@ class _KaijuGaleryState extends State<KaijuGalery> {
         List<Kaiju> kaijuList = snapshot.docs.map((doc) {
           Map<String, dynamic> data = doc.data();
           return Kaiju(
-            name: data["name"],
-            ultra: data["ultra"],
-            img: data["img"],
-          );
+              name: data["name"],
+              ultra: data["ultra"],
+              img: data["img"],
+              description: data["description"] ?? "-",
+              subtitle: data["subtitle"] ?? "-",
+              colorHex: data["colorHex"] ?? "-"
+              //Si no hay description en Firebase recibe -
+              //description: data["description"]
+              );
         }).toList();
 
         return kaijuList;
@@ -122,20 +131,21 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                   child: InkWell(
                     onTap: () {
                       // // Navegación a la pantalla de detalles del Kaiju.
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) =>
-                      //         KaijuDetailsPage(enemy: filterKaijuNames[index]),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              KaijuDetails(kaiju: filterKaijuNames[index]),
+                        ),
+                      );
                     },
                     child: Padding(
                       padding: EdgeInsets.all(9.0),
                       child: Container(
                         // Contenedor para mostrar el Kaiju (Imagen & Detalles).
                         decoration: BoxDecoration(
-                            color: filterKaijuNames[index].color,
+                            color:
+                                colorFromHex(filterKaijuNames[index].colorHex),
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
@@ -160,7 +170,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                                 ),
                                 child: Image.network(
                                   filterKaijuNames[index].img![0],
-                                  fit: BoxFit.cover, 
+                                  fit: BoxFit.cover,
                                   loadingBuilder: (BuildContext context,
                                       Widget child,
                                       ImageChunkEvent? loadingProgress) {

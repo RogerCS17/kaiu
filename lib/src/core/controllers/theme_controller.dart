@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaiu/src/core/services/preferences_service.dart';
 import 'package:kaiu/src/ui/configure.dart';
 
 class ThemeController {
@@ -21,7 +22,11 @@ class ThemeController {
   Color textPrimary() =>
       brightnessValue ? Colors.black : Colors.white;
   
-  void changeTheme(){
+  void changeTheme() async {
     brightness.value = !brightness.value;
+    await PreferencesService.instance.setBool("tema", brightness.value);
+  }
+  Future<void> initTheme() async{
+    brightness.value = await PreferencesService.instance.getBool("tema");
   }
 }

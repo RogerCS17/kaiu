@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
@@ -44,7 +45,8 @@ class UltraSelector extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Card(
-                    margin: EdgeInsets.all(20.0),
+                    margin: EdgeInsets.only(
+                        left: 25.0, right: 25.0, top: 16, bottom: 16),
                     elevation: 7,
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height /
@@ -53,24 +55,43 @@ class UltraSelector extends StatelessWidget {
                         borderRadius: BorderRadius.circular(
                             8.0), // Ajusta según sea necesario
                         child: Image.network(
-                          ultra?.imgPath ?? "",
-                          fit: BoxFit
-                              .cover, // Ajuste para que la imagen llene el Card
+                          ultra?.imgPath ?? "", // URL de la imagen principal
+                          fit: BoxFit.cover,
                           loadingBuilder: (BuildContext context, Widget child,
                               ImageChunkEvent? loadingProgress) {
                             if (loadingProgress == null) {
+                              // La imagen principal está cargada
                               return child;
                             } else {
-                              // Muestra el indicador de carga mientras la imagen se está cargando
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          (loadingProgress.expectedTotalBytes ??
-                                              1)
-                                      : null,
-                                ),
+                              // Muestra el Stack con la imagen de respaldo y el CircularProgressIndicator
+                              return Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height /
+                                        1.55,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: ImageFiltered(
+                                      imageFilter: ImageFilter.blur(
+                                          sigmaX: 5,
+                                          sigmaY: 5), // Ajusta la cantidad de desenfoque
+                                      child: Image.asset(
+                                        'assets/placeholder.jpeg', // Ruta de la imagen de respaldo en tu proyecto
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    color: Colors.black.withOpacity(0.3),
+                                    height: MediaQuery.of(context).size.height /
+                                        1.55,
+                                    width: MediaQuery.of(context).size.width,
+                                  ),
+                                  CircularProgressIndicator(
+                                    strokeWidth: 4,
+                                    color: Color.fromARGB(255, 29, 182, 238),
+                                  ),
+                                ],
                               );
                             }
                           },
