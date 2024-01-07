@@ -56,7 +56,13 @@ class _KaijuGaleryState extends State<KaijuGalery> {
               img: data["img"],
               description: data["description"] ?? "-",
               subtitle: data["subtitle"] ?? "-",
-              colorHex: data["colorHex"] ?? "-"
+              colorHex: data["colorHex"] ?? "-",
+              aliasOf: data["aliasOf"] ?? "-",
+              comentary: data["comentary"] ?? "-",
+              weight: data["weight"] ?? "-",
+              height: data["height"] ?? "-",
+              planet: data["planet"] ?? "-",
+
               //Si no hay description en Firebase recibe -
               //description: data["description"]
               );
@@ -204,7 +210,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                                 // Sombra para el texto - Se debe Resaltar.
                                 shadows: const [
                                   Shadow(
-                                    color: Colors.red,
+                                    color: Color.fromARGB(255, 81, 81, 81),
                                     offset: Offset(0, 0),
                                     blurRadius: 10,
                                   )

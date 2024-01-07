@@ -12,12 +12,12 @@ void main() async {
     options: DefaultFirebaseOptions.android,
   );
   runApp(
-    DevicePreview(
-      enabled: true,
-      builder: (context) => MyApp(),
-    ),
+    // DevicePreview(
+    //   enabled: true,
+    //   builder: (context) => MyApp(),
+    // ),
 
-    // MyApp()
+    MyApp()
   );
 }
 

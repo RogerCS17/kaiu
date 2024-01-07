@@ -4,6 +4,7 @@ import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/ui/pages/home.dart';
 import 'package:kaiu/src/ui/widget/ImageChanger/image_changer.dart';
+import 'package:kaiu/src/ui/widget/KaijuDrawer/kaiju_drawer.dart';
 import 'package:kaiu/src/ui/widget/MoreDetails/more_details_kaiju.dart';
 
 class KaijuDetails extends StatelessWidget {
@@ -22,8 +23,9 @@ class KaijuDetails extends StatelessWidget {
     double screenHeight = size.height - (statusHeight);
     double screenWidth = size.width;
     final theme = ThemeController.instance;
+  
   return Scaffold(
-    drawer: Drawer(),
+    drawer: KaijuDrawer(kaiju: kaiju,),
     backgroundColor: Colors.white,
     resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -63,7 +65,7 @@ class KaijuDetails extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white,
                       ),
-                      height: 50,
+                      height: 45,
                       width: 100,
                       child: Padding(
                         padding: EdgeInsets.all(8),

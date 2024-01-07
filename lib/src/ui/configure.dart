@@ -4,4 +4,5 @@ class Configure{
   static const backgroundLight = Color.fromARGB(255, 255, 255, 255);
   static const backgroundDark = Color(0xFF222222);
   static const ultraRed = Color(0xFFEF3340);
+  static const Color ultraOption = Color.fromARGB(223, 231, 229, 229);
 }
