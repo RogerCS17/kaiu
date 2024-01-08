@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Kaiju {
   //Detalles Principales
   final String name;
@@ -18,6 +16,9 @@ class Kaiju {
   final String imgDrawer;
   final String imgHab;
 
+  //Atributo para Ordenar
+  final int episode; 
+
   Map<String, String>? kaijuHabs = {};
 
   Kaiju({
@@ -35,5 +36,6 @@ class Kaiju {
     this.comentary = '-',
     this.imgDrawer = '-',
     this.imgHab = '-',
+    this.episode = 0,
   });
 }

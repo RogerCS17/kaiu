@@ -13,6 +13,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final theme = ThemeController.instance;
     return ValueListenableBuilder(
         valueListenable: theme.brightness,

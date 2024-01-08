@@ -20,9 +20,9 @@ class DatabaseMethods {
     return FirebaseFirestore.instance.collection("Ultra").snapshots();
   }
 
-  // En InitState
+  // En InitState -- .orderBy (Ordena de forma ascendente dado una variable de la colección)
   Future<QuerySnapshot<Map<String, dynamic>>> getKaijuDetails() async{
-    return await FirebaseFirestore.instance.collection("Kaiju").get();
+    return await FirebaseFirestore.instance.collection("Kaiju").orderBy("episode").get();
   }
   
   Future<String> getImageUrl(String imagePath) async {

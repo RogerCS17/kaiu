@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/core/services/database.dart';
 import 'package:kaiu/src/ui/pages/kaiju_galery.dart';
@@ -14,7 +15,8 @@ class UltraPageView extends StatefulWidget {
 
 class _UltraPageViewState extends State<UltraPageView> {
   final PageController _pageController = PageController();
-  final databaseMethod  = DatabaseMethods.instance;
+  final databaseMethod = DatabaseMethods.instance;
+  final theme = ThemeController.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +45,9 @@ class _UltraPageViewState extends State<UltraPageView> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => KaijuGalery(ultraName: ultras[index].name!)),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              KaijuGalery(ultraName: ultras[index].name!)),
                     );
                   },
                 );
@@ -54,8 +58,20 @@ class _UltraPageViewState extends State<UltraPageView> {
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            return Center(
-              child: CircularProgressIndicator(),
+            return Stack(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  color: theme.background(),
+                ),
+                Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.blue), // Color del indicador
+                  ),
+                )
+              ],
             );
           }
         },

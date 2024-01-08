@@ -41,8 +41,6 @@ class _KaijuGaleryState extends State<KaijuGalery> {
     // filterKaijuNames = selectedKaiju;
   }
 
-
-
   Future<List<Kaiju>> _loadKaijuData() async {
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
@@ -51,21 +49,20 @@ class _KaijuGaleryState extends State<KaijuGalery> {
         List<Kaiju> kaijuList = snapshot.docs.map((doc) {
           Map<String, dynamic> data = doc.data();
           return Kaiju(
-              name: data["name"],
-              ultra: data["ultra"],
-              img: data["img"],
-              description: data["description"] ?? "-",
-              subtitle: data["subtitle"] ?? "-",
-              colorHex: data["colorHex"] ?? "-",
-              aliasOf: data["aliasOf"] ?? "-",
-              comentary: data["comentary"] ?? "-",
-              weight: data["weight"] ?? "-",
-              height: data["height"] ?? "-",
-              planet: data["planet"] ?? "-",
-
-              //Si no hay description en Firebase recibe -
-              //description: data["description"]
-              );
+            name: data["name"],
+            ultra: data["ultra"],
+            img: data["img"],
+            description: data["description"] ?? "-",
+            subtitle: data["subtitle"] ?? "-",
+            colorHex: data["colorHex"] ?? "-",
+            aliasOf: data["aliasOf"] ?? "-",
+            comentary: data["comentary"] ?? "-",
+            weight: data["weight"] ?? "-",
+            height: data["height"] ?? "-",
+            planet: data["planet"] ?? "-",
+            //Si no hay description en Firebase recibe -
+            //description: data["description"]
+          );
         }).toList();
 
         return kaijuList;
@@ -133,6 +130,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
               ),
               itemCount: filterKaijuNames.length,
               itemBuilder: (context, index) {
+                final imageIndex = generateRandomNumberOneToNine();
                 return Center(
                   child: InkWell(
                     onTap: () {
@@ -164,7 +162,8 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                         child: Column(
                           children: [
                             // Imagen del Kaiju.
-                            SizedBox(
+                            Container(
+                              decoration: BoxDecoration(color: theme.background()),
                               height: MediaQuery.of(context).size.height / 6,
                               width: MediaQuery.of(context).size.height / 2,
                               child: ClipRRect(
@@ -184,18 +183,29 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                                       return child;
                                     } else {
                                       // Muestra el indicador de carga mientras la imagen se está cargando
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  (loadingProgress
-                                                          .expectedTotalBytes ??
-                                                      1)
-                                              : null,
-                                        ),
+                                      return Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                6,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                2,
+                                            child: Image.asset(
+                                                fit: BoxFit.cover,
+                                                "assets/kaiju_placeholder ($imageIndex).webp"),
+                                                
+                                          ),
+                                          CircularProgressIndicator(
+                                            strokeWidth: 4,
+                                            color: Color.fromARGB(
+                                                255, 29, 182, 238),
+                                          )
+                                        ],
                                       );
                                     }
                                   },

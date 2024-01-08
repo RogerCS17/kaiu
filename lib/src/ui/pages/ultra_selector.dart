@@ -46,7 +46,7 @@ class UltraSelector extends StatelessWidget {
                 children: [
                   Card(
                     margin: EdgeInsets.only(
-                        left: 25.0, right: 25.0, top: 16, bottom: 16),
+                        left: 25.0, right: 25.0, top: 0, bottom: 5),
                     elevation: 7,
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height /
@@ -74,7 +74,8 @@ class UltraSelector extends StatelessWidget {
                                     child: ImageFiltered(
                                       imageFilter: ImageFilter.blur(
                                           sigmaX: 5,
-                                          sigmaY: 5), // Ajusta la cantidad de desenfoque
+                                          sigmaY:
+                                              5), // Ajusta la cantidad de desenfoque
                                       child: Image.asset(
                                         'assets/placeholder.jpeg', // Ruta de la imagen de respaldo en tu proyecto
                                         fit: BoxFit.cover,
@@ -107,10 +108,11 @@ class UltraSelector extends StatelessWidget {
                         ),
                         onPressed: onPressed,
                         child: Text(
-                          "◀ Lista Kaiju ▶",
+                          "Registros Kaiju",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
+                      SizedBox(height: 20,),
                       Text(
                         ultra?.name ?? "",
                         style: TextStyle(
