@@ -4,7 +4,7 @@ class Kaiju {
   final String subtitle;
   final String description;
   final List<dynamic>? img;
-  final String colorHex; // Falta
+  final String colorHex;
 
   //Detalles Secundarios
   final String aliasOf;

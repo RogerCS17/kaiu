@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/data.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/services/database.dart';
+import 'package:kaiu/src/ui/pages/kaiju_form.dart';
 import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
 import 'package:kaiu/src/ui/widget/Buttons/simple_button.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
@@ -13,7 +14,6 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final theme = ThemeController.instance;
     return ValueListenableBuilder(
         valueListenable: theme.brightness,
@@ -30,9 +30,18 @@ class Home extends StatelessWidget {
                     icon: theme.brightnessValue
                         ? Icon(Icons.wb_sunny)
                         : Icon(Icons.nightlight_round)),
-                IconButton(onPressed: ()async{
-                  print(await databaseMethod.getImageUrl("gs://kaiu-8295c.appspot.com/UltraImages/Logo/ultraman_logo.png"));
-                }, icon: Icon(Icons.document_scanner))
+                IconButton(
+                    onPressed: () async {
+                      print(await databaseMethod.getImageUrl(
+                          "gs://kaiu-8295c.appspot.com/UltraImages/Logo/ultraman_logo.png"));
+                    },
+                    icon: Icon(Icons.document_scanner)),
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => KaijuForm()));
+                    },
+                    icon: Icon(Icons.dock))
               ],
               //Configuraciones de la Barra Superior
               backgroundColor: theme.background(),

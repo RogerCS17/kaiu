@@ -4,13 +4,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class DatabaseMethods {
 
-  // Future addEmployeeDetails(Map<String, dynamic> employeeInfoMap, String id) async {
-  //   //Llamamos a una Instancia de la Base de Datos
-  //   return await FirebaseFirestore.instance
-  //       .collection("Employee")
-  //       .doc(id)
-  //       .set(employeeInfoMap);
-  // }
+  Future addKaijuDetails(Map<String, dynamic> kaijuInfoMap, String id) async {
+    //Llamamos a una Instancia de la Base de Datos
+    return await FirebaseFirestore.instance
+        .collection("Kaiju")
+        .doc(id)
+        .set(kaijuInfoMap);
+  }
   DatabaseMethods._();
 
   static final instance = DatabaseMethods._();

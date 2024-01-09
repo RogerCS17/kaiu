@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  ErrorWidget.builder = (FlutterErrorDetails details) => ErrorPage(details: details);
+  // ErrorWidget.builder = (FlutterErrorDetails details) => ErrorPage(details: details);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.android,
   );

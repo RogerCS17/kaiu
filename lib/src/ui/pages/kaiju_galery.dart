@@ -51,7 +51,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
           return Kaiju(
             name: data["name"],
             ultra: data["ultra"],
-            img: data["img"],
+            img: data["img"] ?? ["https://cdn.pixabay.com/photo/2017/01/25/17/35/picture-2008484_1280.png"],
             description: data["description"] ?? "-",
             subtitle: data["subtitle"] ?? "-",
             colorHex: data["colorHex"] ?? "-",
