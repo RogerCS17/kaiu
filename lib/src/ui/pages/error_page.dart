@@ -50,7 +50,7 @@ class ErrorPage extends StatelessWidget {
               ),
               child: CircleAvatar(
                 radius: 150, // Puedes ajustar el radio según tus necesidades
-                backgroundImage: AssetImage("assets/ultra_error.jpeg"),
+                backgroundImage: AssetImage("assets/ultra_error.png"),
               ),
             ),
             Column(

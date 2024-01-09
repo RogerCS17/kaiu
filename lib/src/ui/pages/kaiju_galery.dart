@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
+import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/core/services/database.dart';
 import 'package:kaiu/src/ui/pages/kaiju_details.dart';
 
 class KaijuGalery extends StatefulWidget {
-  final String ultraName; //Nombre del Ultra
-  const KaijuGalery({super.key, required this.ultraName});
+  
+  final Ultra ultra;  //Nombre del Ultra
+  const KaijuGalery({super.key, required this.ultra});
 
   @override
   State<KaijuGalery> createState() => _KaijuGaleryState();
@@ -29,7 +31,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
     _loadKaijuData().then((kaijuList) {
       setState(() {
         selectedKaiju = kaijuList
-            .where((element) => element.ultra == widget.ultraName)
+            .where((element) => element.ultra == widget.ultra.name)
             .toList();
         filterKaijuNames = selectedKaiju;
       });
@@ -60,6 +62,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
             weight: data["weight"] ?? "-",
             height: data["height"] ?? "-",
             planet: data["planet"] ?? "-",
+            imgDrawer: data["imgDrawer"] ?? "-"
             //Si no hay description en Firebase recibe -
             //description: data["description"]
           );
@@ -98,7 +101,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
       appBar: AppBar(
         backgroundColor: theme.background(),
         title: Text(
-          widget.ultraName,
+          widget.ultra.name!,
           style: TextStyle(color: theme.textPrimary()),
         ),
         iconTheme: IconThemeData(
@@ -139,7 +142,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              KaijuDetails(kaiju: filterKaijuNames[index]),
+                              KaijuDetails(kaiju: filterKaijuNames[index], ultra: widget.ultra,),
                         ),
                       );
                     },

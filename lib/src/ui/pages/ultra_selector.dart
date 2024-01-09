@@ -11,6 +11,8 @@ class UltraSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ThemeController.instance;
+    final heightSelector = MediaQuery.of(context).size.height / 1.40;
+
     return ValueListenableBuilder(
         valueListenable: theme.brightness,
         builder: ((context, value, child) {
@@ -46,15 +48,19 @@ class UltraSelector extends StatelessWidget {
                 children: [
                   Card(
                     margin: EdgeInsets.only(
-                        left: 25.0, right: 25.0, top: 0, bottom: 5),
+                        left: 25.0, right: 25.0, top: 10, bottom: 10),
                     elevation: 7,
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height /
-                          1.55, // Altura fija del Card
+                      height: heightSelector, // Altura fija del Card
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(
                             8.0), // Ajusta según sea necesario
                         child: Image.network(
+                          errorBuilder: (BuildContext context, Object error,
+                              StackTrace? stackTrace) {
+                            // En lugar de un mensaje de error, muestra una imagen de repuesto
+                            return Image.asset('assets/test_image.png', fit: BoxFit.cover,);
+                          },
                           ultra?.imgPath ?? "", // URL de la imagen principal
                           fit: BoxFit.cover,
                           loadingBuilder: (BuildContext context, Widget child,
@@ -68,8 +74,7 @@ class UltraSelector extends StatelessWidget {
                                 alignment: Alignment.center,
                                 children: [
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height /
-                                        1.55,
+                                    height: heightSelector,
                                     width: MediaQuery.of(context).size.width,
                                     child: ImageFiltered(
                                       imageFilter: ImageFilter.blur(
@@ -84,8 +89,7 @@ class UltraSelector extends StatelessWidget {
                                   ),
                                   Container(
                                     color: Colors.black.withOpacity(0.3),
-                                    height: MediaQuery.of(context).size.height /
-                                        1.55,
+                                    height: heightSelector,
                                     width: MediaQuery.of(context).size.width,
                                   ),
                                   CircularProgressIndicator(
@@ -112,7 +116,9 @@ class UltraSelector extends StatelessWidget {
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                      SizedBox(height: 20,),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
                       Text(
                         ultra?.name ?? "",
                         style: TextStyle(

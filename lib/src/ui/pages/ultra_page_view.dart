@@ -31,6 +31,8 @@ class _UltraPageViewState extends State<UltraPageView> {
               return Ultra(
                 name: data['name'],
                 imgPath: data["imgPath"],
+                imgLogo: data["imgLogo"],
+                imgUltra: data["imgUltra"],
                 // Agrega otros atributos según tu modelo Ultra
               );
             }).toList();
@@ -47,7 +49,7 @@ class _UltraPageViewState extends State<UltraPageView> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              KaijuGalery(ultraName: ultras[index].name!)),
+                              KaijuGalery(ultra: ultras[index],)),
                     );
                   },
                 );

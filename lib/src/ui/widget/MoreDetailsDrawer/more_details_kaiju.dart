@@ -28,7 +28,7 @@ class MoreDetailsKaiju extends StatelessWidget {
           color: colorFromHex(kaiju.colorHex).withOpacity(0.85),
         ),
         child: const Icon(
-          Icons.add,
+          Icons.menu,
           size: 24,
           color:Colors.white,
         ),

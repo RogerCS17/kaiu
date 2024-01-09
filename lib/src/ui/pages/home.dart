@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
                 IconButton(
                     onPressed: () async {
                       print(await databaseMethod.getImageUrl(
-                          "gs://kaiu-8295c.appspot.com/UltraImages/Logo/ultraman_logo.png"));
+                          "gs://kaiu-8295c.appspot.com/KaijuImages/Drawer/bemular_drawer.webp"));
                     },
                     icon: Icon(Icons.document_scanner)),
                 IconButton(

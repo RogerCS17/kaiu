@@ -3,7 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class DatabaseMethods {
+  
+  //Constructor Privado
+  DatabaseMethods._();
 
+  static final instance = DatabaseMethods._();
+
+  //Añadir Kaiju
   Future addKaijuDetails(Map<String, dynamic> kaijuInfoMap, String id) async {
     //Llamamos a una Instancia de la Base de Datos
     return await FirebaseFirestore.instance
@@ -11,9 +17,6 @@ class DatabaseMethods {
         .doc(id)
         .set(kaijuInfoMap);
   }
-  DatabaseMethods._();
-
-  static final instance = DatabaseMethods._();
 
   // En StreamBuidler
   Stream<QuerySnapshot<Map<String, dynamic>>> getUltraDetails() {
@@ -25,6 +28,7 @@ class DatabaseMethods {
     return await FirebaseFirestore.instance.collection("Kaiju").orderBy("episode").get();
   }
   
+  //Obtener URL de Imagen
   Future<String> getImageUrl(String imagePath) async {
     Reference ref = FirebaseStorage.instance.ref().child(imagePath);
     return await ref.getDownloadURL();
