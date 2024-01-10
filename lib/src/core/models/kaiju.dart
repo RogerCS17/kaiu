@@ -14,12 +14,14 @@ class Kaiju {
   final String ultra;
   final String comentary;
   final String imgDrawer;
-  final String imgHab;
+  
+  Map<String, dynamic>? kaijuHabs = {};
+  
+  //final String imgHab;
 
   //Atributo para Ordenar
   final int episode; 
 
-  Map<String, String>? kaijuHabs = {};
 
   Kaiju({
     this.name = "-",
@@ -35,7 +37,7 @@ class Kaiju {
     this.ultra = '-',
     this.comentary = '-',
     this.imgDrawer = '-',
-    this.imgHab = '-',
+    //this.imgHab = '-',
     this.episode = 0,
   });
 }

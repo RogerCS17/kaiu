@@ -3,6 +3,7 @@ import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/ui/configure.dart';
+import 'package:kaiu/src/ui/pages/kaiju_habs.dart';
 import 'package:kaiu/src/ui/widget/KaijuDrawer/kaiju_option_drawer.dart';
 
 //Widget de Barra Lateral para cada Kaiju
@@ -100,10 +101,12 @@ class KaijuDrawer extends StatelessWidget {
             ),
             onTap: () {
               // Acción al tocar la opción para mostrar las habilidades.
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => KaijuHabilitiesPage(enemy: enemy))
-              // );
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => KaijuHabs(
+                            kaiju: kaiju,
+                          )));
             },
           ),
 
@@ -138,15 +141,16 @@ class KaijuDrawer extends StatelessWidget {
 
           // Fila con botón de comentario y logo del Ultra.
           Container(
+              height: 190,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(9.0),
-                  ),
+                  // borderRadius: BorderRadius.all(
+                  //   Radius.circular(9.0),
+                  // ),
                   image: DecorationImage(
-                      image: AssetImage("assets/Land_of_Light.webp"),
+                      image: AssetImage("assets/Land_of_Light.webp",),
                       colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.75), BlendMode.dstATop)),
-                  color: const Color.fromARGB(255, 66, 236, 72)),
+                          Colors.black.withOpacity(0.55), BlendMode.dstATop)),
+                  color: colorFromHex(kaiju.colorHex)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,7 +213,9 @@ class KaijuDrawer extends StatelessWidget {
                                           },
                                           child: Text(
                                             'Cerrar',
-                                            style: TextStyle(fontSize: 17),
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                color: Colors.blueAccent),
                                           ),
                                         ),
                                       ],

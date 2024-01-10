@@ -85,7 +85,7 @@ class KaijuDetails extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.only(top:10, left: 10, right: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -145,7 +145,7 @@ class KaijuDetails extends StatelessWidget {
             ),
             Expanded(child: Container()),
             MoreDetailsKaiju(kaiju: kaiju),
-            //Expanded(child: Container()),
+            Expanded(child: Container()),
           ],
         ),
       ),
