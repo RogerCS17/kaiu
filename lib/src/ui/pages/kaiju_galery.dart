@@ -8,8 +8,7 @@ import 'package:kaiu/src/core/services/database.dart';
 import 'package:kaiu/src/ui/pages/kaiju_details.dart';
 
 class KaijuGalery extends StatefulWidget {
-  
-  final Ultra ultra;  //Nombre del Ultra
+  final Ultra ultra; //Nombre del Ultra
   const KaijuGalery({super.key, required this.ultra});
 
   @override
@@ -51,22 +50,26 @@ class _KaijuGaleryState extends State<KaijuGalery> {
         List<Kaiju> kaijuList = snapshot.docs.map((doc) {
           Map<String, dynamic> data = doc.data();
           return Kaiju(
-            name: data["name"],
-            subtitle: data["subtitle"] ?? "-",
-            description: data["description"] ?? "-",
-            img: data["img"] ?? ["https://cdn.pixabay.com/photo/2017/01/25/17/35/picture-2008484_1280.png"],
-            colorHex: data["colorHex"] ?? "-",
-            aliasOf: data["aliasOf"] ?? "-",
-            height: data["height"] ?? "-",
-            weight: data["weight"] ?? "-",
-            planet: data["planet"] ?? "-",
-            ultra: data["ultra"],
-            comentary: data["comentary"] ?? "-",
-            imgDrawer: data["imgDrawer"] ?? "-",
-            kaijuHabs: data["kaijuHabs"] ?? {"_":"_"}
-            //Si no hay description en Firebase recibe -
-            //description: data["description"]
-          );
+              id: data["id"],
+              name: data["name"],
+              subtitle: data["subtitle"] ?? "-",
+              description: data["description"] ?? "-",
+              img: data["img"] ??
+                  [
+                    "https://cdn.pixabay.com/photo/2017/01/25/17/35/picture-2008484_1280.png"
+                  ],
+              colorHex: data["colorHex"] ?? "-",
+              aliasOf: data["aliasOf"] ?? "-",
+              height: data["height"] ?? "-",
+              weight: data["weight"] ?? "-",
+              planet: data["planet"] ?? "-",
+              ultra: data["ultra"],
+              comentary: data["comentary"] ?? "-",
+              imgDrawer: data["imgDrawer"] ?? "-",
+              kaijuHabs: data["kaijuHabs"] ?? {"_": "_"}
+              //Si no hay description en Firebase recibe -
+              //description: data["description"]
+              );
         }).toList();
 
         return kaijuList;
@@ -142,8 +145,10 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              KaijuDetails(kaiju: filterKaijuNames[index], ultra: widget.ultra,),
+                          builder: (context) => KaijuDetails(
+                            kaiju: filterKaijuNames[index],
+                            ultra: widget.ultra,
+                          ),
                         ),
                       );
                     },
@@ -167,7 +172,8 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                           children: [
                             // Imagen del Kaiju.
                             Container(
-                              decoration: BoxDecoration(color: theme.background()),
+                              decoration:
+                                  BoxDecoration(color: theme.background()),
                               height: MediaQuery.of(context).size.height / 6,
                               width: MediaQuery.of(context).size.height / 2,
                               child: ClipRRect(
@@ -202,7 +208,6 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                                             child: Image.asset(
                                                 fit: BoxFit.cover,
                                                 "assets/kaiju_placeholder ($imageIndex).webp"),
-                                                
                                           ),
                                           CircularProgressIndicator(
                                             strokeWidth: 4,

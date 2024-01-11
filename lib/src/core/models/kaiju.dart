@@ -1,4 +1,8 @@
 class Kaiju {
+  
+  //Atributo para Firebase 
+  final String id; 
+  
   //Detalles Principales
   final String name;
   final String subtitle;
@@ -24,6 +28,7 @@ class Kaiju {
 
 
   Kaiju({
+    this.id = "-",
     this.name = "-",
     this.subtitle = "-",
     this.description = "-",

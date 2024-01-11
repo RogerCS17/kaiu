@@ -78,8 +78,9 @@ class _KaijuFormState extends State<KaijuForm> {
                   padding: const EdgeInsets.all(10.0),
                   child: ElevatedButton(
                     onPressed: () async {
-                      String id = randomAlphaNumeric(10);
+                      String id = randomAlphaNumeric(20);
                       Map<String, dynamic> kaijuInfoMap = {
+                        "id": id,
                         "name": nameController.text,
                         "subtitle": subtitleController.text,
                         "description": descriptionController.text,
