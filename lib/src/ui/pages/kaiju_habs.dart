@@ -18,8 +18,8 @@ class _KaijuHabsState extends State<KaijuHabs> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ...(widget.kaiju.kaijuHabs?.keys ?? []).map((e) => Text(e)),
-            ...(widget.kaiju.kaijuHabs?.values ?? []).map((e) => Text(e)),
+            ...(widget.kaiju.kaijuHabs?.keys ?? []).map((e) => Text(e)).toList(),
+            ...(widget.kaiju.kaijuHabs?.values ?? []).map((e) => Text(e)).toList(),
           ],
         ),
       ),

@@ -34,7 +34,7 @@ class DatabaseMethods {
     return await ref.getDownloadURL();
   }
 
-  // Future updateEmployeeDetail(String id, Map<String, dynamic> updateInfo) async{
-  //   return await FirebaseFirestore.instance.collection("Employee").doc(id).update(updateInfo);
-  // }
+  Future updateKaijuDetail(String id, Map<String, dynamic> updateInfo) async{
+    return await FirebaseFirestore.instance.collection("Kaiju").doc(id).update(updateInfo);
+  }
 }

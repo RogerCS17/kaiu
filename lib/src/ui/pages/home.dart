@@ -3,6 +3,7 @@ import 'package:kaiu/src/core/constants/data.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/services/database.dart';
 import 'package:kaiu/src/ui/pages/kaiju_form.dart';
+import 'package:kaiu/src/ui/pages/kaiju_form_image.dart';
 import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
 import 'package:kaiu/src/ui/widget/Buttons/simple_button.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
@@ -39,7 +40,7 @@ class Home extends StatelessWidget {
                 IconButton(
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => KaijuForm()));
+                          MaterialPageRoute(builder: (context) => KaijuFormImage()));
                     },
                     icon: Icon(Icons.dock))
               ],
