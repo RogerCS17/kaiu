@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kaiu/src/core/models/kaiju.dart';
+import 'package:kaiu/src/core/services/database.dart';
 
 class KaijuFormHabs extends StatefulWidget {
   @override
@@ -7,11 +11,54 @@ class KaijuFormHabs extends StatefulWidget {
 }
 
 class _KaijuFormHabsState extends State<KaijuFormHabs> {
-  
+  final databaseMethod = DatabaseMethods.instance;
   List<TextEditingController> keyControllers = [TextEditingController()];
   List<TextEditingController> valueControllers = [TextEditingController()];
-  String selectedOption = 'Opción 1'; // Valor predeterminado
-  List<String> dropdownOptions = ['Opción 1', 'Opción 2', 'Opción 3'];
+
+  late Kaiju selectedKaiju; // Valor predeterminado
+  String optionKaiju = '';
+  List<Kaiju> kaijus = [];
+  List<String> dropdownOptions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadKaijuData().then((kaijuList) {
+      setState(() {
+        //Inicializamos la Lista con todos los Kaijus
+        kaijus = kaijuList;
+        dropdownOptions = [...kaijuList.map((e) => e.name)];
+        optionKaiju = dropdownOptions.first;
+        selectedKaiju =
+            kaijus.firstWhere((element) => element.name == optionKaiju);
+      });
+    });
+  }
+
+  Future<List<Kaiju>> _loadKaijuData() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await databaseMethod.getKaijuDetails();
+      if (snapshot.docs.isNotEmpty) {
+        List<Kaiju> kaijuList = snapshot.docs.map((doc) {
+          Map<String, dynamic> data = doc.data();
+          return Kaiju(
+              id: data["id"] ?? "-",
+              name: data["name"] ?? "-",
+              kaijuHabs: data["kaijuHabs"] ?? {});
+        }).toList();
+
+        return kaijuList;
+      } else {
+        // Si no hay documentos, devuelve una lista vacía
+        return [];
+      }
+    } catch (error) {
+      print('Error al cargar datos: $error');
+      // Puedes manejar el error según tus necesidades, y aquí también puedes devolver una lista vacía o null
+      return [];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +70,22 @@ class _KaijuFormHabsState extends State<KaijuFormHabs> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: DropdownButton<String>(
-              value: selectedOption,
+              value: optionKaiju,
               onChanged: (newValue) {
                 setState(() {
-                  selectedOption = newValue!;
+                  optionKaiju = newValue!;
+                  selectedKaiju = kaijus
+                      .firstWhere((element) => element.name == optionKaiju);
                 });
               },
-              items:
-                  dropdownOptions.map((String option) {
+              items: dropdownOptions.map((String option) {
                 return DropdownMenuItem<String>(
                   value: option,
-                  child: Text(option,style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
+                  child: Text(
+                    option,
+                    style: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
+                  ),
                 );
               }).toList(),
             ),
@@ -47,7 +99,6 @@ class _KaijuFormHabsState extends State<KaijuFormHabs> {
             // Mostrar los campos de texto existentes para clave y valor
             Column(
               children: iterableZipController.map((pair) {
-                
                 var keyController = pair[0];
                 var valueController = pair[1];
 
@@ -79,10 +130,26 @@ class _KaijuFormHabsState extends State<KaijuFormHabs> {
             SizedBox(height: 10),
             // Botón para imprimir los valores actuales de los campos de texto para clave y valor
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 for (var pair in iterableZipController) {
-                  print("Llave: ${pair[0].text}, Valor: ${pair[1].text}");
+                  selectedKaiju.kaijuHabs?[pair[0].text] = pair[1].text;
+                  //print("Llave: ${pair[0].text}, Valor: ${pair[1].text}");
                 }
+                Map<String, dynamic> updateInfo = {
+                  "kaijuHabs": selectedKaiju.kaijuHabs
+                };
+                await databaseMethod
+                    .updateKaijuDetail(selectedKaiju.id, updateInfo)
+                    .then((value) {
+                  Fluttertoast.showToast(
+                      msg: "Habilidades Agregadas",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                });
               },
               child: Text('Imprimir Valores'),
             ),
