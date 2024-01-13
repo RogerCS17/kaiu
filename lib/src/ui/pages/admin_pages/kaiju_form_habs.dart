@@ -33,7 +33,7 @@ class _KaijuFormHabsState extends State<KaijuFormHabs> {
                   dropdownOptions.map((String option) {
                 return DropdownMenuItem<String>(
                   value: option,
-                  child: Text(option),
+                  child: Text(option,style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
                 );
               }).toList(),
             ),

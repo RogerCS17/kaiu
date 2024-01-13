@@ -87,7 +87,7 @@ class _KaijuFormImageState extends State<KaijuFormImage> {
               items: dropdownOptions.map((option) {
                 return DropdownMenuItem<String>(
                   value: option,
-                  child: Text(option),
+                  child: Text(option,style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
                 );
               }).toList(),
             ),

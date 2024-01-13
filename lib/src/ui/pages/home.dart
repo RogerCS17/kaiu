@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/data.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/services/database.dart';
+import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
 import 'package:kaiu/src/ui/pages/admin_pages/kaiju_form.dart';
 import 'package:kaiu/src/ui/pages/admin_pages/kaiju_form_habs.dart';
 import 'package:kaiu/src/ui/pages/admin_pages/kaiju_form_image.dart';
@@ -41,7 +42,7 @@ class Home extends StatelessWidget {
                 IconButton(
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => KaijuFormImage()));
+                          MaterialPageRoute(builder: (context) => AdminPageView()));
                     },
                     icon: Icon(Icons.dock))
               ],

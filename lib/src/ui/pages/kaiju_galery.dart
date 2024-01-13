@@ -54,10 +54,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
               name: data["name"],
               subtitle: data["subtitle"] ?? "-",
               description: data["description"] ?? "-",
-              img: data["img"] ??
-                  [
-                    "https://cdn.pixabay.com/photo/2017/01/25/17/35/picture-2008484_1280.png"
-                  ],
+              img: data["img"] ?? [],
               colorHex: data["colorHex"] ?? "-",
               aliasOf: data["aliasOf"] ?? "-",
               height: data["height"] ?? "-",
@@ -66,7 +63,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
               ultra: data["ultra"],
               comentary: data["comentary"] ?? "-",
               imgDrawer: data["imgDrawer"] ?? "-",
-              kaijuHabs: data["kaijuHabs"] ?? {"_": "_"}
+              kaijuHabs: data["kaijuHabs"] ?? {},
               //Si no hay description en Firebase recibe -
               //description: data["description"]
               );
