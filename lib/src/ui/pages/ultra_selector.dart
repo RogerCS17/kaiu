@@ -6,9 +6,14 @@ import 'package:kaiu/src/core/models/ultra.dart';
 class UltraSelector extends StatelessWidget {
   final Ultra? ultra;
   final bool isSelected;
+  final int currentPageFake;
   final Function()? onPressed;
   const UltraSelector(
-      {super.key, this.ultra, required this.isSelected, this.onPressed});
+      {super.key,
+      this.ultra,
+      required this.isSelected,
+      required this.currentPageFake,
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +99,8 @@ class UltraSelector extends StatelessWidget {
                         height: 10,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.grey,
+                          color:
+                              currentPageFake == i ? Colors.blue : Colors.grey,
                         ),
                       ),
                   ],
@@ -111,9 +117,9 @@ class UltraSelector extends StatelessWidget {
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    // SizedBox(
+                    //   height: 5,
+                    // ),
                     Text(
                       ultra?.name?.toUpperCase() ?? "",
                       style: TextStyle(
@@ -130,15 +136,19 @@ class UltraSelector extends StatelessWidget {
         : Stack(
             alignment: Alignment.center,
             children: [
-              SizedBox(
-                height: heightSelector,
-                width: MediaQuery.of(context).size.width,
-                child: ImageFiltered(
-                  imageFilter: ImageFilter.blur(
-                      sigmaX: 5, sigmaY: 5), // Ajusta la cantidad de desenfoque
-                  child: Image.asset(
-                    'assets/placeholder.jpeg', // Ruta de la imagen de respaldo en tu proyecto
-                    fit: BoxFit.cover,
+              ClipRect(
+                child: SizedBox(
+                  height: heightSelector,
+                  width: MediaQuery.of(context).size.width,
+                  child: ImageFiltered(
+                    imageFilter: ImageFilter.blur(
+                      sigmaX: 5,
+                      sigmaY: 5,
+                    ),
+                    child: Image.asset(
+                      'assets/placeholder.jpeg',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),

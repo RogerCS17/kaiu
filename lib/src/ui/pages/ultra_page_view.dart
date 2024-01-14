@@ -86,6 +86,7 @@ class _UltraPageViewState extends State<UltraPageView> {
                     );
                   },
                   isSelected: isSelected,
+                  currentPageFake: _currentPageFake,
                 );
               },
             );
