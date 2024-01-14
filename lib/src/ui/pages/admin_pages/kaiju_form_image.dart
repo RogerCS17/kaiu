@@ -46,10 +46,7 @@ class _KaijuFormImageState extends State<KaijuFormImage> {
           return Kaiju(
               id: data["id"] ?? "-",
               name: data["name"] ?? "-",
-              img: data["img"] ??
-                  [
-                    "https://cdn.pixabay.com/photo/2017/01/25/17/35/picture-2008484_1280.png"
-                  ]);
+              img: data["img"] ?? []);
         }).toList();
 
         return kaijuList;
@@ -87,7 +84,11 @@ class _KaijuFormImageState extends State<KaijuFormImage> {
               items: dropdownOptions.map((option) {
                 return DropdownMenuItem<String>(
                   value: option,
-                  child: Text(option,style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
+                  child: Text(
+                    option,
+                    style: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
+                  ),
                 );
               }).toList(),
             ),
