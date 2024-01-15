@@ -3,7 +3,7 @@ import 'package:kaiu/src/core/constants/data.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/services/database.dart';
 import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
-import 'package:kaiu/src/ui/pages/login/login_page.dart';
+import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
 import 'package:kaiu/src/ui/widget/Buttons/simple_button.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';

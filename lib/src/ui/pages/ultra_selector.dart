@@ -18,7 +18,7 @@ class UltraSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ThemeController.instance;
-    final heightSelector = MediaQuery.of(context).size.height / 1.40;
+    final heightSelector = MediaQuery.of(context).size.height / 1.425;
 
     return isSelected
         ? SizedBox(
@@ -30,7 +30,7 @@ class UltraSelector extends StatelessWidget {
               children: [
                 Card(
                   margin: EdgeInsets.only(
-                      left: 25.0, right: 25.0, top: 10, bottom: 10),
+                      left: 20.0, right: 20.0, top: 10, bottom: 10),
                   elevation: 7,
                   child: SizedBox(
                     height: heightSelector, // Altura fija del Card
@@ -136,7 +136,8 @@ class UltraSelector extends StatelessWidget {
         : Stack(
             alignment: Alignment.center,
             children: [
-              ClipRect(
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
                 child: SizedBox(
                   height: heightSelector,
                   width: MediaQuery.of(context).size.width,
@@ -152,10 +153,13 @@ class UltraSelector extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                color: Colors.black.withOpacity(0.3),
-                height: heightSelector,
-                width: MediaQuery.of(context).size.width,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                child: Container(
+                  color: Colors.black.withOpacity(0.3),
+                  height: heightSelector,
+                  width: MediaQuery.of(context).size.width,
+                ),
               ),
             ],
           );
