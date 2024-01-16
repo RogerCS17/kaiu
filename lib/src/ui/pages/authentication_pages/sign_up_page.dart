@@ -26,7 +26,7 @@ class _SignUpPageState extends State<SignUpPage> {
         padding: EdgeInsets.zero,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 30, right: 15, left: 15, bottom: 5),
+            padding: EdgeInsets.only(top: 30, right: 15, left: 15, bottom: 12),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(
                   75.0), // Ajusta el radio según tus necesidades
@@ -56,18 +56,19 @@ class _SignUpPageState extends State<SignUpPage> {
                   height: 56,
                   child: TextField(
                     controller: _emailController,
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                     style: TextStyle(
                       color: Color(0xFF393939),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
                     decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.email),
+                      prefixIconColor: theme.textPrimary(),
                       labelText: 'Correo',
                       labelStyle: TextStyle(
-                        color: theme.textPrimary(),
+                        color: theme.textPrimary().withOpacity(0.5),
                         fontSize: 15,
-                        fontWeight: FontWeight.w600,
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -91,13 +92,15 @@ class _SignUpPageState extends State<SignUpPage> {
                   height: 56,
                   child: TextField(
                     controller: _passController,
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                     style: TextStyle(
                       color: Color(0xFF393939),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
                     decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.lock_open),
+                      prefixIconColor: theme.textPrimary(),
                       labelText: 'Contraseña',
                       // hintText: 'Crear Contraseña',
                       hintStyle: TextStyle(
@@ -106,9 +109,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         fontWeight: FontWeight.w400,
                       ),
                       labelStyle: TextStyle(
-                        color: theme.textPrimary(),
+                        color: theme.textPrimary().withOpacity(0.5),
                         fontSize: 15,
-                        fontWeight: FontWeight.w600,
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -132,13 +134,15 @@ class _SignUpPageState extends State<SignUpPage> {
                   height: 56,
                   child: TextField(
                     controller: _repassController,
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                     style: TextStyle(
                       color: Color(0xFF393939),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
                     decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.lock),
+                      prefixIconColor: theme.textPrimary(),
                       labelText: 'Confirmar Contraseña',
                       // hintText: 'Confirmando',
                       hintStyle: TextStyle(
@@ -147,9 +151,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         fontWeight: FontWeight.w400,
                       ),
                       labelStyle: TextStyle(
-                        color: theme.textPrimary(),
+                        color: theme.textPrimary().withOpacity(0.5),
                         fontSize: 15,
-                        fontWeight: FontWeight.w600,
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -210,9 +213,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         );
                       },
                       child: Text(
-                        'Inicia Sesión ',
+                        'Inicia Sesión',
                         style: TextStyle(
-                          color: theme.textPrimary(),
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.blueAccent,
+                          color: Colors.blueAccent,
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
                         ),
