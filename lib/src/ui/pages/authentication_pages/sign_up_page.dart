@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
@@ -22,6 +21,9 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _repassController = TextEditingController();
 
+  bool _isPasswordVisible = false;
+  bool _isRePasswordVisible = false;
+
   void _signUp() async {
     log("Funciona");
     String email = _emailController.text;
@@ -31,7 +33,7 @@ class _SignUpPageState extends State<SignUpPage> {
       assert(password == rePassword, "Las Contraseñas no Coinciden");
       final response = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
-          log("Registro exitoso");
+      log("Registro exitoso");
       // Navigator.pushReplacement(
       //     context, MaterialPageRoute(builder: (context) => Home()));
     } catch (error) {
@@ -129,6 +131,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 SizedBox(
                   height: 56,
                   child: TextField(
+                    obscureText: !_isPasswordVisible,
                     controller: _passController,
                     textAlign: TextAlign.start,
                     style: TextStyle(
@@ -137,8 +140,24 @@ class _SignUpPageState extends State<SignUpPage> {
                       fontWeight: FontWeight.w400,
                     ),
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock_open),
+                      prefixIcon: Icon(
+                        Icons.lock_open,
+                      ),
                       prefixIconColor: theme.textPrimary(),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: _isPasswordVisible
+                                ? Configure.ultraRed
+                                : theme.textPrimary().withOpacity(0.5)),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                      ),
                       labelText: 'Contraseña',
                       // hintText: 'Crear Contraseña',
                       hintStyle: TextStyle(
@@ -171,6 +190,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 SizedBox(
                   height: 56,
                   child: TextField(
+                    obscureText: !_isRePasswordVisible,
                     controller: _repassController,
                     textAlign: TextAlign.start,
                     style: TextStyle(
@@ -181,6 +201,20 @@ class _SignUpPageState extends State<SignUpPage> {
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.lock),
                       prefixIconColor: theme.textPrimary(),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                            _isRePasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: _isRePasswordVisible
+                                ? Configure.ultraRed
+                                : theme.textPrimary().withOpacity(0.5)),
+                        onPressed: () {
+                          setState(() {
+                            _isRePasswordVisible = !_isRePasswordVisible;
+                          });
+                        },
+                      ),
                       labelText: 'Confirmar Contraseña',
                       // hintText: 'Confirmando',
                       hintStyle: TextStyle(

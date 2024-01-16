@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
+import 'package:kaiu/src/ui/pages/kaiju_galery.dart';
 
 class UltraSelector extends StatelessWidget {
   final Ultra? ultra;
@@ -17,8 +18,9 @@ class UltraSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = ThemeController.instance;
+    // final theme = ThemeController.instance;
     final heightSelector = MediaQuery.of(context).size.height / 1.425;
+    final theme = ThemeController.instance;
 
     return isSelected
         ? SizedBox(
@@ -28,107 +30,94 @@ class UltraSelector extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Card(
-                  margin: EdgeInsets.only(
-                      left: 20.0, right: 20.0, top: 10, bottom: 10),
-                  elevation: 7,
-                  child: SizedBox(
-                    height: heightSelector, // Altura fija del Card
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                          8.0), // Ajusta según sea necesario
-                      child: Image.network(
-                        errorBuilder: (BuildContext context, Object error,
-                            StackTrace? stackTrace) {
-                          // En lugar de un mensaje de error, muestra una imagen de repuesto
-                          return Image.asset(
-                            'assets/test_image.png',
-                            fit: BoxFit.cover,
-                          );
-                        },
-                        ultra?.imgPath ?? "", // URL de la imagen principal
-                        fit: BoxFit.cover,
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) {
-                            // La imagen principal está cargada
-                            return child;
-                          } else {
-                            // Muestra el Stack con la imagen de respaldo y el CircularProgressIndicator
-                            return Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                SizedBox(
-                                  height: heightSelector,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: ImageFiltered(
-                                    imageFilter: ImageFilter.blur(
-                                        sigmaX: 5,
-                                        sigmaY:
-                                            5), // Ajusta la cantidad de desenfoque
-                                    child: Image.asset(
-                                      'assets/placeholder.jpeg', // Ruta de la imagen de respaldo en tu proyecto
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  color: Colors.black.withOpacity(0.3),
-                                  height: heightSelector,
-                                  width: MediaQuery.of(context).size.width,
-                                ),
-                                CircularProgressIndicator(
-                                  strokeWidth: 4,
-                                  color: Color.fromARGB(255, 29, 182, 238),
-                                ),
-                              ],
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (int i = 0; i < 3; i++) // Creamos 3 bolitas
-                      Container(
-                        margin: EdgeInsets.all(2),
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color:
-                              currentPageFake == i ? Colors.blue : Colors.grey,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => KaijuGalery(ultra: ultra!)));
+                  },
+                  child: Stack(
+                    children: [
+                      Card(
+                        margin: EdgeInsets.only(
+                            left: 20.0, right: 20.0, top: 10, bottom: 10),
+                        elevation: 7,
+                        child: SizedBox(
+                          height: heightSelector, // Altura fija del Card
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              errorBuilder: (BuildContext context, Object error,
+                                  StackTrace? stackTrace) {
+                                return Image.asset(
+                                  'assets/test_image.png',
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                              ultra?.imgPath ?? "",
+                              fit: BoxFit.cover,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                } else {
+                                  return Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: heightSelector,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: ImageFiltered(
+                                          imageFilter: ImageFilter.blur(
+                                              sigmaX: 5, sigmaY: 5),
+                                          child: Image.asset(
+                                            'assets/placeholder.jpeg',
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.black.withOpacity(0.3),
+                                        height: heightSelector,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                      ),
+                                      CircularProgressIndicator(
+                                        strokeWidth: 4,
+                                        color:
+                                            Color.fromARGB(255, 29, 182, 238),
+                                      ),
+                                    ],
+                                  );
+                                }
+                              },
+                            ),
+                          ),
                         ),
                       ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
+                      Positioned(
+                        bottom: 10,
+                        right: 10,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.blue.withOpacity(0.5),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.touch_app_outlined,
+                              color: Colors.white,
+                              size: 50.0,
+                            ),
+                          ),
+                        ),
                       ),
-                      onPressed: onPressed,
-                      child: Text(
-                        "◀ Registros Kaiju ▶",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    // SizedBox(
-                    //   height: 5,
-                    // ),
-                    Text(
-                      ultra?.name?.toUpperCase() ?? "",
-                      style: TextStyle(
-                        color: theme.textPrimary(),
-                        // fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w200,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

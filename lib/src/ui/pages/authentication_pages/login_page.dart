@@ -1,12 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
+import 'package:kaiu/src/core/services/preferences_service.dart';
 import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/pages/authentication_pages/sign_up_page.dart';
 import 'package:kaiu/src/ui/pages/home.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
-import 'dart:developer';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,43 +16,102 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //Controladores
   final theme = ThemeController.instance;
   final auth = FirebaseAuth.instance;
+
+  //Controladores de Texto
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 
+  //Variables Empleadas
+  bool _isPasswordVisible = false;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEmailPassword().then((list) {
+      _emailController.text = list[0]; // 0 > Correo
+      _passController.text = list[1]; //1 > Contraseña
+    });
+  }
+
+  Future<List<String>> _loadEmailPassword() async {
+    final email = await PreferencesService.instance.getString("email");
+    final password = await PreferencesService.instance.getString("password");
+    return [email, password];
+  }
+
   void _login() async {
-    String email = _emailController.text;
-    String password = _passController.text;
+    setState(() {
+      //Primer Cambio de Estado
+      _isLoading = true; // Activa el indicador de carga
+    });
 
     try {
-      final response = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      await auth.signInWithEmailAndPassword(
+          email: _emailController.text, password: _passController.text);
+      await PreferencesService.instance
+          .setString("email", _emailController.text);
+      await PreferencesService.instance
+          .setString("password", _passController.text);
+      _navigateToHome(); // Ir al Home
+    } catch (error) {
+      _showErrorDialog(error.toString()); // Mostrar Error
+    } finally {
+      setState(() {
+        _isLoading =
+            false; // Desactiva el indicador de carga una vez que termine
+      });
+    }
+  }
+
+  //Funcion que devuelve un Widget - Home
+  void _navigateToHome() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Home()));
-    } catch (error) {
+    });
+  }
+
+  //Funcion que devuelve un Wdiget - Mensaje de Error
+  void _showErrorDialog(String errorMessage) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Error de inicio de sesión'),
-            content: Text("asdasd"),
+            content: Text(errorMessage),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: Text('Continuar'),
               ),
             ],
           );
         },
       );
-    }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    //Widget Principal
+    return Scaffold(
+      backgroundColor: theme.background(),
+      body: _isLoading
+          ? _buildLoadingScreen()
+          : _buildLoginForm(), // Mostrar el formulario o pantalla de carga
+    );
+  }
+
+  //Funcion que devuelve un Widget - Formulario
+  Widget _buildLoginForm() {
+    // Resto del código del formulario
     final heightSelector = MediaQuery.of(context).size.height / 2.5;
     return Scaffold(
       // resizeToAvoidBottomInset: false,
@@ -126,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 15),
                 TextField(
-                  obscureText: true,
+                  obscureText: !_isPasswordVisible,
                   controller: _passController,
                   textAlign: TextAlign.start,
                   style: TextStyle(
@@ -138,6 +197,20 @@ class _LoginPageState extends State<LoginPage> {
                     prefixIcon: Icon(
                       Icons.lock,
                       color: theme.textPrimary(),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: _isPasswordVisible
+                              ? Configure.ultraRed
+                              : theme.textPrimary().withOpacity(0.5)),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
                     ),
                     labelText: 'Contraseña',
                     labelStyle: TextStyle(
@@ -162,7 +235,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -185,18 +258,18 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    RawMaterialButton(
-                      onPressed: () {},
-                      elevation: 3.0,
-                      fillColor: Color.fromARGB(235, 255, 255, 255),
-                      child: Image.asset(
-                        'assets/google_logo.png',
-                        height: 20,
-                        width: 20,
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      shape: CircleBorder(),
-                    ),
+                    // RawMaterialButton(
+                    //   onPressed: () {},
+                    //   elevation: 3.0,
+                    //   fillColor: Color.fromARGB(235, 255, 255, 255),
+                    //   child: Image.asset(
+                    //     'assets/google_logo.png',
+                    //     height: 20,
+                    //     width: 20,
+                    //   ),
+                    //   padding: const EdgeInsets.all(10),
+                    //   shape: CircleBorder(),
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -236,7 +309,7 @@ class _LoginPageState extends State<LoginPage> {
                 TextButton(
                   onPressed: () {
                     // Acción a realizar cuando se presiona el botón de texto
-                    print("Aún falta esta funcionalidad papi");
+                    log("Aún falta esta funcionalidad papi");
                   },
                   child: Text(
                     '¿Olvidaste tu Contraseña?',
@@ -253,6 +326,15 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  //Funcion que devuelve un Widget - Pantalla de Carga
+  Widget _buildLoadingScreen() {
+    return Center(
+      child: CircularProgressIndicator(
+        color: Colors.blueAccent,
       ),
     );
   }
