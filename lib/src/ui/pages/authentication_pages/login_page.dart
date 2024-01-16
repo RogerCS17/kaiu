@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
@@ -5,6 +6,7 @@ import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/pages/authentication_pages/sign_up_page.dart';
 import 'package:kaiu/src/ui/pages/home.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
+import 'dart:developer';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -15,23 +17,26 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final theme = ThemeController.instance;
+  final auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 
-  void _login() {
+  void _login() async {
     String email = _emailController.text;
     String password = _passController.text;
-    if (email.isNotEmpty && password.isNotEmpty) {
+
+    try {
+      final response = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Home()));
-      print("Inicio de Sesión Existoso");
-    } else {
+    } catch (error) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Error de inicio de sesión'),
-            content: Text('Por favor, ingresa un correo y contraseña.'),
+            content: Text("asdasd"),
             actions: [
               TextButton(
                 onPressed: () {

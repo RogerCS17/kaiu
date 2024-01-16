@@ -1,7 +1,11 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
+import 'package:kaiu/src/ui/pages/home.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -13,9 +17,43 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final theme = ThemeController.instance;
+  final auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _repassController = TextEditingController();
+
+  void _signUp() async {
+    log("Funciona");
+    String email = _emailController.text;
+    String password = _passController.text;
+    String rePassword = _repassController.text;
+    try {
+      assert(password == rePassword, "Las Contraseñas no Coinciden");
+      final response = await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+          log("Registro exitoso");
+      // Navigator.pushReplacement(
+      //     context, MaterialPageRoute(builder: (context) => Home()));
+    } catch (error) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error de registro'),
+            content: Text(error.toString()),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     controller: _emailController,
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      color: Color(0xFF393939),
+                      color: theme.textPrimary(),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
@@ -94,7 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     controller: _passController,
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      color: Color(0xFF393939),
+                      color: theme.textPrimary(),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
@@ -136,7 +174,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     controller: _repassController,
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      color: Color(0xFF393939),
+                      color: theme.textPrimary(),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
@@ -175,7 +213,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _signUp();
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Configure.ultraRed,
                     ),
