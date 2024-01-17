@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
 
-class KaijuGaleryBanner extends StatelessWidget {
-  const KaijuGaleryBanner({
+class BannerButton extends StatelessWidget {
+  final Function()? onTap;
+  final String image;
+  final String primaryMessage;
+  final String secondaryMessage;
+  
+  const BannerButton({
+    required this.onTap,
+    required this.primaryMessage,
+    required this.secondaryMessage,
+    required this.image,
     Key? key,
   }) : super(key: key);
 
@@ -10,9 +18,7 @@ class KaijuGaleryBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final heightSelector = MediaQuery.of(context).size.height / 6;
     return GestureDetector(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => UltraPageView()));
-      },
+      onTap: onTap,
       child: Container(
         alignment: Alignment.center,
         height: heightSelector,
@@ -33,7 +39,7 @@ class KaijuGaleryBanner extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.asset(
-                      'assets/kaiju_banner.png', // Ruta de tu imagen de fondo
+                      image, // Ruta de tu imagen de fondo
                       fit: BoxFit.cover, // Ajusta la imagen para que cubra el contenedor
                     ),
                   ),
@@ -42,13 +48,13 @@ class KaijuGaleryBanner extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: const Text.rich(
+              child: Text.rich(
                 TextSpan(
                   style: TextStyle(color: Colors.white),
                   children: [
-                    TextSpan(text: "Visita la Novedosa\n"),
+                    TextSpan(text: "$primaryMessage\n"),
                     TextSpan(
-                      text: "Galería Kaiju",
+                      text: secondaryMessage,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

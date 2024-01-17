@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/ui/pages/kaiju_galery.dart';
 
@@ -20,7 +19,7 @@ class UltraSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     // final theme = ThemeController.instance;
     final heightSelector = MediaQuery.of(context).size.height / 1.425;
-    final theme = ThemeController.instance;
+    // final theme = ThemeController.instance;
 
     return isSelected
         ? SizedBox(

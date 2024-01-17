@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/core/services/database.dart';
-import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/pages/kaiju_galery.dart';
 import 'package:kaiu/src/ui/pages/ultra_selector.dart';
 

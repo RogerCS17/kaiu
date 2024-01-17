@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
-import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
-import 'package:kaiu/src/ui/pages/home_components/kaiju_galery_banner.dart';
-import 'package:kaiu/src/ui/pages/home_components/logo_banner.dart';
-import 'package:kaiu/src/ui/pages/home_components/special_offers.dart';
-import 'package:kaiu/src/ui/pages/home_components/ultrabrother_banner.dart';
-import 'package:kaiu/src/ui/pages/home_components/popular_product.dart';
-import 'package:kaiu/src/ui/widget/Logo/logo.dart';
+import 'package:kaiu/src/ui/widget/home_components/banner_button.dart';
+import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
 
 class Home extends StatelessWidget {
   static String routeName = "/home";
@@ -20,7 +16,10 @@ class Home extends StatelessWidget {
         builder: (BuildContext context, value, child) {
           return Scaffold(
             appBar: AppBar(
-              title: Text("Página Inicio", style: TextStyle(color: theme.exTextPrimary()),),
+              title: Text(
+                "Página Inicio",
+                style: TextStyle(color: theme.exTextPrimary()),
+              ),
               backgroundColor: theme.exBackground(),
               actions: [
                 PopupMenuButton<String>(
@@ -70,9 +69,29 @@ class Home extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 16, horizontal: 5),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    UltraBrotherBanner(),
-                    KaijuGaleryBanner(),
+                  children: [
+                    
+                    //Para Rediriginar al Canal de Youtube
+                    BannerButton(
+                        primaryMessage: "Visita el Canal de",
+                        secondaryMessage: "UltraBrother M78",
+                        onTap: () {
+                          launchURL(
+                              "https://www.youtube.com/channel/UCvx0kG1KPYrD7Ez24C2rMtQ");
+                        },
+                        image: "assets/ultraman_banner.png"),
+                    
+                    //Para Acceder a la Galería Kaiju
+                    BannerButton(
+                        primaryMessage: "Visita la Novedosa",
+                        secondaryMessage: "Galería Kaiju",
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UltraPageView()));
+                        },
+                        image: "assets/kaiju_banner.png"),
                   ],
                 ),
               ),
