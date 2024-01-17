@@ -17,8 +17,11 @@ class ThemeController {
 
   Color background() =>
       brightnessValue ? Configure.backgroundLight : Configure.backgroundDark;
+  Color exBackground() =>
+      !brightnessValue ? Configure.backgroundLight : Configure.backgroundDark;
 
   Color textPrimary() => brightnessValue ? Colors.black : Colors.white;
+  Color exTextPrimary() => !brightnessValue ? Colors.black : Colors.white;
 
   Color backgroundSecondary() =>
       brightnessValue ? Configure.backgrountLightSecondary : Configure.backgroundDarkSecondary;

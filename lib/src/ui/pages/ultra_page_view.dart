@@ -32,14 +32,15 @@ class _UltraPageViewState extends State<UltraPageView> {
       appBar: AppBar(
         title: Text(
           "Selector Ultra",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: theme.exTextPrimary()),
         ),
-        backgroundColor: Configure.ultraRed,
-        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: theme.exBackground(),
+        iconTheme: IconThemeData(color: theme.exTextPrimary()),
       ),
       resizeToAvoidBottomInset: false,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: StreamBuilder(

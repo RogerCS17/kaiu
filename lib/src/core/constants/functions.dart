@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //Decodifica el Color desde un String
 Color colorFromHex(String hexColor) {
@@ -17,3 +18,12 @@ int generateRandomNumberOneToNine() {
   int randomNumber = random.nextInt(9) + 1;
   return randomNumber;
 }
+
+  // Función para abrir el enlace
+  void launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'No se pudo abrir el enlace $url';
+    }
+  }
