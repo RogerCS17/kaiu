@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/services/preferences_service.dart';
 import 'package:kaiu/src/ui/configure.dart';
+import 'package:kaiu/src/ui/pages/authentication_pages/reset_password_page.dart';
 import 'package:kaiu/src/ui/pages/authentication_pages/sign_up_page.dart';
 import 'package:kaiu/src/ui/pages/home.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
@@ -309,7 +310,12 @@ class _LoginPageState extends State<LoginPage> {
                 TextButton(
                   onPressed: () {
                     // Acción a realizar cuando se presiona el botón de texto
-                    log("Aún falta esta funcionalidad papi");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ResetPasswordPage(),
+                      ),
+                    );
                   },
                   child: Text(
                     '¿Olvidaste tu Contraseña?',
