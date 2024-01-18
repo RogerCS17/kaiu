@@ -1,14 +1,40 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
+import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 import 'package:kaiu/src/ui/widget/home_components/banner_button.dart';
 import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
 
 class Home extends StatelessWidget {
   static String routeName = "/home";
   final theme = ThemeController.instance;
+  final _auth = FirebaseAuth.instance;
+
   Home({super.key});
+
+  void signOut() async {
+    await _auth.signOut();
+  }
+
+  void deleteAccount() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        await user.delete();
+        print('Cuenta eliminada con éxito.');
+      } else {
+        print('No hay usuario autenticado.');
+      }
+    } catch (e) {
+      print('Error al eliminar la cuenta: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -44,8 +70,12 @@ class Home extends StatelessWidget {
                       PopupMenuItem<String>(
                         value: 'opcion2',
                         child: Text('Cerrar Sesión'),
-                        onTap: () {
-                          print("Aquí va Cerrar Sesión Papi");
+                        onTap: () async {
+                          signOut();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
                         },
                       ),
                       PopupMenuItem<String>(
@@ -56,6 +86,17 @@ class Home extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => AdminPageView()));
+                        },
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'opcion4',
+                        child: Text('Borrar cuenta'),
+                        onTap: () async {
+                          deleteAccount();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
                         },
                       ),
                     ];
@@ -70,7 +111,6 @@ class Home extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    
                     //Para Rediriginar al Canal de Youtube
                     BannerButton(
                         primaryMessage: "Visita el Canal de",
@@ -80,7 +120,7 @@ class Home extends StatelessWidget {
                               "https://www.youtube.com/channel/UCvx0kG1KPYrD7Ez24C2rMtQ");
                         },
                         image: "assets/ultraman_banner.png"),
-                    
+
                     //Para Acceder a la Galería Kaiju
                     BannerButton(
                         primaryMessage: "Visita la Novedosa",

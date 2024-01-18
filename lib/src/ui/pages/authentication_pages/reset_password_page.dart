@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
+import 'dart:developer';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({Key? key}) : super(key: key);
@@ -139,7 +140,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     fontSize: 15,
                   ),
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.email, color: theme.textPrimary(),),
+                    prefixIcon: Icon(
+                      Icons.email,
+                      color: theme.textPrimary(),
+                    ),
                     labelText: 'Correo',
                     labelStyle: TextStyle(
                       color: theme.textPrimary().withOpacity(0.5),
