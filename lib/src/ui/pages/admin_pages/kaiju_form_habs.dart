@@ -6,11 +6,13 @@ import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/core/services/database.dart';
 
 class KaijuFormHabs extends StatefulWidget {
+  const KaijuFormHabs({super.key});
+
   @override
-  _KaijuFormHabsState createState() => _KaijuFormHabsState();
+  KaijuFormHabsState createState() => KaijuFormHabsState();
 }
 
-class _KaijuFormHabsState extends State<KaijuFormHabs> {
+class KaijuFormHabsState extends State<KaijuFormHabs> {
   final databaseMethod = DatabaseMethods.instance;
   List<TextEditingController> keyControllers = [TextEditingController()];
   List<TextEditingController> valueControllers = [TextEditingController()];
@@ -65,11 +67,12 @@ class _KaijuFormHabsState extends State<KaijuFormHabs> {
     var iterableZipController = IterableZip([keyControllers, valueControllers]);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dynamic Form'),
+        title: Text('Gestionar Habilidades'),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: DropdownButton<String>(
+              dropdownColor: Colors.black,
               value: optionKaiju,
               onChanged: (newValue) {
                 setState(() {
@@ -84,7 +87,7 @@ class _KaijuFormHabsState extends State<KaijuFormHabs> {
                   child: Text(
                     option,
                     style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
+                        color: Colors.orange, fontWeight: FontWeight.bold),
                   ),
                 );
               }).toList(),
@@ -106,11 +109,13 @@ class _KaijuFormHabsState extends State<KaijuFormHabs> {
                   children: [
                     TextField(
                       controller: keyController,
-                      decoration: InputDecoration(labelText: 'Clave'),
+                      decoration:
+                          InputDecoration(labelText: 'Nombre de la Habilidad'),
                     ),
                     TextField(
                       controller: valueController,
-                      decoration: InputDecoration(labelText: 'Valor'),
+                      decoration:
+                          InputDecoration(labelText: 'Imagen de la Habilidad'),
                     ),
                   ],
                 );

@@ -8,10 +8,10 @@ class KaijuForm extends StatefulWidget {
   const KaijuForm({super.key});
 
   @override
-  State<KaijuForm> createState() => _KaijuFormState();
+  State<KaijuForm> createState() => KaijuFormState();
 }
 
-class _KaijuFormState extends State<KaijuForm> {
+class KaijuFormState extends State<KaijuForm> {
   final database = DatabaseMethods.instance;
 
   TextEditingController nameController = TextEditingController();
@@ -25,7 +25,6 @@ class _KaijuFormState extends State<KaijuForm> {
   TextEditingController ultraController = TextEditingController();
   TextEditingController commentaryController = TextEditingController();
   TextEditingController imgDrawerController = TextEditingController();
-  TextEditingController imgHabController = TextEditingController();
   TextEditingController episodeController = TextEditingController();
 
   @override
@@ -34,7 +33,7 @@ class _KaijuFormState extends State<KaijuForm> {
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: const [
             Text(
               "Kaiju",
               style: TextStyle(
@@ -70,9 +69,8 @@ class _KaijuFormState extends State<KaijuForm> {
               buildInputField("Ultra", ultraController),
               buildInputField("Comentary", commentaryController),
               buildInputField("Img Drawer", imgDrawerController),
-              buildInputField("Img Hab", imgHabController),
               buildInputField("Episode", episodeController), //Castear
-        
+
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -92,7 +90,6 @@ class _KaijuFormState extends State<KaijuForm> {
                         "ultra": ultraController.text,
                         "comentary": commentaryController.text,
                         "imgDrawer": imgDrawerController.text,
-                        "imgHab": imgHabController.text,
                         "episode": int.parse(episodeController.text),
                       };
                       //Parte BackEnd
@@ -110,8 +107,9 @@ class _KaijuFormState extends State<KaijuForm> {
                       });
                     },
                     child: Text(
-                      "Add",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      "Añadir Kaiju",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),

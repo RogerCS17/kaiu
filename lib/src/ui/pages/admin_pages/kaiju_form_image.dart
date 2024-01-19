@@ -5,11 +5,13 @@ import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/core/services/database.dart';
 
 class KaijuFormImage extends StatefulWidget {
+  const KaijuFormImage({super.key});
+
   @override
-  _KaijuFormImageState createState() => _KaijuFormImageState();
+  KaijuFormImageState createState() => KaijuFormImageState();
 }
 
-class _KaijuFormImageState extends State<KaijuFormImage> {
+class KaijuFormImageState extends State<KaijuFormImage> {
   //Metodo que Instancia la Base de Datos
   final databaseMethod = DatabaseMethods.instance;
   List<TextEditingController> textControllers = [TextEditingController()];
@@ -65,12 +67,13 @@ class _KaijuFormImageState extends State<KaijuFormImage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Kaiju Form Image'),
+        title: Text('Gestionar Imágenes'),
         actions: [
           Padding(
             padding: EdgeInsets.all(8.0),
             child: // Lista desplegable al inicio
                 DropdownButton<String>(
+              dropdownColor: Colors.black,
               value: optionKaiju,
               onChanged: (newValue) {
                 setState(() {
@@ -87,7 +90,7 @@ class _KaijuFormImageState extends State<KaijuFormImage> {
                   child: Text(
                     option,
                     style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
+                        color: Colors.orange, fontWeight: FontWeight.bold),
                   ),
                 );
               }).toList(),

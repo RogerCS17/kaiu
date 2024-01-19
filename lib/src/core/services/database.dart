@@ -3,11 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class DatabaseMethods {
-  
   //Constructor Privado
   DatabaseMethods._();
 
   static final instance = DatabaseMethods._();
+
+  // Implementado en StreamBuilder
+  Stream<QuerySnapshot<Map<String, dynamic>>> getUltraDetails() {
+    return FirebaseFirestore.instance.collection("Ultra").snapshots();
+  }
 
   //Añadir Kaiju
   Future addKaijuDetails(Map<String, dynamic> kaijuInfoMap, String id) async {
@@ -18,23 +22,25 @@ class DatabaseMethods {
         .set(kaijuInfoMap);
   }
 
-  // En StreamBuidler
-  Stream<QuerySnapshot<Map<String, dynamic>>> getUltraDetails() {
-    return FirebaseFirestore.instance.collection("Ultra").snapshots();
+  // Implementado en InitState
+  Future<QuerySnapshot<Map<String, dynamic>>> getKaijuDetails() async {
+    return await FirebaseFirestore.instance
+        .collection("Kaiju")
+        .orderBy("episode")
+        .get();
   }
 
-  // En InitState -- .orderBy (Ordena de forma ascendente dado una variable de la colección)
-  Future<QuerySnapshot<Map<String, dynamic>>> getKaijuDetails() async{
-    return await FirebaseFirestore.instance.collection("Kaiju").orderBy("episode").get();
+  //Funcion Actualizar Kaiju
+  Future updateKaijuDetail(String id, Map<String, dynamic> updateInfo) async {
+    return await FirebaseFirestore.instance
+        .collection("Kaiju")
+        .doc(id)
+        .update(updateInfo);
   }
-  
+
   //Obtener URL de Imagen
   Future<String> getImageUrl(String imagePath) async {
     Reference ref = FirebaseStorage.instance.ref().child(imagePath);
     return await ref.getDownloadURL();
-  }
-
-  Future updateKaijuDetail(String id, Map<String, dynamic> updateInfo) async{
-    return await FirebaseFirestore.instance.collection("Kaiju").doc(id).update(updateInfo);
   }
 }

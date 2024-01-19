@@ -1,24 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
+import 'package:kaiu/src/core/services/preferences_service.dart';
 import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
-import 'dart:developer';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({Key? key}) : super(key: key);
 
   @override
-  _ResetPasswordPageState createState() => _ResetPasswordPageState();
+  State<ResetPasswordPage> createState() => _ResetPasswordPageState();
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final theme = ThemeController.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   final TextEditingController _emailController = TextEditingController();
 
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEmail().then((email) {
+      _emailController.text = email; // 0 > Correo
+    });
+  }
+
+  Future<String> _loadEmail() async {
+    final email = await PreferencesService.instance.getString("email");
+    return email;
+  }
 
   void _resetPassword() async {
     setState(() {

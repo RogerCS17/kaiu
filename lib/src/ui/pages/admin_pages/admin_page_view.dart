@@ -3,15 +3,14 @@ import 'package:kaiu/src/ui/pages/admin_pages/kaiju_form.dart';
 import 'package:kaiu/src/ui/pages/admin_pages/kaiju_form_habs.dart';
 import 'package:kaiu/src/ui/pages/admin_pages/kaiju_form_image.dart';
 
-
 class AdminPageView extends StatefulWidget {
   const AdminPageView({Key? key}) : super(key: key);
 
   @override
-  _AdminPageViewState createState() => _AdminPageViewState();
+  AdminPageViewState createState() => AdminPageViewState();
 }
 
-class _AdminPageViewState extends State<AdminPageView> {
+class AdminPageViewState extends State<AdminPageView> {
   int _currentIndex = 0;
   late List<Widget> _pages;
 
@@ -40,8 +39,9 @@ class _AdminPageViewState extends State<AdminPageView> {
             _currentIndex = index;
           });
         },
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.pageview), label: 'Formulario'),
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.pageview), label: 'Formulario'),
           BottomNavigationBarItem(icon: Icon(Icons.image), label: 'Imagen'),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Habilidades'),
         ],
