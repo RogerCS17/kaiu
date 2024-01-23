@@ -1,4 +1,7 @@
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
@@ -12,26 +15,37 @@ class KaijuFormImage extends StatefulWidget {
 }
 
 class KaijuFormImageState extends State<KaijuFormImage> {
-  //Metodo que Instancia la Base de Datos
   final databaseMethod = DatabaseMethods.instance;
-  List<TextEditingController> textControllers = [TextEditingController()];
 
-  List<Kaiju> kaijus = []; //La Lista de todos los Kaijus en Firebase
-  late Kaiju selectedKaiju; //Seleccionamos un Kaiju a Actualizar
+  List<Kaiju> kaijus =
+      []; //La Lista de todos los Kaijus en Firebase (Inmutable)
+  late Kaiju selectedKaiju; //El Kaiju particular Seleccionado
+
   String optionKaiju = ''; //Nombre del Kaiju a Seleccionar
+  String optionUltra = ''; // Nombre del Ultra a Seleccionar - Filtro Mayor
 
-  //Conjunto de Nombres Posibles de Seleccionar
-  List<String> dropdownOptions = [];
+  //Conjunto de Nombres Posibles a Seleccionar
+  List<String> kaijuOptions = [];
+  List<String> ultraOptions = [];
 
   @override
   void initState() {
     super.initState();
     _loadKaijuData().then((kaijuList) {
       setState(() {
-        //Inicializamos la Lista con todos los Kaijus
+        // Inicializamos la Lista con todos los Kaijus
         kaijus = kaijuList;
-        dropdownOptions = [...kaijuList.map((e) => e.name)];
-        optionKaiju = dropdownOptions.first;
+
+        // Inicializamos la Lista de Ultra con nombres únicos
+        ultraOptions = kaijuList.map((e) => e.ultra).toSet().toList();
+        ultraOptions.sort();
+
+        // Establecemos las opciones de Ultra y la opción por defecto
+        kaijuOptions = [...kaijuList.map((e) => e.name)];
+        optionKaiju = kaijuOptions.first;
+        optionUltra = ultraOptions.first;
+
+        // Establecemos el Kaiju y Ultra seleccionados
         selectedKaiju =
             kaijus.firstWhere((element) => element.name == optionKaiju);
       });
@@ -48,7 +62,8 @@ class KaijuFormImageState extends State<KaijuFormImage> {
           return Kaiju(
               id: data["id"] ?? "-",
               name: data["name"] ?? "-",
-              img: data["img"] ?? []);
+              img: data["img"] ?? [],
+              ultra: data["ultra"] ?? "-");
         }).toList();
 
         return kaijuList;
@@ -63,71 +78,150 @@ class KaijuFormImageState extends State<KaijuFormImage> {
     }
   }
 
+  Future<List<String>> pickAndUploadImages(
+      String ultraName, String nameKaiju) async {
+    List<String> listKaijuLink = [];
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'webp'],
+      );
+
+      if (result != null) {
+        for (PlatformFile file in result.files) {
+          if (['jpg', 'jpeg', 'png', 'webp'].contains(file.extension)) {
+            Uint8List fileBytes = file.bytes!;
+
+            await FirebaseStorage.instance
+                .ref('Kaijus/$ultraName/$nameKaiju/${file.name}')
+                .putData(
+                    fileBytes, SettableMetadata(contentType: file.extension));
+
+            String imageUrl = await FirebaseStorage.instance
+                .ref('Kaijus/$ultraName/$nameKaiju/${file.name}')
+                .getDownloadURL();
+
+            listKaijuLink.add(imageUrl);
+
+            // print('Imagen seleccionada y subida: ${file.name}');
+            // print('Link Asociado: $imageUrl');
+          } else {
+            print('El archivo ${file.name} no es una imagen.');
+            return [];
+          }
+        }
+
+        //Procedemos a ordenar la Lista Correctamente
+        listKaijuLink.sort((a, b) {
+          // Extraer los números de los nombres de archivo
+          int numA = int.parse(a.split("_")[2].split(".")[0]);
+          int numB = int.parse(b.split("_")[2].split(".")[0]);
+
+          // Comparar los números
+          return numA.compareTo(numB);
+        });
+
+        //Mensaje de Aviso
+        print("Lista de Imágenes Ingresadas con éxito");
+        return listKaijuLink;
+      } else {
+        print('Selección de archivos cancelada');
+        return [];
+      }
+    } catch (e) {
+      print('Error al seleccionar los archivos: $e');
+      return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Gestionar Imágenes'),
-        actions: [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: // Lista desplegable al inicio
-                DropdownButton<String>(
-              dropdownColor: Colors.black,
-              value: optionKaiju,
-              onChanged: (newValue) {
-                setState(() {
-                  //Seleccionamos el nombre del Kaiju
-                  optionKaiju = newValue!;
-                  //Obtenemos al Kaiju Individual
-                  selectedKaiju = kaijus
-                      .firstWhere((element) => element.name == optionKaiju);
-                });
-              },
-              items: dropdownOptions.map((option) {
-                return DropdownMenuItem<String>(
-                  value: option,
-                  child: Text(
-                    option,
-                    style: TextStyle(
-                        color: Colors.orange, fontWeight: FontWeight.bold),
-                  ),
-                );
-              }).toList(),
-            ),
-          )
-        ],
+        actions: [],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Container(
+        margin: EdgeInsets.all(12.0),
+        height: 150,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Color.fromARGB(193, 180, 37, 236)
+          ),
+          borderRadius: BorderRadius.circular(10.0)
+        ),
+        padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
-            SizedBox(height: 10),
-            // Mostrar los campos de texto existentes
-            Column(
-              children: textControllers.map((controller) {
-                return TextField(
-                  controller: controller,
-                  decoration: InputDecoration(labelText: "URL de Imagen"),
-                );
-              }).toList(),
+            Text("Imagenes Principales",style: TextStyle(fontWeight: FontWeight.bold),),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // Dropdown para seleccionar "Ultra"
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: optionUltra,
+                    onChanged: (newValue) {
+                      setState(() {
+                        optionUltra = newValue!;
+                        kaijuOptions = kaijus
+                            .where((element) => element.ultra == optionUltra)
+                            .map((e) => e.name)
+                            .toList();
+                        optionKaiju = kaijuOptions.first;
+                        selectedKaiju = kaijus.firstWhere(
+                            (element) => element.name == optionKaiju);
+                      });
+                    },
+                    items: ultraOptions.map((ultraOption) {
+                      return DropdownMenuItem<String>(
+                        value: ultraOption,
+                        child: Text(
+                          ultraOption,
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                SizedBox(width: 16), // Separador
+                // Dropdown para seleccionar "Kaiju"
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: optionKaiju,
+                    onChanged: (newValue) {
+                      setState(() {
+                        optionKaiju = newValue!;
+                        selectedKaiju = kaijus.firstWhere(
+                            (element) => element.name == optionKaiju);
+                      });
+                    },
+                    items: kaijuOptions.map((option) {
+                      return DropdownMenuItem<String>(
+                        value: option,
+                        child: Text(
+                          option,
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 10),
-            // Botón para agregar más campos de texto
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  textControllers.add(TextEditingController());
-                });
-              },
-              child: Icon(Icons.add),
-            ),
-            SizedBox(height: 10),
-            // Botón para imprimir los valores actuales de los campos de texto
+            SizedBox(height: 16), // Separador
+            // Botón para subir imágenes
             ElevatedButton(
               onPressed: () async {
-                for (var controller in textControllers) {
-                  selectedKaiju.img?.add(controller.text);
+                var listKaijuLink = await pickAndUploadImages(
+                    selectedKaiju.ultra,
+                    selectedKaiju
+                        .name); // De esta Forma creamos la ruta donde se guarda la Imagen
+                for (var kaijuLink in listKaijuLink) {
+                  selectedKaiju.img?.add(kaijuLink);
                 }
                 Map<String, dynamic> updateInfo = {"img": selectedKaiju.img};
                 await databaseMethod
@@ -143,7 +237,7 @@ class KaijuFormImageState extends State<KaijuFormImage> {
                       fontSize: 16.0);
                 });
               },
-              child: Text('Agregar Imágenes'),
+              child: Text('Subir Imágenes'),
             ),
           ],
         ),

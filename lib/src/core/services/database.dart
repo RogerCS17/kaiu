@@ -1,6 +1,9 @@
 //Metodo de Base de Datos
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart';
+
 
 class DatabaseMethods {
   //Constructor Privado
@@ -42,5 +45,24 @@ class DatabaseMethods {
   Future<String> getImageUrl(String imagePath) async {
     Reference ref = FirebaseStorage.instance.ref().child(imagePath);
     return await ref.getDownloadURL();
+  }
+
+  Future<String> uploadImageToFirebaseStorage(File imageFile) async {
+    try {
+      String fileName = basename(imageFile.path);
+      Reference storageReference =
+          FirebaseStorage.instance.ref().child('images/$fileName');
+      UploadTask uploadTask = storageReference.putFile(imageFile);
+
+      await uploadTask.whenComplete(() => null);
+
+      String downloadURL = await storageReference.getDownloadURL();
+      print('Image uploaded. Download URL: $downloadURL');
+
+      return downloadURL; // Devuelve la URL de descarga
+    } catch (e) {
+      print('Error uploading image to Firebase Storage: $e');
+      return ''; // Devuelve una cadena vacía si hay un error
+    }
   }
 }
