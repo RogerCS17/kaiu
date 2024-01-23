@@ -27,15 +27,15 @@ class _UltraPageViewState extends State<UltraPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: theme.background(),
       appBar: AppBar(
         title: Text(
           "Selector Ultra",
-          style: TextStyle(color: theme.exTextPrimary()),
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: theme.exBackground(),
-        iconTheme: IconThemeData(color: theme.exTextPrimary()),
+        backgroundColor: theme.backgroundUltraRed(),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
+      backgroundColor: theme.background(),
       resizeToAvoidBottomInset: false,
       body: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,

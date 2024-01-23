@@ -19,6 +19,7 @@ class UltraSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     // final theme = ThemeController.instance;
     final heightSelector = MediaQuery.of(context).size.height / 1.425;
+    final widthSelector = MediaQuery.of(context).size.width/ 1.5;
     // final theme = ThemeController.instance;
 
     return isSelected
@@ -42,57 +43,61 @@ class UltraSelector extends StatelessWidget {
                         margin: EdgeInsets.only(
                             left: 20.0, right: 20.0, top: 10, bottom: 10),
                         elevation: 7,
-                        child: SizedBox(
-                          height: heightSelector, // Altura fija del Card
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.network(
-                              errorBuilder: (BuildContext context, Object error,
-                                  StackTrace? stackTrace) {
-                                return Image.asset(
-                                  'assets/test_image.png',
-                                  fit: BoxFit.cover,
-                                );
-                              },
-                              ultra?.imgPath ?? "",
-                              fit: BoxFit.cover,
-                              loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent? loadingProgress) {
-                                if (loadingProgress == null) {
-                                  return child;
-                                } else {
-                                  return Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      SizedBox(
-                                        height: heightSelector,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: ImageFiltered(
-                                          imageFilter: ImageFilter.blur(
-                                              sigmaX: 5, sigmaY: 5),
-                                          child: Image.asset(
-                                            'assets/placeholder.jpeg',
-                                            fit: BoxFit.cover,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: heightSelector,
+                            width: widthSelector, // Altura fija del Card
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.network(
+                                errorBuilder: (BuildContext context,
+                                    Object error, StackTrace? stackTrace) {
+                                  return Image.asset(
+                                    'assets/test_image.png',
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                                ultra?.imgPath ?? "",
+                                fit: BoxFit.cover,
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  } else {
+                                    return Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        SizedBox(
+                                          height: heightSelector,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: ImageFiltered(
+                                            imageFilter: ImageFilter.blur(
+                                                sigmaX: 5, sigmaY: 5),
+                                            child: Image.asset(
+                                              'assets/placeholder.jpeg',
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Container(
-                                        color: Colors.black.withOpacity(0.3),
-                                        height: heightSelector,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                      ),
-                                      CircularProgressIndicator(
-                                        strokeWidth: 4,
-                                        color:
-                                            Color.fromARGB(255, 29, 182, 238),
-                                      ),
-                                    ],
-                                  );
-                                }
-                              },
+                                        Container(
+                                          color: Colors.black.withOpacity(0.3),
+                                          height: heightSelector,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                        ),
+                                        CircularProgressIndicator(
+                                          strokeWidth: 4,
+                                          color:
+                                              Color.fromARGB(255, 29, 182, 238),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -103,7 +108,7 @@ class UltraSelector extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.blue.withOpacity(0.5),
+                            color: const Color.fromARGB(255, 0, 101, 184),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

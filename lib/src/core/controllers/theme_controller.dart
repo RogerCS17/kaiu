@@ -19,6 +19,7 @@ class ThemeController {
   //Métodos que Cambiar el Color Dinámicamente
   Color background() =>
       brightnessValue ? Configure.backgroundLight : Configure.backgroundDark;
+  
   Color exBackground() =>
       !brightnessValue ? Configure.backgroundLight : Configure.backgroundDark;
 
@@ -28,6 +29,10 @@ class ThemeController {
   Color backgroundSecondary() => brightnessValue
       ? Configure.backgrountLightSecondary
       : Configure.backgroundDarkSecondary;
+    
+  Color backgroundUltraRed() => brightnessValue
+      ? Configure.ultraRed
+      : Configure.ultraRedDark;
 
   //Funcion que permite cambiar de tema entre claro y obscuro
   void changeTheme() async {

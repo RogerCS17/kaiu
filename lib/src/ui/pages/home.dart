@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
+import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
 import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 import 'package:kaiu/src/ui/widget/home_components/banner_button.dart';
@@ -42,17 +41,18 @@ class Home extends StatelessWidget {
         builder: (BuildContext context, value, child) {
           return Scaffold(
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               title: Text(
                 "Página Inicio",
-                style: TextStyle(color: theme.exTextPrimary()),
+                style: TextStyle(color: Colors.white),
               ),
-              backgroundColor: theme.exBackground(),
+              backgroundColor: theme.backgroundUltraRed(),
               actions: [
                 PopupMenuButton<String>(
                   color: Colors.white.withOpacity(0.9),
                   icon: Icon(
                     Icons.settings,
-                    color: theme.exTextPrimary(),
+                    color: Colors.white,
                   ),
                   onSelected: (value) {
                     // Acción a realizar cuando se selecciona una opción
@@ -132,6 +132,15 @@ class Home extends StatelessWidget {
                                   builder: (context) => UltraPageView()));
                         },
                         image: "assets/kaiju_banner.png"),
+
+                    BannerButton(
+                        primaryMessage: "Visita el TikTok de",
+                        secondaryMessage: "UltraBrother M78",
+                        onTap: () {
+                          launchURL(
+                              "https://www.tiktok.com/@ultrabrother_m78");
+                        },
+                        image: "assets/tiktok_banner.jpeg"),
                   ],
                 ),
               ),

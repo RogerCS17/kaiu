@@ -135,6 +135,51 @@ class KaijuFormImageState extends State<KaijuFormImage> {
     }
   }
 
+  Future<String> pickAndUploadImageDrawer(
+      String ultraName, String nameKaiju) async {
+    String kaijuLink = "";
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'webp'],
+      );
+
+      if (result != null) {
+        var file = result.files.first;
+        if (['jpg', 'jpeg', 'png', 'webp'].contains(file.extension)) {
+          Uint8List fileBytes = file.bytes!;
+
+          await FirebaseStorage.instance
+              .ref('KaijuDrawer/$ultraName/$nameKaiju/${file.name}')
+              .putData(
+                  fileBytes, SettableMetadata(contentType: file.extension));
+
+          String imageUrl = await FirebaseStorage.instance
+              .ref('KaijuDrawer/$ultraName/$nameKaiju/${file.name}')
+              .getDownloadURL();
+          kaijuLink = imageUrl;
+
+          // print('Imagen seleccionada y subida: ${file.name}');
+          // print('Link Asociado: $imageUrl');
+        } else {
+          print('El archivo ${file.name} no es una imagen.');
+          return "";
+        }
+
+        //Mensaje de Aviso
+        print("Lista de Imágenes Ingresadas con éxito");
+        return kaijuLink;
+      } else {
+        print('Selección de archivos cancelada');
+        return "";
+      }
+    } catch (e) {
+      print('Error al seleccionar los archivos: $e');
+      return "";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,105 +187,121 @@ class KaijuFormImageState extends State<KaijuFormImage> {
         title: Text('Gestionar Imágenes'),
         actions: [],
       ),
-      body: Container(
-        margin: EdgeInsets.all(12.0),
-        height: 150,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Color.fromARGB(193, 180, 37, 236)
+      body: Column(
+        children: [
+          Text(
+            "Imagenes Principales",
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          borderRadius: BorderRadius.circular(10.0)
-        ),
-        padding: EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Text("Imagenes Principales",style: TextStyle(fontWeight: FontWeight.bold),),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // Dropdown para seleccionar "Ultra"
-                Expanded(
-                  child: DropdownButton<String>(
-                    value: optionUltra,
-                    onChanged: (newValue) {
-                      setState(() {
-                        optionUltra = newValue!;
-                        kaijuOptions = kaijus
-                            .where((element) => element.ultra == optionUltra)
-                            .map((e) => e.name)
-                            .toList();
-                        optionKaiju = kaijuOptions.first;
-                        selectedKaiju = kaijus.firstWhere(
-                            (element) => element.name == optionKaiju);
-                      });
-                    },
-                    items: ultraOptions.map((ultraOption) {
-                      return DropdownMenuItem<String>(
-                        value: ultraOption,
-                        child: Text(
-                          ultraOption,
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }).toList(),
-                  ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // Dropdown para seleccionar "Ultra"
+              Expanded(
+                child: DropdownButton<String>(
+                  value: optionUltra,
+                  onChanged: (newValue) {
+                    setState(() {
+                      optionUltra = newValue!;
+                      kaijuOptions = kaijus
+                          .where((element) => element.ultra == optionUltra)
+                          .map((e) => e.name)
+                          .toList();
+                      optionKaiju = kaijuOptions.first;
+                      selectedKaiju = kaijus
+                          .firstWhere((element) => element.name == optionKaiju);
+                    });
+                  },
+                  items: ultraOptions.map((ultraOption) {
+                    return DropdownMenuItem<String>(
+                      value: ultraOption,
+                      child: Text(
+                        ultraOption,
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                    );
+                  }).toList(),
                 ),
-                SizedBox(width: 16), // Separador
-                // Dropdown para seleccionar "Kaiju"
-                Expanded(
-                  child: DropdownButton<String>(
-                    value: optionKaiju,
-                    onChanged: (newValue) {
-                      setState(() {
-                        optionKaiju = newValue!;
-                        selectedKaiju = kaijus.firstWhere(
-                            (element) => element.name == optionKaiju);
-                      });
-                    },
-                    items: kaijuOptions.map((option) {
-                      return DropdownMenuItem<String>(
-                        value: option,
-                        child: Text(
-                          option,
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }).toList(),
-                  ),
+              ),
+              SizedBox(width: 16), // Separador
+              // Dropdown para seleccionar "Kaiju"
+              Expanded(
+                child: DropdownButton<String>(
+                  value: optionKaiju,
+                  onChanged: (newValue) {
+                    setState(() {
+                      optionKaiju = newValue!;
+                      selectedKaiju = kaijus
+                          .firstWhere((element) => element.name == optionKaiju);
+                    });
+                  },
+                  items: kaijuOptions.map((option) {
+                    return DropdownMenuItem<String>(
+                      value: option,
+                      child: Text(
+                        option,
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                    );
+                  }).toList(),
                 ),
-              ],
-            ),
-            SizedBox(height: 16), // Separador
-            // Botón para subir imágenes
-            ElevatedButton(
-              onPressed: () async {
-                var listKaijuLink = await pickAndUploadImages(
-                    selectedKaiju.ultra,
-                    selectedKaiju
-                        .name); // De esta Forma creamos la ruta donde se guarda la Imagen
-                for (var kaijuLink in listKaijuLink) {
-                  selectedKaiju.img?.add(kaijuLink);
-                }
-                Map<String, dynamic> updateInfo = {"img": selectedKaiju.img};
-                await databaseMethod
-                    .updateKaijuDetail(selectedKaiju.id, updateInfo)
-                    .then((value) {
-                  Fluttertoast.showToast(
-                      msg: "Imágenes Agregadas",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
-                });
-              },
-              child: Text('Subir Imágenes'),
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16), // Separador
+          // Botón para subir imágenes
+          ElevatedButton(
+            onPressed: () async {
+              var listKaijuLink = await pickAndUploadImages(
+                  selectedKaiju.ultra,
+                  selectedKaiju
+                      .name); // De esta Forma creamos la ruta donde se guarda la Imagen
+              for (var kaijuLink in listKaijuLink) {
+                selectedKaiju.img?.add(kaijuLink);
+              }
+              Map<String, dynamic> updateInfo = {"img": selectedKaiju.img};
+              await databaseMethod
+                  .updateKaijuDetail(selectedKaiju.id, updateInfo)
+                  .then((value) {
+                Fluttertoast.showToast(
+                    msg: "Imágenes Agregadas",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              });
+            },
+            child: Text('Subir Imágenes'),
+          ),
+          // Boton Subir Imagen Drawer
+          ElevatedButton(
+            onPressed: () async {
+              var kaijuLink = await pickAndUploadImageDrawer(
+                  selectedKaiju.ultra,
+                  selectedKaiju
+                      .name); // De esta Forma creamos la ruta donde se guarda la Imagen
+
+              Map<String, dynamic> updateInfo = {"imgDrawer": kaijuLink};
+              await databaseMethod
+                  .updateKaijuDetail(selectedKaiju.id, updateInfo)
+                  .then((value) {
+                Fluttertoast.showToast(
+                    msg: "Imágenes Drawer Agregada",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              });
+            },
+            child: Text('Subir Imagen Drawer'),
+          ),
+        ],
       ),
     );
   }

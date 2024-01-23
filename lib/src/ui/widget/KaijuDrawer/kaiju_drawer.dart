@@ -3,6 +3,7 @@ import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/ui/configure.dart';
+import 'package:kaiu/src/ui/pages/kaiju_galery_image_online.dart';
 import 'package:kaiu/src/ui/pages/kaiju_habs.dart';
 import 'package:kaiu/src/ui/widget/KaijuDrawer/kaiju_option_drawer.dart';
 
@@ -132,10 +133,10 @@ class KaijuDrawer extends StatelessWidget {
                 optionColor: Configure.ultraOption),
             onTap: () {
               // Acción al tocar la opción para mostrar las curiosidades.
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => KaijuGaleryImagesOnlinePage(enemy:enemy))
-              // );
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => KaijuGaleryImageOnline()));
             },
           ),
 
@@ -147,7 +148,9 @@ class KaijuDrawer extends StatelessWidget {
                   //   Radius.circular(9.0),
                   // ),
                   image: DecorationImage(
-                      image: AssetImage("assets/Land_of_Light.webp",),
+                      image: AssetImage(
+                        "assets/Land_of_Light.webp",
+                      ),
                       colorFilter: ColorFilter.mode(
                           Colors.black.withOpacity(0.55), BlendMode.dstATop)),
                   color: colorFromHex(kaiju.colorHex)),
@@ -249,7 +252,7 @@ class KaijuDrawer extends StatelessWidget {
                   // ),
                 ],
               )),
-              //Expanded(child: Container(color: ,))
+          //Expanded(child: Container(color: ,))
         ],
       ),
     );

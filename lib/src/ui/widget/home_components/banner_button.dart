@@ -5,7 +5,7 @@ class BannerButton extends StatelessWidget {
   final String image;
   final String primaryMessage;
   final String secondaryMessage;
-  
+
   const BannerButton({
     required this.onTap,
     required this.primaryMessage,
@@ -40,7 +40,8 @@ class BannerButton extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     child: Image.asset(
                       image, // Ruta de tu imagen de fondo
-                      fit: BoxFit.cover, // Ajusta la imagen para que cubra el contenedor
+                      fit: BoxFit
+                          .cover, // Ajusta la imagen para que cubra el contenedor
                     ),
                   ),
                 ),
@@ -50,14 +51,37 @@ class BannerButton extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text.rich(
                 TextSpan(
-                  style: TextStyle(color: Colors.white),
                   children: [
-                    TextSpan(text: "$primaryMessage\n"),
+                    TextSpan(
+                      text: "$primaryMessage\n",
+                      style: TextStyle(
+                        color: Colors.white,
+                        // fontSize: 24, // Adjust font size as needed
+                        // fontWeight: FontWeight.bold,
+                        // Apply stroke for primary message
+                        shadows: const <Shadow>[
+                          Shadow(
+                            offset: Offset(3, 1),
+                            blurRadius: 6.0,
+                            color: Color.fromARGB(255, 231, 42, 9), // Customize border color
+                          ),
+                        ],
+                      ),
+                    ),
                     TextSpan(
                       text: secondaryMessage,
                       style: TextStyle(
-                        fontSize: 24,
+                        color: Colors.white,
+                        fontSize: 24, // Adjust font size as needed
                         fontWeight: FontWeight.bold,
+                        // Apply stroke for secondary message
+                        shadows: const <Shadow>[
+                          Shadow(
+                            offset: Offset(3, 1),
+                            blurRadius: 5.0,
+                            color: Color.fromARGB(255, 0, 25, 136), // Customize border color
+                          ),
+                        ],
                       ),
                     ),
                   ],
