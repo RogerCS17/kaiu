@@ -293,17 +293,20 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   );
                 },
-                child: Text(
-                  '¿Olvidaste tu Contraseña?',
-                  style: TextStyle(
-                    color: Colors.blueAccent,
-                    decoration: TextDecoration.underline,
-                    decorationColor: Colors.blueAccent,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    '¿Olvidaste tu Contraseña?',
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      decoration: TextDecoration.underline,
+                      decorationColor: Colors.blueAccent,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

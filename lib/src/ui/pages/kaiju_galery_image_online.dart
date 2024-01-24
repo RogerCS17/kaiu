@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 
 class KaijuGaleryImageOnline extends StatelessWidget {
-  KaijuGaleryImageOnline({super.key});
+  final Color color; 
+  KaijuGaleryImageOnline({super.key, required this.color});
 
   final List<String> imageUrls = [
     'https://i.imgur.com/6S7tIZQ.jpg',
@@ -18,8 +19,9 @@ class KaijuGaleryImageOnline extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.background(),
       appBar: AppBar(
-        backgroundColor: theme.exBackground(),
-        title: Text("Galería Kaiju"),
+        backgroundColor: color,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text("Galería Kaiju", style: TextStyle(color: Colors.white),),
       ),
       body: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

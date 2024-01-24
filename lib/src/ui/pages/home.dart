@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
-import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
 import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 import 'package:kaiu/src/ui/widget/home_components/banner_button.dart';
@@ -137,8 +136,7 @@ class Home extends StatelessWidget {
                         primaryMessage: "Visita el TikTok de",
                         secondaryMessage: "UltraBrother M78",
                         onTap: () {
-                          launchURL(
-                              "https://www.tiktok.com/@ultrabrother_m78");
+                          launchURL("https://www.tiktok.com/@ultrabrother_m78");
                         },
                         image: "assets/tiktok_banner.jpeg"),
                   ],

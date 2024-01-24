@@ -4,6 +4,7 @@ import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/ui/pages/home.dart';
+import 'package:kaiu/src/ui/widget/CarruselText/CarrouselText.dart';
 import 'package:kaiu/src/ui/widget/ImageChanger/image_changer.dart';
 import 'package:kaiu/src/ui/widget/KaijuDrawer/kaiju_drawer.dart';
 import 'package:kaiu/src/ui/widget/MoreDetailsDrawer/more_details_kaiju.dart';
@@ -69,11 +70,11 @@ class KaijuDetails extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white, // Cambio de color del contenedor
                       ),
-                      height: 45,
-                      width: 100,
+                      height: 10,
+                      width: 10,
                       child: Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Image.network(ultra.imgLogo!),
+                        padding: EdgeInsets.all(8), //REPARAR
+                        // child: Image.network(ultra.imgLogo!),
                       ),
                     ),
                   ),
@@ -85,16 +86,23 @@ class KaijuDetails extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.only(top:10, left: 10, right: 10),
+        padding: EdgeInsets.only(top: 10, left: 10, right: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(25),
-              child: Container(
-                height: screenHeight / 2.85,
-                width: screenWidth,
-                child: ImageChanger(kaiju: kaiju),
+              child: Stack(
+                alignment: Alignment.bottomLeft,
+                children: [
+                  Container(
+                    height: screenHeight / 2.85,
+                    width: screenWidth,
+                    child: ImageChanger(kaiju: kaiju),
+                  ),
+                  CarrouselText(
+                      userNames: ["@Dunksman", "@username2", "@username3"])
+                ],
               ),
             ),
             SizedBox(height: screenHeight / 50),

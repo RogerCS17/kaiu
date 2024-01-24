@@ -98,9 +98,8 @@ class _KaijuGaleryState extends State<KaijuGalery> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: theme.background(),
       appBar: AppBar(
-        backgroundColor: theme.background(),
+        backgroundColor: theme.backgroundUltraRed(),
         title: Text(
           widget.ultra.name!,
           style: TextStyle(color: theme.textPrimary()),
@@ -109,6 +108,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
           color: theme.textPrimary(),
         ),
       ),
+      backgroundColor: theme.background(),
       body: Column(
         children: [
           Padding(

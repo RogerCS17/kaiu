@@ -190,7 +190,7 @@ class KaijuFormImageState extends State<KaijuFormImage> {
       body: Column(
         children: [
           Text(
-            "Imagenes Principales",
+            "Filtro Kaiju",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Row(
@@ -218,7 +218,7 @@ class KaijuFormImageState extends State<KaijuFormImage> {
                       child: Text(
                         ultraOption,
                         style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                            color: const Color.fromARGB(255, 209, 6, 6), fontWeight: FontWeight.bold),
                       ),
                     );
                   }).toList(),
@@ -242,7 +242,7 @@ class KaijuFormImageState extends State<KaijuFormImage> {
                       child: Text(
                         option,
                         style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                            color: Color.fromARGB(255, 5, 29, 245), fontWeight: FontWeight.bold),
                       ),
                     );
                   }).toList(),
@@ -252,54 +252,60 @@ class KaijuFormImageState extends State<KaijuFormImage> {
           ),
           SizedBox(height: 16), // Separador
           // Botón para subir imágenes
-          ElevatedButton(
-            onPressed: () async {
-              var listKaijuLink = await pickAndUploadImages(
-                  selectedKaiju.ultra,
-                  selectedKaiju
-                      .name); // De esta Forma creamos la ruta donde se guarda la Imagen
-              for (var kaijuLink in listKaijuLink) {
-                selectedKaiju.img?.add(kaijuLink);
-              }
-              Map<String, dynamic> updateInfo = {"img": selectedKaiju.img};
-              await databaseMethod
-                  .updateKaijuDetail(selectedKaiju.id, updateInfo)
-                  .then((value) {
-                Fluttertoast.showToast(
-                    msg: "Imágenes Agregadas",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-              });
-            },
-            child: Text('Subir Imágenes'),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                var listKaijuLink = await pickAndUploadImages(
+                    selectedKaiju.ultra,
+                    selectedKaiju
+                        .name); // De esta Forma creamos la ruta donde se guarda la Imagen
+                for (var kaijuLink in listKaijuLink) {
+                  selectedKaiju.img?.add(kaijuLink);
+                }
+                Map<String, dynamic> updateInfo = {"img": selectedKaiju.img};
+                await databaseMethod
+                    .updateKaijuDetail(selectedKaiju.id, updateInfo)
+                    .then((value) {
+                  Fluttertoast.showToast(
+                      msg: "Imágenes Agregadas",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                });
+              },
+              child: Text('Subir Imágenes Principales'),
+            ),
           ),
           // Boton Subir Imagen Drawer
-          ElevatedButton(
-            onPressed: () async {
-              var kaijuLink = await pickAndUploadImageDrawer(
-                  selectedKaiju.ultra,
-                  selectedKaiju
-                      .name); // De esta Forma creamos la ruta donde se guarda la Imagen
-
-              Map<String, dynamic> updateInfo = {"imgDrawer": kaijuLink};
-              await databaseMethod
-                  .updateKaijuDetail(selectedKaiju.id, updateInfo)
-                  .then((value) {
-                Fluttertoast.showToast(
-                    msg: "Imágenes Drawer Agregada",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-              });
-            },
-            child: Text('Subir Imagen Drawer'),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                var kaijuLink = await pickAndUploadImageDrawer(
+                    selectedKaiju.ultra,
+                    selectedKaiju
+                        .name); // De esta Forma creamos la ruta donde se guarda la Imagen
+            
+                Map<String, dynamic> updateInfo = {"imgDrawer": kaijuLink};
+                await databaseMethod
+                    .updateKaijuDetail(selectedKaiju.id, updateInfo)
+                    .then((value) {
+                  Fluttertoast.showToast(
+                      msg: "Imágenes Drawer Agregada",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                });
+              },
+              child: Text('Subir Imagen Drawer'),
+            ),
           ),
         ],
       ),

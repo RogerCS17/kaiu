@@ -115,7 +115,7 @@ class KaijuDrawer extends StatelessWidget {
           ListTile(
             title: KaijuOptionDrawer(
                 color: Colors.purple,
-                text: 'Debilidades',
+                text: 'Curiosidades (Prox.)',
                 optionColor: Configure.ultraOption),
             onTap: () {
               // Acción al tocar la opción para mostrar las debilidades.
@@ -136,7 +136,7 @@ class KaijuDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => KaijuGaleryImageOnline()));
+                      builder: (context) => KaijuGaleryImageOnline(color: colorFromHex(kaiju.colorHex))));
             },
           ),
 

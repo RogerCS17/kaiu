@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
+import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/pages/kaiju_galery.dart';
 
 class UltraSelector extends StatelessWidget {
@@ -19,8 +21,8 @@ class UltraSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     // final theme = ThemeController.instance;
     final heightSelector = MediaQuery.of(context).size.height / 1.425;
-    final widthSelector = MediaQuery.of(context).size.width/ 1.5;
-    // final theme = ThemeController.instance;
+    final widthSelector = MediaQuery.of(context).size.width / 1.5;
+    final theme = ThemeController.instance;
 
     return isSelected
         ? SizedBox(
@@ -108,7 +110,8 @@ class UltraSelector extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color.fromARGB(255, 0, 101, 184),
+                            color: const Color.fromARGB(255, 0, 101, 184)
+                                .withOpacity(0.85),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -123,6 +126,15 @@ class UltraSelector extends StatelessWidget {
                     ],
                   ),
                 ),
+                Image.network(ultra!.imgLogo ?? "", width: heightSelector/5,)
+                // Text(
+                //   ultra!.name ?? "",
+                //   style: TextStyle(
+                //       color: theme.textPrimary(),
+                //       fontWeight: FontWeight.w200,
+                //       fontStyle: FontStyle.italic,
+                //       fontSize: 15),
+                // )
               ],
             ),
           )
