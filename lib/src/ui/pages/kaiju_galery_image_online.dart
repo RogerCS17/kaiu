@@ -1,27 +1,54 @@
+import 'dart:developer';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
+import 'package:kaiu/src/core/models/kaiju.dart';
+import 'package:kaiu/src/core/services/database.dart';
 
-class KaijuGaleryImageOnline extends StatelessWidget {
-  final Color color; 
-  KaijuGaleryImageOnline({super.key, required this.color});
+class KaijuGaleryImageOnline extends StatefulWidget {
+  final Kaiju kaiju;
 
-  final List<String> imageUrls = [
-    'https://i.imgur.com/6S7tIZQ.jpg',
-    'https://i.imgur.com/v6cKgbf.jpg',
-    'https://i.imgur.com/itloZU1.jpg',
-    // Agrega más URL de imágenes según sea necesario
-  ];
+  KaijuGaleryImageOnline({super.key, required this.kaiju});
 
+  @override
+  State<KaijuGaleryImageOnline> createState() => _KaijuGaleryImageOnlineState();
+}
+
+class _KaijuGaleryImageOnlineState extends State<KaijuGaleryImageOnline> {
   final theme = ThemeController.instance;
+  final database = DatabaseMethods.instance;
+
+  List<String> imageUrls = [];
+
+  // Agrega más URL de imágenes según sea necesario  ];
+
+  @override
+  void initState() {
+    super.initState();
+    //Then - De la Función asíncrona
+    database
+        .getStorageLinkFiles('GalleryImages/${widget.kaiju.name}/')
+        .then((listLinks) {
+      //Cambio de Estado. 
+      setState(() {
+        imageUrls = listLinks;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: theme.background(),
       appBar: AppBar(
-        backgroundColor: color,
+        backgroundColor: colorFromHex(widget.kaiju.colorHex),
         iconTheme: IconThemeData(color: Colors.white),
-        title: Text("Galería Kaiju", style: TextStyle(color: Colors.white),),
+        title: Text(
+          "Galería Kaiju",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

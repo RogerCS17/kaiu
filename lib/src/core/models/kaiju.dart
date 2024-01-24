@@ -18,6 +18,7 @@ class Kaiju {
   final String ultra;
   final String comentary;
   final String imgDrawer;
+  final List<dynamic>? usersPremium;
 
   //Variables que se usaran en un futuro
   //final int numOfVotes;
@@ -45,5 +46,6 @@ class Kaiju {
     this.comentary = '-',
     this.imgDrawer = '-',
     this.episode = 0,
+    this.usersPremium
   });
 }

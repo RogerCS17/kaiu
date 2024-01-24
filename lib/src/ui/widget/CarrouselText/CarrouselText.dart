@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class CarrouselText extends StatefulWidget {
+  
   final List<String> userNames;
 
   const CarrouselText({required this.userNames});

@@ -65,4 +65,27 @@ class DatabaseMethods {
       return ''; // Devuelve una cadena vacía si hay un error
     }
   }
+
+Future<List<String>> getStorageLinkFiles(String path) async {
+  List<String> filesLinks = [];
+
+  try {
+    // Accede a la ruta
+    final storageRef = FirebaseStorage.instance.ref(path);
+
+    // Lista los elementos en la ruta
+    final ListResult result = await storageRef.list();
+
+    // Itera sobre los elementos y obtiene los enlaces de descarga
+    for (final Reference ref in result.items) {
+      String imageUrl = await ref.getDownloadURL();
+      filesLinks.add(imageUrl);
+    }
+  } catch (error) {
+    print('Error al obtener archivos: $error');
+  }
+
+  return filesLinks;
+}
+
 }

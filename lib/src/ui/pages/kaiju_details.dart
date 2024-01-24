@@ -4,12 +4,13 @@ import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/ui/pages/home.dart';
-import 'package:kaiu/src/ui/widget/CarruselText/CarrouselText.dart';
+import 'package:kaiu/src/ui/widget/CarrouselText/CarrouselText.dart';
 import 'package:kaiu/src/ui/widget/ImageChanger/image_changer.dart';
 import 'package:kaiu/src/ui/widget/KaijuDrawer/kaiju_drawer.dart';
 import 'package:kaiu/src/ui/widget/MoreDetailsDrawer/more_details_kaiju.dart';
 
 class KaijuDetails extends StatelessWidget {
+  
   final Kaiju kaiju;
   final Ultra ultra;
   final theme = ThemeController.instance;
@@ -101,7 +102,7 @@ class KaijuDetails extends StatelessWidget {
                     child: ImageChanger(kaiju: kaiju),
                   ),
                   CarrouselText(
-                      userNames: ["@Dunksman", "@username2", "@username3"])
+                      userNames: kaiju.usersPremium!.cast<String>())
                 ],
               ),
             ),

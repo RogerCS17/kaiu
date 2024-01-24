@@ -136,7 +136,7 @@ class KaijuDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => KaijuGaleryImageOnline(color: colorFromHex(kaiju.colorHex))));
+                      builder: (context) => KaijuGaleryImageOnline(kaiju: kaiju,)));
             },
           ),
 

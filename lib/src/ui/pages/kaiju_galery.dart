@@ -64,6 +64,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
               comentary: data["comentary"] ?? "-",
               imgDrawer: data["imgDrawer"] ?? "-",
               kaijuHabs: data["kaijuHabs"] ?? {},
+              usersPremium: data["usersPremium"] ?? []
               //Si no hay description en Firebase recibe -
               //description: data["description"]
               );

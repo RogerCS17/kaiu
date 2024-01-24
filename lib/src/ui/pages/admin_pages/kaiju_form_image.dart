@@ -135,6 +135,39 @@ class KaijuFormImageState extends State<KaijuFormImage> {
     }
   }
 
+  Future<void> pickAndUploadImagesGallery(
+      String ultraName, String nameKaiju) async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'webp'],
+      );
+
+      if (result != null) {
+        for (PlatformFile file in result.files) {
+          if (['jpg', 'jpeg', 'png', 'webp'].contains(file.extension)) {
+            Uint8List fileBytes = file.bytes!;
+
+            await FirebaseStorage.instance
+                .ref('GalleryImages/$nameKaiju/${file.name}')
+                .putData(
+                    fileBytes, SettableMetadata(contentType: file.extension));
+          } else {
+            print('El archivo ${file.name} no es una imagen.');
+          }
+        }
+
+        //Mensaje de Aviso
+        print("Lista de Imágenes de la Galería Ingresadas con éxito");
+      } else {
+        print('Selección de archivos cancelada');
+      }
+    } catch (e) {
+      print('Error al seleccionar los archivos: $e');
+    }
+  }
+
   Future<String> pickAndUploadImageDrawer(
       String ultraName, String nameKaiju) async {
     String kaijuLink = "";
@@ -218,7 +251,8 @@ class KaijuFormImageState extends State<KaijuFormImage> {
                       child: Text(
                         ultraOption,
                         style: TextStyle(
-                            color: const Color.fromARGB(255, 209, 6, 6), fontWeight: FontWeight.bold),
+                            color: const Color.fromARGB(255, 209, 6, 6),
+                            fontWeight: FontWeight.bold),
                       ),
                     );
                   }).toList(),
@@ -242,7 +276,8 @@ class KaijuFormImageState extends State<KaijuFormImage> {
                       child: Text(
                         option,
                         style: TextStyle(
-                            color: Color.fromARGB(255, 5, 29, 245), fontWeight: FontWeight.bold),
+                            color: Color.fromARGB(255, 5, 29, 245),
+                            fontWeight: FontWeight.bold),
                       ),
                     );
                   }).toList(),
@@ -289,7 +324,7 @@ class KaijuFormImageState extends State<KaijuFormImage> {
                     selectedKaiju.ultra,
                     selectedKaiju
                         .name); // De esta Forma creamos la ruta donde se guarda la Imagen
-            
+
                 Map<String, dynamic> updateInfo = {"imgDrawer": kaijuLink};
                 await databaseMethod
                     .updateKaijuDetail(selectedKaiju.id, updateInfo)
@@ -305,6 +340,26 @@ class KaijuFormImageState extends State<KaijuFormImage> {
                 });
               },
               child: Text('Subir Imagen Drawer'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                await pickAndUploadImagesGallery(
+                        selectedKaiju.ultra, selectedKaiju.name)
+                    .then((value) {
+                  Fluttertoast.showToast(
+                      msg: "Imágenes de la Galería Agregada",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                }); // De esta Forma creamos la ruta donde se guarda la Imagen
+              },
+              child: Text('Subir Imagen Galería Online'),
             ),
           ),
         ],
