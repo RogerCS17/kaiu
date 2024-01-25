@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
 import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 import 'package:kaiu/src/ui/widget/home_components/banner_button.dart';
 import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatelessWidget {
   static String routeName = "/home";
@@ -30,6 +30,13 @@ class Home extends StatelessWidget {
       }
     } catch (e) {
       print('Error al eliminar la cuenta: $e');
+    }
+  }
+
+  Future<void> _launchUrl(String url) async {
+    var _url = Uri.parse(url);
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
     }
   }
 
@@ -115,7 +122,7 @@ class Home extends StatelessWidget {
                         primaryMessage: "Visita el Canal de",
                         secondaryMessage: "UltraBrother M78",
                         onTap: () {
-                          launchURL(
+                          _launchUrl(
                               "https://www.youtube.com/channel/UCvx0kG1KPYrD7Ez24C2rMtQ");
                         },
                         image: "assets/ultraman_banner.png"),
@@ -136,7 +143,7 @@ class Home extends StatelessWidget {
                         primaryMessage: "Visita el TikTok de",
                         secondaryMessage: "UltraBrother M78",
                         onTap: () {
-                          launchURL("https://www.tiktok.com/@ultrabrother_m78");
+                          _launchUrl("https://www.tiktok.com/@ultrabrother_m78");
                         },
                         image: "assets/tiktok_banner.jpeg"),
                   ],

@@ -30,11 +30,3 @@ int generateRandomNumberOneToNine() {
   return randomNumber;
 }
 
-// Función para abrir el enlace
-void launchURL(String url) async {
-  if (await canLaunchUrl(Uri.parse(url))) {
-    await launchUrl(Uri.parse(url));
-  } else {
-    throw 'No se pudo abrir el enlace $url';
-  }
-}
