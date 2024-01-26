@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/core/services/database.dart';
+import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/pages/kaiju_galery.dart';
 import 'package:kaiu/src/ui/pages/ultra_selector.dart';
+import 'package:kaiu/src/ui/widget/Logo/logo.dart';
 
 class UltraPageView extends StatefulWidget {
   const UltraPageView({super.key});
@@ -23,6 +26,35 @@ class _UltraPageViewState extends State<UltraPageView> {
 
   final databaseMethod = DatabaseMethods.instance;
   final theme = ThemeController.instance;
+
+  Widget _buildLoadingScreen() {
+    return Scaffold(
+      backgroundColor: Configure.ultraRedDark,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SpinKitCubeGrid(
+                    size: 100,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Widget que contiene el logo de tu aplicación
+          Logo(),
+          SizedBox(
+            height: 10,
+          )
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,11 +129,7 @@ class _UltraPageViewState extends State<UltraPageView> {
                     child: Text('Error: ${snapshot.error}'),
                   );
                 } else {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                    ),
-                  );
+                  return _buildLoadingScreen();
                 }
               },
             ),

@@ -30,3 +30,11 @@ int generateRandomNumberOneToNine() {
   return randomNumber;
 }
 
+//Redirigir un URL 
+Future<void> applaunchUrl(String url) async {
+  try {
+    await launchUrl(Uri.parse(url));
+  } catch (e) {
+    throw Exception('Could not launch $url');
+  }
+}

@@ -1,42 +1,42 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
+import 'package:kaiu/src/core/services/database.dart';
 import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
 import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 import 'package:kaiu/src/ui/widget/home_components/banner_button.dart';
 import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatelessWidget {
   static String routeName = "/home";
   final theme = ThemeController.instance;
   final _auth = FirebaseAuth.instance;
+  final database = DatabaseMethods.instance;
 
   Home({super.key});
 
-  void signOut() async {
+  //Funcion Cerrar Sesión
+  Future<void> signOut() async {
     await _auth.signOut();
   }
 
-  void deleteAccount() async {
+  //Funcion de Eliminar Cuenta
+  Future<void> deleteAccount() async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
+      var userId = user?.uid;
 
       if (user != null) {
         await user.delete();
+        await database.deleteAllVotesForUser(userId ?? "");
+
         print('Cuenta eliminada con éxito.');
       } else {
         print('No hay usuario autenticado.');
       }
     } catch (e) {
       print('Error al eliminar la cuenta: $e');
-    }
-  }
-
-  Future<void> _launchUrl(String url) async {
-    var _url = Uri.parse(url);
-    if (!await launchUrl(_url)) {
-      throw Exception('Could not launch $_url');
     }
   }
 
@@ -76,7 +76,7 @@ class Home extends StatelessWidget {
                       PopupMenuItem<String>(
                         value: 'opcion2',
                         child: Text('Cerrar Sesión'),
-                        onTap: () async {
+                        onTap: () {
                           signOut();
                           Navigator.push(
                               context,
@@ -97,7 +97,7 @@ class Home extends StatelessWidget {
                       PopupMenuItem<String>(
                         value: 'opcion4',
                         child: Text('Borrar cuenta'),
-                        onTap: () async {
+                        onTap: () {
                           deleteAccount();
                           Navigator.push(
                               context,
@@ -122,10 +122,10 @@ class Home extends StatelessWidget {
                         primaryMessage: "Visita el Canal de",
                         secondaryMessage: "UltraBrother M78",
                         onTap: () {
-                          _launchUrl(
+                          applaunchUrl(
                               "https://www.youtube.com/channel/UCvx0kG1KPYrD7Ez24C2rMtQ");
                         },
-                        image: "assets/ultraman_banner.png"),
+                        image: "assets/ultraman_banner.webp"),
 
                     //Para Acceder a la Galería Kaiju
                     BannerButton(
@@ -137,13 +137,14 @@ class Home extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (context) => UltraPageView()));
                         },
-                        image: "assets/kaiju_banner.png"),
+                        image: "assets/kaiju_banner.webp"),
 
                     BannerButton(
                         primaryMessage: "Visita el TikTok de",
                         secondaryMessage: "UltraBrother M78",
                         onTap: () {
-                          _launchUrl("https://www.tiktok.com/@ultrabrother_m78");
+                          applaunchUrl(
+                              "https://www.tiktok.com/@ultrabrother_m78");
                         },
                         image: "assets/tiktok_banner.jpeg"),
                   ],

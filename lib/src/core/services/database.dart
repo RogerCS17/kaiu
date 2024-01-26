@@ -1,9 +1,9 @@
 //Metodo de Base de Datos
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
-
 
 class DatabaseMethods {
   //Constructor Privado
@@ -66,26 +66,70 @@ class DatabaseMethods {
     }
   }
 
-Future<List<String>> getStorageLinkFiles(String path) async {
-  List<String> filesLinks = [];
+  Future<List<String>> getStorageLinkFiles(String path) async {
+    List<String> filesLinks = [];
 
-  try {
-    // Accede a la ruta
-    final storageRef = FirebaseStorage.instance.ref(path);
+    try {
+      // Accede a la ruta
+      final storageRef = FirebaseStorage.instance.ref(path);
 
-    // Lista los elementos en la ruta
-    final ListResult result = await storageRef.list();
+      // Lista los elementos en la ruta
+      final ListResult result = await storageRef.list();
 
-    // Itera sobre los elementos y obtiene los enlaces de descarga
-    for (final Reference ref in result.items) {
-      String imageUrl = await ref.getDownloadURL();
-      filesLinks.add(imageUrl);
+      // Itera sobre los elementos y obtiene los enlaces de descarga
+      for (final Reference ref in result.items) {
+        String imageUrl = await ref.getDownloadURL();
+        filesLinks.add(imageUrl);
+      }
+    } catch (error) {
+      print('Error al obtener archivos: $error');
     }
-  } catch (error) {
-    print('Error al obtener archivos: $error');
+
+    return filesLinks;
   }
 
-  return filesLinks;
-}
+//Funcion que crea un documento para perdurar los "Favoritos"
+  Future<void> likePost(String kaijuId) async {
+    await FirebaseFirestore.instance
+        .collection('Votes')
+        .doc('${FirebaseAuth.instance.currentUser?.uid}$kaijuId')
+        .set({});
+  }
 
+  //Comprobar que el voto existe
+  Future<bool> hasUserLikedPost(String kaijuId) async {
+    final DocumentSnapshot voteDoc = await FirebaseFirestore.instance
+        .collection('Votes')
+        .doc('${FirebaseAuth.instance.currentUser?.uid}$kaijuId')
+        .get();
+
+    return voteDoc.exists;
+  }
+
+  //Eliminar de "Favoritos"
+  Future<void> unlikePost(String kaijuId) async {
+    await FirebaseFirestore.instance
+        .collection('Votes')
+        .doc('${FirebaseAuth.instance.currentUser?.uid}$kaijuId')
+        .delete();
+  }
+
+  //Eliminar todos los votos al eliminar la cuenta
+  Future<void> deleteAllVotesForUser(String userId) async {
+    try {
+      final String upperBound = userId + 'z';
+
+      final votesToDelete = await FirebaseFirestore.instance
+          .collection('Votes')
+          .where(FieldPath.documentId, isGreaterThanOrEqualTo: userId)
+          .where(FieldPath.documentId, isLessThan: upperBound)
+          .get();
+
+      for (final doc in votesToDelete.docs) {
+        await doc.reference.delete();
+      }
+    } catch (error) {
+      print('Error al eliminar votos: $error');
+    }
+  }
 }

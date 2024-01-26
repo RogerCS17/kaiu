@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
+import 'package:kaiu/src/core/services/database.dart';
 
 class ImageChanger extends StatefulWidget {
   //Pasamos la referencia del enemigo actual
@@ -16,13 +18,19 @@ class _ImageChangerState extends State<ImageChanger> {
   late Kaiju kaiju;
   List<dynamic>? kaijuImages = [];
   int currentImageIndex = 0;
-  bool isVote = false;
+  bool isLiked = false;
+  final database = DatabaseMethods.instance;
 
   @override
   void initState() {
     super.initState();
     kaiju = widget.kaiju;
     kaijuImages = kaiju.img;
+    database.hasUserLikedPost(kaiju.id).then((value) {
+      setState(() {
+        isLiked = value;
+      });
+    });
   }
 
   void changeImageNext() {
@@ -94,12 +102,18 @@ class _ImageChangerState extends State<ImageChanger> {
                           color: Colors.white70,
                         ),
                         child: IconButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            if (isLiked) {
+                              database.unlikePost(kaiju.id);
+                            } else {
+                              database.likePost(kaiju.id);
+                            }
+
                             setState(() {
-                              isVote = !isVote;
+                              isLiked = !isLiked;
                             });
                           },
-                          icon: isVote
+                          icon: isLiked
                               ? Icon(
                                   Icons.favorite,
                                   color: Color.fromARGB(255, 211, 12, 12),
