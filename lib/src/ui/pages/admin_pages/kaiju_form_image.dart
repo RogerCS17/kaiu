@@ -362,6 +362,18 @@ class KaijuFormImageState extends State<KaijuFormImage> {
               child: Text('Subir Imagen Galería Online'),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                print(await FirebaseStorage.instance
+                    .ref(
+                        "gs://kaiu-8295c.appspot.com/UltraImages/Logo/Ultraman_tiga_logo.png")
+                    .getDownloadURL());
+              },
+              child: Text('Obtener Link de Imagen'),
+            ),
+          ),
         ],
       ),
     );

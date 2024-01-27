@@ -29,7 +29,7 @@ class _UltraPageViewState extends State<UltraPageView> {
 
   Widget _buildLoadingScreen() {
     return Scaffold(
-      backgroundColor: Configure.ultraRedDark,
+      backgroundColor:  Configure.ultraRedBackground,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [

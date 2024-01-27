@@ -28,6 +28,7 @@ void main() async {
 
 Widget _buildNoConnectionApp() {
   return MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: Scaffold(
       backgroundColor: Configure.ultraRedDark,
       body: Center(
@@ -73,30 +74,34 @@ class MyApp extends StatelessWidget {
 
   Widget _buildLoadingScreen() {
     return Scaffold(
-      backgroundColor: Configure.ultraRedDark,
+      backgroundColor: Configure.ultraRedBackground,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: SizedBox(
-                        height: 250,
-                        child: Image.asset(
-                          "assets/kaiju_icon.png",
-                        )),
+              child: Card(
+                elevation: 5,
+                margin: EdgeInsets.all(16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      65.0), // Ajusta el radio según tus preferencias
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical:8, horizontal: 10),
+                  child: SizedBox(
+                    height: 250,
+                    child: Image.asset(
+                      "assets/kaiju_icon.png",
+                    ),
                   ),
-                  SpinKitCubeGrid(
-                    size: 62,
-                    color: Colors.white,
-                  ),
-                ],
+                ),
               ),
             ),
+          ),
+          SpinKitCubeGrid(
+            size: 62,
+            color: Colors.white,
           ),
           // Widget que contiene el logo de tu aplicación
           Logo(),
