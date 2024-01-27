@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class BannerButton extends StatelessWidget {
+class BannerButton extends StatefulWidget {
   final Function()? onTap;
   final String image;
   final String primaryMessage;
@@ -15,33 +15,68 @@ class BannerButton extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _BannerButtonState createState() => _BannerButtonState();
+}
+
+class _BannerButtonState extends State<BannerButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 2500), // Ajusta la duración según sea necesario
+    );
+
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // Iniciar la animación cuando el widget se inicia
+    _animationController.forward();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final heightSelector = MediaQuery.of(context).size.height / 6;
+    final widthSelector = MediaQuery.of(context).size.width / 1.1;
+
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
         alignment: Alignment.center,
-        height: heightSelector,
         margin: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          // color: Configure.ultraRed,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Stack(
           children: [
-            // Imagen con opacidad
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+            // Fondo con opacidad animada
+            FadeTransition(
+              opacity: _opacityAnimation,
               child: Container(
-                color: Colors.black,
-                child: Opacity(
-                  opacity: 0.75, // Ajusta la opacidad según sea necesario
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.black,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    height: heightSelector,
+                    width: widthSelector,
                     child: Image.asset(
-                      image, // Ruta de tu imagen de fondo
-                      fit: BoxFit
-                          .cover, // Ajusta la imagen para que cubra el contenedor
+                      
+                      widget.image,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
                     ),
                   ),
                 ),
@@ -53,33 +88,29 @@ class BannerButton extends StatelessWidget {
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: "$primaryMessage\n",
+                      text: "${widget.primaryMessage}\n",
                       style: TextStyle(
                         color: Colors.white,
-                        // fontSize: 24, // Adjust font size as needed
-                        // fontWeight: FontWeight.bold,
-                        // Apply stroke for primary message
                         shadows: const <Shadow>[
                           Shadow(
                             offset: Offset(3, 1),
                             blurRadius: 6.0,
-                            color: Color.fromARGB(255, 231, 42, 9), // Customize border color
+                            color: Color.fromARGB(255, 231, 42, 9),
                           ),
                         ],
                       ),
                     ),
                     TextSpan(
-                      text: secondaryMessage,
+                      text: widget.secondaryMessage,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24, // Adjust font size as needed
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        // Apply stroke for secondary message
                         shadows: const <Shadow>[
                           Shadow(
                             offset: Offset(3, 1),
                             blurRadius: 5.0,
-                            color: Color.fromARGB(255, 0, 25, 136), // Customize border color
+                            color: Color.fromARGB(255, 0, 25, 136),
                           ),
                         ],
                       ),
@@ -110,5 +141,11 @@ class BannerButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }

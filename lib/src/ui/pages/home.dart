@@ -1,45 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/services/database.dart';
-import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
-import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
+import 'package:kaiu/src/ui/pages/settings_page.dart';
 import 'package:kaiu/src/ui/widget/home_components/banner_button.dart';
 import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
+import 'package:kaiu/src/ui/widget/home_components/youtuber_player_screen.dart';
 
 class Home extends StatelessWidget {
-  static String routeName = "/home";
   final theme = ThemeController.instance;
-  final _auth = FirebaseAuth.instance;
   final database = DatabaseMethods.instance;
 
   Home({super.key});
-
-  //Funcion Cerrar Sesión
-  Future<void> signOut() async {
-    await _auth.signOut();
-  }
-
-  //Funcion de Eliminar Cuenta
-  Future<void> deleteAccount() async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
-      var userId = user?.uid;
-
-      if (user != null) {
-        
-        await user.delete();
-        await database.deleteAllVotesForUser(userId ?? "");
-
-        print('Cuenta eliminada con éxito.');
-      } else {
-        print('No hay usuario autenticado.');
-      }
-    } catch (e) {
-      print('Error al eliminar la cuenta: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,58 +27,28 @@ class Home extends StatelessWidget {
               ),
               backgroundColor: theme.backgroundUltraRed(),
               actions: [
-                PopupMenuButton<String>(
-                  color: Colors.white.withOpacity(0.9),
+                // ... (código existente)
+                IconButton(
+                  icon: Icon(
+                    theme.brightnessValue ? Icons.light_mode : Icons.contrast,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    theme.changeTheme();
+                  },
+                ),
+                IconButton(
                   icon: Icon(
                     Icons.settings,
                     color: Colors.white,
                   ),
-                  onSelected: (value) {
-                    // Acción a realizar cuando se selecciona una opción
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return [
-                      PopupMenuItem<String>(
-                        child: theme.brightnessValue
-                            ? Text("Modo Obscuro")
-                            : Text('Modo Claro'),
-                        onTap: () {
-                          theme.changeTheme();
-                        },
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingsPage(),
                       ),
-                      PopupMenuItem<String>(
-                        value: 'opcion2',
-                        child: Text('Cerrar Sesión'),
-                        onTap: () {
-                          signOut();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginPage()));
-                        },
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'opcion3',
-                        child: Text('Modo Admin'),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AdminPageView()));
-                        },
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'opcion4',
-                        child: Text('Borrar cuenta'),
-                        onTap: () {
-                          deleteAccount();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginPage()));
-                        },
-                      ),
-                    ];
+                    );
                   },
                 ),
               ],
@@ -148,6 +90,10 @@ class Home extends StatelessWidget {
                               "https://www.tiktok.com/@ultrabrother_m78");
                         },
                         image: "assets/tiktok_banner.jpeg"),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: YoutubePlayerScreen(videoId: "CFrlLvK3LAE"),
+                    )
                   ],
                 ),
               ),

@@ -150,170 +150,172 @@ class KaijuFormHabsState extends State<KaijuFormHabs> {
         title: Text('Gestionar Habilidades'),
         actions: [],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              "Filtro Kaiju",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // Dropdown para seleccionar "Ultra"
-                Expanded(
-                  child: DropdownButton<String>(
-                    value: optionUltra,
-                    onChanged: (newValue) {
-                      setState(() {
-                        optionUltra = newValue!;
-                        kaijuOptions = kaijus
-                            .where((element) => element.ultra == optionUltra)
-                            .map((e) => e.name)
-                            .toList();
-                        optionKaiju = kaijuOptions.first;
-                        selectedKaiju = kaijus.firstWhere(
-                            (element) => element.name == optionKaiju);
-                        keyCount = selectedKaiju.kaijuHabs?.length ?? 0;
-                      });
-                    },
-                    items: ultraOptions.map((ultraOption) {
-                      return DropdownMenuItem<String>(
-                        value: ultraOption,
-                        child: Text(
-                          ultraOption,
-                          style: TextStyle(
-                              color: const Color.fromARGB(255, 209, 6, 6),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }).toList(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Text(
+                "Filtro Kaiju",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // Dropdown para seleccionar "Ultra"
+                  Expanded(
+                    child: DropdownButton<String>(
+                      value: optionUltra,
+                      onChanged: (newValue) {
+                        setState(() {
+                          optionUltra = newValue!;
+                          kaijuOptions = kaijus
+                              .where((element) => element.ultra == optionUltra)
+                              .map((e) => e.name)
+                              .toList();
+                          optionKaiju = kaijuOptions.first;
+                          selectedKaiju = kaijus.firstWhere(
+                              (element) => element.name == optionKaiju);
+                          keyCount = selectedKaiju.kaijuHabs?.length ?? 0;
+                        });
+                      },
+                      items: ultraOptions.map((ultraOption) {
+                        return DropdownMenuItem<String>(
+                          value: ultraOption,
+                          child: Text(
+                            ultraOption,
+                            style: TextStyle(
+                                color: const Color.fromARGB(255, 209, 6, 6),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
-                ),
-                SizedBox(width: 16), // Separador
-                // Dropdown para seleccionar "Kaiju"
-                Expanded(
-                  child: DropdownButton<String>(
-                    value: optionKaiju,
-                    onChanged: (newValue) {
-                      setState(() {
-                        optionKaiju = newValue!;
-                        selectedKaiju = kaijus.firstWhere(
-                            (element) => element.name == optionKaiju);
-                        keyCount = selectedKaiju.kaijuHabs?.length ?? 0;
-                      });
-                    },
-                    items: kaijuOptions.map((option) {
-                      return DropdownMenuItem<String>(
-                        value: option,
-                        child: Text(
-                          option,
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 5, 29, 245),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }).toList(),
+                  SizedBox(width: 16), // Separador
+                  // Dropdown para seleccionar "Kaiju"
+                  Expanded(
+                    child: DropdownButton<String>(
+                      value: optionKaiju,
+                      onChanged: (newValue) {
+                        setState(() {
+                          optionKaiju = newValue!;
+                          selectedKaiju = kaijus.firstWhere(
+                              (element) => element.name == optionKaiju);
+                          keyCount = selectedKaiju.kaijuHabs?.length ?? 0;
+                        });
+                      },
+                      items: kaijuOptions.map((option) {
+                        return DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(
+                            option,
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 5, 29, 245),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            // Mostrar los campos de texto existentes para clave y valor
-            Column(
-              children: iterableZipController.map((tetra) {
-                var nameController = tetra[0];
-                var descriptionController = tetra[1];
-                var timeAgoController = tetra[2];
-                var linkImageController = tetra[3];
-
-                return Column(
-                  children: [
-                    TextField(
-                      controller: nameController,
-                      decoration:
-                          InputDecoration(labelText: 'Nombre de la Habilidad'),
-                    ),
-                    TextField(
-                      controller: descriptionController,
-                      decoration:
-                          InputDecoration(labelText: 'Ingrese la Descripción'),
-                    ),
-                    TextField(
-                      controller: timeAgoController,
-                      decoration:
-                          InputDecoration(labelText: 'Ingrese la Fecha'),
-                    ),
-                    TextField(
-                      enabled: false,
-                      controller: linkImageController,
-                      decoration: InputDecoration(labelText: 'Ingrese el Link'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            var url = await pickAndUploadImageHabs(
-                                selectedKaiju.ultra, selectedKaiju.name);
-                            setState(() {
-                              linkImageController.text = url;
-                            });
-                          },
-                          child: Text("Subir Imagen")),
-                    )
-                  ],
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 10),
-            // Botón para agregar más campos de texto para clave y valor
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  nameControllers.add(TextEditingController());
-                  descriptionControllers.add(TextEditingController());
-                  timeAgoControllers.add(TextEditingController());
-                  linkImageControllers.add(TextEditingController());
-                });
-              },
-              child: Icon(Icons.add),
-            ),
-            SizedBox(height: 10),
-            // Botón para imprimir los valores actuales de los campos de texto para clave y valor
-            ElevatedButton(
-              onPressed: () async {
-                //Poblar Diccionario
-                for (var tetra in iterableZipController) {
-                  selectedKaiju.kaijuHabs!["$keyCount"] = {
-                    "name": tetra[0].text,
-                    "description": tetra[1].text,
-                    "timeAgo": tetra[2].text,
-                    "image": tetra[3].text
+                ],
+              ),
+              // Mostrar los campos de texto existentes para clave y valor
+              Column(
+                children: iterableZipController.map((tetra) {
+                  var nameController = tetra[0];
+                  var descriptionController = tetra[1];
+                  var timeAgoController = tetra[2];
+                  var linkImageController = tetra[3];
+        
+                  return Column(
+                    children: [
+                      TextField(
+                        controller: nameController,
+                        decoration:
+                            InputDecoration(labelText: 'Nombre de la Habilidad'),
+                      ),
+                      TextField(
+                        controller: descriptionController,
+                        decoration:
+                            InputDecoration(labelText: 'Ingrese la Descripción'),
+                      ),
+                      TextField(
+                        controller: timeAgoController,
+                        decoration:
+                            InputDecoration(labelText: 'Ingrese la Fecha'),
+                      ),
+                      TextField(
+                        enabled: false,
+                        controller: linkImageController,
+                        decoration: InputDecoration(labelText: 'Ingrese el Link'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              var url = await pickAndUploadImageHabs(
+                                  selectedKaiju.ultra, selectedKaiju.name);
+                              setState(() {
+                                linkImageController.text = url;
+                              });
+                            },
+                            child: Text("Subir Imagen")),
+                      )
+                    ],
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 10),
+              // Botón para agregar más campos de texto para clave y valor
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    nameControllers.add(TextEditingController());
+                    descriptionControllers.add(TextEditingController());
+                    timeAgoControllers.add(TextEditingController());
+                    linkImageControllers.add(TextEditingController());
+                  });
+                },
+                child: Icon(Icons.add),
+              ),
+              SizedBox(height: 10),
+              // Botón para imprimir los valores actuales de los campos de texto para clave y valor
+              ElevatedButton(
+                onPressed: () async {
+                  //Poblar Diccionario
+                  for (var tetra in iterableZipController) {
+                    selectedKaiju.kaijuHabs!["$keyCount"] = {
+                      "name": tetra[0].text,
+                      "description": tetra[1].text,
+                      "timeAgo": tetra[2].text,
+                      "image": tetra[3].text
+                    };
+        
+                    keyCount++; // Incrementar keyCount después de cada iteración
+                  }
+        
+                  Map<String, dynamic> updateInfo = {
+                    "kaijuHabs": selectedKaiju.kaijuHabs
                   };
-
-                  keyCount++; // Incrementar keyCount después de cada iteración
-                }
-
-                Map<String, dynamic> updateInfo = {
-                  "kaijuHabs": selectedKaiju.kaijuHabs
-                };
-
-                await databaseMethod
-                    .updateKaijuDetail(selectedKaiju.id, updateInfo)
-                    .then((value) {
-                  Fluttertoast.showToast(
-                      msg: "Habilidades Agregadas",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
-                });
-              },
-              child: Text('Agregar Habilidades'),
-            ),
-          ],
+        
+                  await databaseMethod
+                      .updateKaijuDetail(selectedKaiju.id, updateInfo)
+                      .then((value) {
+                    Fluttertoast.showToast(
+                        msg: "Habilidades Agregadas",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  });
+                },
+                child: Text('Agregar Habilidades'),
+              ),
+            ],
+          ),
         ),
       ),
     );

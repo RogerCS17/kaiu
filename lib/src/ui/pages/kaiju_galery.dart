@@ -103,10 +103,10 @@ class _KaijuGaleryState extends State<KaijuGalery> {
         backgroundColor: theme.backgroundUltraRed(),
         title: Text(
           widget.ultra.name!,
-          style: TextStyle(color: theme.textPrimary()),
+          style: TextStyle(color: Colors.white),
         ),
         iconTheme: IconThemeData(
-          color: theme.textPrimary(),
+          color: Colors.white,
         ),
       ),
       backgroundColor: theme.background(),

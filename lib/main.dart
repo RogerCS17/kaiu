@@ -30,7 +30,7 @@ Widget _buildNoConnectionApp() {
   return MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Scaffold(
-      backgroundColor: Configure.ultraRedDark,
+      backgroundColor: Configure.ultraRedBackground,
       body: Center(
         child: AlertDialog(
           title: Text('Sin conexión'),
@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
 
   Widget _buildLoadingScreen() {
     return Scaffold(
-      backgroundColor: Configure.ultraRedBackground,
+      backgroundColor: Color.fromARGB(255, 255, 17, 0),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -90,7 +90,8 @@ class MyApp extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical:8, horizontal: 10),
                   child: SizedBox(
-                    height: 250,
+                    height: 257,
+                    width: 250,
                     child: Image.asset(
                       "assets/kaiju_icon.png",
                     ),
