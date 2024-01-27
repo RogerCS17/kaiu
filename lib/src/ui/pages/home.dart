@@ -28,6 +28,7 @@ class Home extends StatelessWidget {
       var userId = user?.uid;
 
       if (user != null) {
+        
         await user.delete();
         await database.deleteAllVotesForUser(userId ?? "");
 
