@@ -10,12 +10,11 @@ import 'package:kaiu/src/ui/widget/KaijuDrawer/kaiju_drawer.dart';
 import 'package:kaiu/src/ui/widget/MoreDetailsDrawer/more_details_kaiju.dart';
 
 class KaijuDetails extends StatelessWidget {
-  
   final Kaiju kaiju;
   final Ultra ultra;
   final theme = ThemeController.instance;
 
-  KaijuDetails({required this.kaiju, required this.ultra});
+  KaijuDetails({super.key, required this.kaiju, required this.ultra});
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +29,9 @@ class KaijuDetails extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: Colors.white), // Icono de volver atrás
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(
-                context); // Acción al presionar el botón de volver atrás
+            Navigator.pop(context);
           },
         ),
         iconTheme: IconThemeData(
@@ -47,44 +44,29 @@ class KaijuDetails extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        backgroundColor:
-            colorFromHex(kaiju.colorHex), // Cambio de color del AppBar
-        flexibleSpace: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(child: Container()),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Home()));
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: 25.0,
-                      right: 20.0,
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white, // Cambio de color del contenedor
-                      ),
-                      height: 10,
-                      width: 10,
-                      child: Padding(
-                        padding: EdgeInsets.all(8), //REPARAR
-                        // child: Image.network(ultra.imgLogo!),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(child: Container()),
-              ],
-            )
-          ],
-        ),
+        backgroundColor: colorFromHex(kaiju.colorHex),
+        actions: [
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+              );
+            },
+            child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10.0),
+                        topLeft: Radius.circular(8.0))),
+                width: 120,
+                height: 75,
+                padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                child: Image.network(
+                  ultra.imgLogo!,
+                )),
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -96,13 +78,12 @@ class KaijuDetails extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
-                  Container(
+                  SizedBox(
                     height: screenHeight / 2.85,
                     width: screenWidth,
                     child: ImageChanger(kaiju: kaiju),
                   ),
-                  CarrouselText(
-                      userNames: kaiju.usersPremium!.cast<String>())
+                  CarrouselText(userNames: kaiju.usersPremium!.cast<String>())
                 ],
               ),
             ),

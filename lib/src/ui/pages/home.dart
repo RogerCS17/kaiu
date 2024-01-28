@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
@@ -7,11 +8,16 @@ import 'package:kaiu/src/ui/widget/home_components/banner_button.dart';
 import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
 import 'package:kaiu/src/ui/widget/home_components/youtuber_player_screen.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   final theme = ThemeController.instance;
   final database = DatabaseMethods.instance;
-
-  Home({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +33,9 @@ class Home extends StatelessWidget {
               ),
               backgroundColor: theme.backgroundUltraRed(),
               actions: [
-                // ... (código existente)
                 IconButton(
                   icon: Icon(
-                    theme.brightnessValue ? Icons.light_mode : Icons.contrast,
+                    theme.brightnessValue ? Icons.light_mode : Icons.brightness_medium,
                     color: Colors.white,
                   ),
                   onPressed: () {
@@ -60,7 +65,6 @@ class Home extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    //Para Rediriginar al Canal de Youtube
                     BannerButton(
                         primaryMessage: "Visita el Canal de",
                         secondaryMessage: "UltraBrother M78",
@@ -69,8 +73,6 @@ class Home extends StatelessWidget {
                               "https://www.youtube.com/channel/UCvx0kG1KPYrD7Ez24C2rMtQ");
                         },
                         image: "assets/ultraman_banner.webp"),
-
-                    //Para Acceder a la Galería Kaiju
                     BannerButton(
                         primaryMessage: "Visita la Novedosa",
                         secondaryMessage: "Galería Kaiju",
@@ -81,7 +83,6 @@ class Home extends StatelessWidget {
                                   builder: (context) => UltraPageView()));
                         },
                         image: "assets/kaiju_banner.webp"),
-
                     BannerButton(
                         primaryMessage: "Visita el TikTok de",
                         secondaryMessage: "UltraBrother M78",
@@ -92,7 +93,7 @@ class Home extends StatelessWidget {
                         image: "assets/tiktok_banner.jpeg"),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: YoutubePlayerScreen(videoId: "CFrlLvK3LAE"),
+                      child: YoutubePlayerScreen(documentId: "k64WtpMUvfMUvcJ0fAOv"),
                     )
                   ],
                 ),

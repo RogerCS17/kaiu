@@ -17,7 +17,7 @@ class SettingsPage extends StatelessWidget {
 
   bool adminConfirmation() {
     User? user = FirebaseAuth.instance.currentUser;
-    return user?.email == "yakomo3132@gmail.com";
+    return user?.email == "yakomo3132@gmail.com" || user?.uid == "rlBwBVg9h8RkF9kLYrwEVxpM5DF3";
   }
 
   // Funcion Cerrar Sesión
@@ -90,7 +90,6 @@ class SettingsPage extends StatelessWidget {
           'Opciones',
           style: TextStyle(
             color: Colors.white,
-            fontStyle: FontStyle.italic,
           ),
         ),
         iconTheme: IconThemeData(color: Colors.white),
@@ -105,6 +104,7 @@ class SettingsPage extends StatelessWidget {
                   style: TextStyle(
                     color: theme.textPrimary(),
                     fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w300
                   ),
                 ),
                 onTap: () => signOut(context),
@@ -116,6 +116,7 @@ class SettingsPage extends StatelessWidget {
                   style: TextStyle(
                     color: theme.textPrimary(),
                     fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w300
                   ),
                 ),
                 onTap: () => deleteAccount(context),
@@ -128,6 +129,7 @@ class SettingsPage extends StatelessWidget {
                         style: TextStyle(
                           color: theme.textPrimary(),
                           fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w300
                         ),
                       ),
                       onTap: () {
