@@ -16,6 +16,9 @@ class KaijuDetails extends StatelessWidget {
 
   KaijuDetails({super.key, required this.kaiju, required this.ultra});
 
+  // Añadir un ScrollController
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     var statusHeight = MediaQuery.of(context).viewPadding.top;
@@ -55,6 +58,7 @@ class KaijuDetails extends StatelessWidget {
             },
             child: Container(
                 decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black,width: 0.45),
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(10.0),
@@ -102,8 +106,7 @@ class KaijuDetails extends StatelessWidget {
               height: screenHeight / 2.85,
               width: screenWidth,
               decoration: BoxDecoration(
-                color: theme
-                    .backgroundSecondary(), // Cambio de color del contenedor
+                color: theme.backgroundSecondary(),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: Colors.white,
@@ -111,7 +114,9 @@ class KaijuDetails extends StatelessWidget {
                 ),
               ),
               child: Scrollbar(
+                controller: _scrollController, // Asigna el ScrollController al Scrollbar
                 child: ListView(
+                  controller: _scrollController, // Asigna el ScrollController al ListView
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(15),
