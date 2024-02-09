@@ -41,12 +41,17 @@ class KaijuPost extends StatelessWidget {
           ListTile(
             leading: CircleAvatar(
               radius: 20,
-              backgroundImage: AssetImage("assets/${kaiju.ultra}_avatar.jpg"), // Cambia la URL de la foto de perfil
+              backgroundImage: AssetImage(
+                  "assets/${kaiju.ultra}_avatar.jpg"), // Cambia la URL de la foto de perfil
             ),
             title: Text(kaiju.ultra),
             subtitle: Row(
               children: [
-                Icon(Icons.public, color: Colors.black.withOpacity(0.5), size: 20,), // Icono "mundo" para indicar que es público
+                Icon(
+                  Icons.public,
+                  color: Colors.black.withOpacity(0.5),
+                  size: 20,
+                ), // Icono "mundo" para indicar que es público
                 SizedBox(width: 4),
                 Text(kaijuHabsInfo["timeAgo"]), // Tiempo del post
               ],
@@ -59,17 +64,22 @@ class KaijuPost extends StatelessWidget {
             child: Row(
               children: [
                 Image.asset(
-                  'assets/bullet_point_text.png', // Ruta de la imagen
+                  'assets/bullet_point_text.png',
                   width: 30, // Ajusta el ancho según tus preferencias
                   height: 30, // Ajusta la altura según tus preferencias
+                  // ... other properties ...
                 ),
-                SizedBox(width: 8), // Espacio entre la imagen y el texto
-                Text(
-                  kaijuHabsInfo["name"] ?? "",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    fontStyle: FontStyle.italic,
+                SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    kaijuHabsInfo["name"] ?? "",
+                    overflow:
+                        TextOverflow.fade, // ¿Como se maneja el desbordamiento?
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
                 ),
               ],

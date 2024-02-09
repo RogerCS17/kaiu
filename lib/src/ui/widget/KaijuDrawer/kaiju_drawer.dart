@@ -3,6 +3,7 @@ import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/ui/configure.dart';
+import 'package:kaiu/src/ui/pages/kaiju_curiosity.dart';
 import 'package:kaiu/src/ui/pages/kaiju_galery_image_online.dart';
 import 'package:kaiu/src/ui/pages/kaiju_habs.dart';
 import 'package:kaiu/src/ui/widget/KaijuDrawer/kaiju_option_drawer.dart';
@@ -119,10 +120,10 @@ class KaijuDrawer extends StatelessWidget {
                 optionColor: Configure.ultraOption),
             onTap: () {
               // Acción al tocar la opción para mostrar las debilidades.
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => KaijuWeaknessPage(enemy: enemy))
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => KaijuCuriosity())
+              );
             },
           ),
 

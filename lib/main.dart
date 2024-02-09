@@ -13,6 +13,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(MyApp());
+  });
   await ThemeController.instance.initTheme();
   ErrorWidget.builder =
       (FlutterErrorDetails details) => ErrorPage(details: details);
@@ -74,7 +78,7 @@ class MyApp extends StatelessWidget {
 
   Widget _buildLoadingScreen() {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 17, 0),
+      backgroundColor: ThemeController.instance.background(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -88,7 +92,8 @@ class MyApp extends StatelessWidget {
                       65.0), // Ajusta el radio según tus preferencias
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical:8, horizontal: 10),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                   child: SizedBox(
                     height: 257,
                     width: 250,
@@ -102,7 +107,7 @@ class MyApp extends StatelessWidget {
           ),
           SpinKitCubeGrid(
             size: 62,
-            color: Colors.white,
+            color: ThemeController.instance.exBackground(),
           ),
           // Widget que contiene el logo de tu aplicación
           Logo(),

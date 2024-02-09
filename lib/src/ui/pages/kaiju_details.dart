@@ -58,7 +58,7 @@ class KaijuDetails extends StatelessWidget {
             },
             child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black,width: 0.45),
+                  border: Border.all(color: Color.fromARGB(255, 0, 0, 0),width: 0.15),
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(10.0),

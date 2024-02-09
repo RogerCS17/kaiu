@@ -148,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                  prefixIcon: Icon(Icons.email, color: theme.textPrimary()),
+                  prefixIcon: Icon(Icons.email, color: theme.textPrimary().withOpacity(0.5)),
                   labelText: 'Correo',
                   labelStyle: TextStyle(
                     color: theme.textPrimary().withOpacity(0.5),
@@ -185,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.lock,
-                    color: theme.textPrimary(),
+                    color: theme.textPrimary().withOpacity(0.5),
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
