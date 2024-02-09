@@ -122,7 +122,7 @@ class _SignUpPageState extends State<SignUpPage> {
               borderRadius: BorderRadius.circular(
                   75.0), // Ajusta el radio según tus necesidades
               child: Image.asset(
-                "assets/ultra_sign_up.png",
+                "assets/ultra_sign_up.webp",
                 height: heightSelector,
               ),
             ),

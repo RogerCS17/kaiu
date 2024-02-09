@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/core/services/database.dart';
 import 'package:kaiu/src/ui/configure.dart';
+import 'package:kaiu/src/ui/pages/error_page.dart';
 import 'package:kaiu/src/ui/pages/kaiju_galery.dart';
 import 'package:kaiu/src/ui/pages/ultra_selector.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
@@ -29,7 +31,7 @@ class _UltraPageViewState extends State<UltraPageView> {
 
   Widget _buildLoadingScreen() {
     return Scaffold(
-      backgroundColor:  Configure.ultraRedBackground,
+      backgroundColor: Configure.ultraRedBackground,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
@@ -110,14 +112,27 @@ class _UltraPageViewState extends State<UltraPageView> {
                       return UltraSelector(
                         ultra: ultras[index],
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => KaijuGalery(
-                                ultra: ultras[index],
-                              ),
-                            ),
-                          );
+                          ConnectivityWrapper.instance.isConnected
+                              .then((isConnected) {
+                            if (isConnected) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => KaijuGalery(
+                                    ultra: ultras[index],
+                                  ),
+                                ),
+                              );
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ErrorPage(), // Redirige a la página de error
+                                ),
+                              );
+                            }
+                          });
                         },
                         isSelected: isSelected,
                         currentPageFake: _currentPageFake,

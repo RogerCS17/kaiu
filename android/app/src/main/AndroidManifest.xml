@@ -2,7 +2,7 @@
     <application
         android:label="kaiu"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/kaiju_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"

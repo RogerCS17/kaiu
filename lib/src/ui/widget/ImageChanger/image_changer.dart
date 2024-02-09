@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
@@ -103,15 +102,25 @@ class _ImageChangerState extends State<ImageChanger> {
                         ),
                         child: IconButton(
                           onPressed: () async {
-                            if (isLiked) {
-                              database.unlikePost(kaiju.id);
-                            } else {
-                              database.likePost(kaiju.id);
-                            }
-
+                            // Actualiza el estado local de isLiked
                             setState(() {
                               isLiked = !isLiked;
+                              // Actualiza el número de votos localmente
+                              kaiju.vote += isLiked ? 1 : -1;
                             });
+
+                            // Actualiza la base de datos Firebase
+                            Map<String, dynamic> updateInfo = {
+                              "vote": kaiju.vote
+                            };
+                            //Lógica del Booleano invertido
+                            if (isLiked) {
+                              await database.likePost(kaiju.id);
+                            } else {
+                              await database.unlikePost(kaiju.id);
+                            }
+                            await database.updateKaijuDetail(
+                                kaiju.id, updateInfo);
                           },
                           icon: isLiked
                               ? Icon(

@@ -13,11 +13,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) {
-    runApp(MyApp());
-  });
+
   await ThemeController.instance.initTheme();
+
   ErrorWidget.builder =
       (FlutterErrorDetails details) => ErrorPage(details: details);
 
@@ -26,7 +24,10 @@ void main() async {
     // No hay conexión, muestra el mensaje y cierra la aplicación
     runApp(_buildNoConnectionApp());
   } else {
-    runApp(MyApp());
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+        .then((_) {
+      runApp(MyApp());
+    });
   }
 }
 
@@ -98,16 +99,19 @@ class MyApp extends StatelessWidget {
                     height: 257,
                     width: 250,
                     child: Image.asset(
-                      "assets/kaiju_icon.png",
+                      "assets/kaiju_icon.webp",
                     ),
                   ),
                 ),
               ),
             ),
           ),
-          SpinKitCubeGrid(
-            size: 62,
-            color: ThemeController.instance.exBackground(),
+          Padding(
+            padding: EdgeInsets.only(bottom: 100),
+            child: SpinKitCubeGrid(
+              size: 75,
+              color: ThemeController.instance.exBackground(),
+            ),
           ),
           // Widget que contiene el logo de tu aplicación
           Logo(),

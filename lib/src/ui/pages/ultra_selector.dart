@@ -1,6 +1,8 @@
 import 'dart:ui';
+import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
+import 'package:kaiu/src/ui/pages/error_page.dart';
 import 'package:kaiu/src/ui/pages/kaiju_galery.dart';
 
 class UltraSelector extends StatelessWidget {
@@ -17,10 +19,8 @@ class UltraSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final heightSelector = MediaQuery.of(context).size.height / 1.425;
     final widthSelector = MediaQuery.of(context).size.width / 1.5;
-
 
     return isSelected
         ? SizedBox(
@@ -32,10 +32,24 @@ class UltraSelector extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => KaijuGalery(ultra: ultra!)));
+                    ConnectivityWrapper.instance.isConnected
+                        .then((isConnected) {
+                      if (isConnected) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    KaijuGalery(ultra: ultra!)));
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ErrorPage(), // Redirige a la página de error
+                          ),
+                        );
+                      }
+                    });
                   },
                   child: Stack(
                     children: [
@@ -54,7 +68,7 @@ class UltraSelector extends StatelessWidget {
                                 errorBuilder: (BuildContext context,
                                     Object error, StackTrace? stackTrace) {
                                   return Image.asset(
-                                    'assets/test_image.png',
+                                    'assets/test_image.webp',
                                     fit: BoxFit.cover,
                                   );
                                 },
@@ -77,7 +91,7 @@ class UltraSelector extends StatelessWidget {
                                             imageFilter: ImageFilter.blur(
                                                 sigmaX: 5, sigmaY: 5),
                                             child: Image.asset(
-                                              'assets/placeholder.jpeg',
+                                              'assets/placeholder.webp',
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -147,7 +161,7 @@ class UltraSelector extends StatelessWidget {
                       sigmaY: 5,
                     ),
                     child: Image.asset(
-                      'assets/placeholder.jpeg',
+                      'assets/placeholder.webp',
                       fit: BoxFit.cover,
                     ),
                   ),

@@ -21,7 +21,7 @@ class KaijuCuriosity extends StatelessWidget {
         children: [
           // Fondo de la imagen
           Image.asset(
-            'assets/ultraman_background.jpeg',
+            'assets/ultraman_background.webp',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,

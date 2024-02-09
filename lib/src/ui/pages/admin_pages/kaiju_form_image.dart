@@ -17,8 +17,7 @@ class KaijuFormImage extends StatefulWidget {
 class KaijuFormImageState extends State<KaijuFormImage> {
   final databaseMethod = DatabaseMethods.instance;
 
-  List<Kaiju> kaijus =
-      []; //La Lista de todos los Kaijus en Firebase (Inmutable)
+  List<Kaiju> kaijus = []; //La Lista de todos los Kaijus en Firebase (Inmutable)
   late Kaiju selectedKaiju; //El Kaiju particular Seleccionado
 
   String optionKaiju = ''; //Nombre del Kaiju a Seleccionar

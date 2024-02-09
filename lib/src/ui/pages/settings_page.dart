@@ -17,7 +17,7 @@ class SettingsPage extends StatelessWidget {
 
   bool adminConfirmation() {
     User? user = FirebaseAuth.instance.currentUser;
-    return user?.email == "yakomo3132@gmail.com" || user?.uid == "rlBwBVg9h8RkF9kLYrwEVxpM5DF3";
+    return user?.email == "yakomo3132@gmail.com" && user?.uid == "rlBwBVg9h8RkF9kLYrwEVxpM5DF3";
   }
 
   // Funcion Cerrar Sesión
@@ -148,7 +148,7 @@ class SettingsPage extends StatelessWidget {
             bottom: 10,
             right: 10,
             child: Image.asset(
-              'assets/ultra_icon.png', // Reemplaza con la ruta de tu imagen
+              'assets/ultra_icon.webp', // Reemplaza con la ruta de tu imagen
               width: 100, // Ajusta el tamaño según tus necesidades
               height: 100,
             ),

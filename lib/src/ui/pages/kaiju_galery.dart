@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/core/services/database.dart';
+import 'package:kaiu/src/ui/pages/error_page.dart';
 import 'package:kaiu/src/ui/pages/kaiju_details.dart';
 
 class KaijuGalery extends StatefulWidget {
@@ -50,24 +52,25 @@ class _KaijuGaleryState extends State<KaijuGalery> {
         List<Kaiju> kaijuList = snapshot.docs.map((doc) {
           Map<String, dynamic> data = doc.data();
           return Kaiju(
-              id: data["id"],
-              name: data["name"],
-              subtitle: data["subtitle"] ?? "-",
-              description: data["description"] ?? "-",
-              img: data["img"] ?? [],
-              colorHex: data["colorHex"] ?? "-",
-              aliasOf: data["aliasOf"] ?? "-",
-              height: data["height"] ?? "-",
-              weight: data["weight"] ?? "-",
-              planet: data["planet"] ?? "-",
-              ultra: data["ultra"],
-              comentary: data["comentary"] ?? "-",
-              imgDrawer: data["imgDrawer"] ?? "-",
-              kaijuHabs: data["kaijuHabs"] ?? {},
-              usersPremium: data["usersPremium"] ?? []
-              //Si no hay description en Firebase recibe -
-              //description: data["description"]
-              );
+            id: data["id"],
+            name: data["name"],
+            subtitle: data["subtitle"] ?? "-",
+            description: data["description"] ?? "-",
+            img: data["img"] ?? [],
+            colorHex: data["colorHex"] ?? "-",
+            aliasOf: data["aliasOf"] ?? "-",
+            height: data["height"] ?? "-",
+            weight: data["weight"] ?? "-",
+            planet: data["planet"] ?? "-",
+            ultra: data["ultra"],
+            comentary: data["comentary"] ?? "-",
+            imgDrawer: data["imgDrawer"] ?? "-",
+            kaijuHabs: data["kaijuHabs"] ?? {},
+            usersPremium: data["usersPremium"] ?? [],
+            vote: data["vote"] ?? 0,
+            //Si no hay description en Firebase recibe -
+            //description: data["description"]
+          );
         }).toList();
 
         return kaijuList;
@@ -139,16 +142,29 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                 return Center(
                   child: InkWell(
                     onTap: () {
+                      ConnectivityWrapper.instance.isConnected
+                          .then((isConnected) {
+                        if (isConnected) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => KaijuDetails(
+                                kaiju: filterKaijuNames[index],
+                                ultra: widget.ultra,
+                              ),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ErrorPage(), // Redirige a la página de error
+                            ),
+                          );
+                        }
+                      });
                       // // Navegación a la pantalla de detalles del Kaiju.
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => KaijuDetails(
-                            kaiju: filterKaijuNames[index],
-                            ultra: widget.ultra,
-                          ),
-                        ),
-                      );
                     },
                     child: Padding(
                       padding: EdgeInsets.all(9.0),

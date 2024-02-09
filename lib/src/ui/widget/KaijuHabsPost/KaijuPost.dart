@@ -42,7 +42,7 @@ class KaijuPost extends StatelessWidget {
             leading: CircleAvatar(
               radius: 20,
               backgroundImage: AssetImage(
-                  "assets/${kaiju.ultra}_avatar.jpg"), // Cambia la URL de la foto de perfil
+                  "assets/${kaiju.ultra}_avatar.webp"), // Cambia la URL de la foto de perfil
             ),
             title: Text(kaiju.ultra),
             subtitle: Row(
@@ -64,7 +64,7 @@ class KaijuPost extends StatelessWidget {
             child: Row(
               children: [
                 Image.asset(
-                  'assets/bullet_point_text.png',
+                  'assets/bullet_point_text.webp',
                   width: 30, // Ajusta el ancho según tus preferencias
                   height: 30, // Ajusta la altura según tus preferencias
                   // ... other properties ...

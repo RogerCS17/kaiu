@@ -137,7 +137,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100.0),
                   child: Image.asset(
-                    "assets/ultra_reset.png",
+                    "assets/ultra_reset.webp",
                     height: heightSelector,
                   ),
                 ),

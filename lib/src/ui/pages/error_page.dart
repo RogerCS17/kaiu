@@ -25,65 +25,59 @@ class ErrorPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.background(),
       appBar: AppBar(
+        leading: Icon(Icons.wifi_off, color: theme.textPrimary(),),
         elevation: 0,
         centerTitle: true,
         automaticallyImplyLeading: false,
-        backgroundColor: ThemeController.instance.background(),
+        backgroundColor: theme.background(),
         title: Text(
-          "¡Notifica a UltraBrother!",
+          "¡Error de Conexión!",
           style: TextStyle(color: theme.textPrimary()),
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.all(0),
-        height: double.infinity,
-        width: double.infinity,
+      body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Configure.backgroundLight,
-                shape: BoxShape.circle, // Cambiado a una forma circular
+                shape: BoxShape.circle,
               ),
               child: CircleAvatar(
-                radius: 150, // Puedes ajustar el radio según tus necesidades
-                backgroundImage: AssetImage("assets/ultra_error.png"),
+                radius: 150,
+                backgroundImage: AssetImage("assets/ultra_error.webp"),
               ),
             ),
-            Column(
-              children: [
-                Text(
-                  Constants.errorMessage,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: theme.textPrimary(), fontSize: 25),
-                ),
-                details != null
-                    ? Text(
-                        getException(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(color: Color.fromARGB(255, 255, 221, 0)),
-                      )
-                    : Container(),
-              ],
+            SizedBox(height: 20),
+            Text(
+              Constants.errorMessage,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: theme.textPrimary(), fontSize: 25),
             ),
-            Column(
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => Home()),
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                    child: Text("Regresar al Inicio"))
-              ],
-            )
+            SizedBox(height: 10),
+            details != null
+                ? Text(
+                    getException(),
+                    style: TextStyle(color: Colors.amber),
+                  )
+                : Text(
+                    "¡Revisa tu Conexión a Internet!",
+                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                  (Route<dynamic> route) => false,
+                );
+              },
+              child: Text("Regresar al Inicio"),
+            ),
           ],
         ),
       ),
