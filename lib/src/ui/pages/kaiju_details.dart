@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
@@ -20,8 +22,83 @@ class KaijuDetails extends StatelessWidget {
   // Añadir un ScrollController
   final ScrollController _scrollController = ScrollController();
 
+  //Obtener Datos Específicos
+  Future<Kaiju> fetchKaijuData(Kaiju document) async {
+    try {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('Kaiju')
+          .doc(document.id)
+          .get();
+
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+
+        // Crea una instancia de Kaiju utilizando el constructor desdeMap
+        Kaiju kaiju = Kaiju(
+          
+          //Reutilizar Datos Cargados Anteriormente
+          id: document.id,
+          name: document.name,
+          img: document.img,
+          ultra: document.ultra,
+          colorHex: document.colorHex,
+
+          //Datos Cargados de Firebase (Detalles)
+          subtitle: data["subtitle"] ?? "-",
+          description: data["description"] ?? "-",
+          aliasOf: data["aliasOf"] ?? "-",
+          height: data["height"] ?? "-",
+          weight: data["weight"] ?? "-",
+          planet: data["planet"] ?? "-",
+          comentary: data["comentary"] ?? "-",
+          imgDrawer: data["imgDrawer"] ?? "-",
+          kaijuHabs: data["kaijuHabs"] ?? {},
+          usersPremium: data["usersPremium"] ?? [],
+          vote: data["vote"] ?? 0,
+        );
+
+        return kaiju; // Devuelve el objeto Kaiju
+      } else {
+        return Kaiju();
+      }
+    } catch (e) {
+      return Kaiju();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: theme.background(),
+      body: FutureBuilder<Kaiju>(
+        future: fetchKaijuData(kaiju),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Muestra un círculo de carga mientras se obtienen los datos
+            return Center(
+              child: SpinKitCubeGrid(
+                size: 75,
+                color: ThemeController.instance.exBackground(),
+                duration: Duration(milliseconds: 500)
+              ),
+            );
+          } else if (snapshot.hasError) {
+            // Muestra un mensaje de error si ocurrió algún problema al obtener los datos
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            // Muestra la información del Kaiju una vez que se haya obtenido
+            final kaijuData = snapshot.data!;
+            return _buildKaijuDetails(context, kaijuData);
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildKaijuDetails(BuildContext context, Kaiju kaiju) {
     var statusHeight = MediaQuery.of(context).viewPadding.top;
     var size = MediaQuery.of(context).size;
     var screenHeight = size.height - (statusHeight);
@@ -61,29 +138,7 @@ class KaijuDetails extends StatelessWidget {
           ),
         ),
         backgroundColor: colorFromHex(kaiju.colorHex),
-        actions: const [
-          // InkWell(
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => Home()),
-          //     );
-          //   },
-          //   child: Container(
-          //       decoration: BoxDecoration(
-          //         border: Border.all(color: Color.fromARGB(255, 0, 0, 0),width: 0.15),
-          //           color: Colors.white,
-          //           borderRadius: BorderRadius.only(
-          //               bottomLeft: Radius.circular(10.0),
-          //               topLeft: Radius.circular(8.0))),
-          //       width: 120,
-          //       height: 75,
-          //       padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          //       child: Image.network(
-          //         ultra.imgLogo!,
-          //       )),
-          // ),
-        ],
+        actions: const [],
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 10, left: 10, right: 10),

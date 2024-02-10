@@ -38,7 +38,6 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
-
   //Funcion Principal del Registro
   void _signUp() async {
     setState(() {
@@ -85,7 +84,8 @@ class _SignUpPageState extends State<SignUpPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Error de registro'),
-            content: Text(errorMessage.toString()),
+            content: Text(
+                "Por favor, asegúrate de ingresar un correo electrónico válido y de verificar que tus contraseñas coincidan."),
             actions: [
               TextButton(
                 onPressed: () {
@@ -117,7 +117,7 @@ class _SignUpPageState extends State<SignUpPage> {
         padding: EdgeInsets.zero,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 30, right: 15, left: 15, bottom: 12),
+            padding: EdgeInsets.only(top: 32, right: 15, left: 15, bottom: 10),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(
                   75.0), // Ajusta el radio según tus necesidades
@@ -191,18 +191,17 @@ class _SignUpPageState extends State<SignUpPage> {
                       fontWeight: FontWeight.w400,
                     ),
                     decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.lock_open,
-                      ),
+                      prefixIcon: Icon(Icons.lock_open),
                       prefixIconColor: theme.textPrimary(),
                       suffixIcon: IconButton(
                         icon: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: _isPasswordVisible
-                                ? Configure.ultraRed
-                                : theme.textPrimary().withOpacity(0.5)),
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: _isPasswordVisible
+                              ? Configure.ultraRed
+                              : theme.textPrimary().withOpacity(0.5),
+                        ),
                         onPressed: () {
                           setState(() {
                             _isPasswordVisible = !_isPasswordVisible;
@@ -210,30 +209,38 @@ class _SignUpPageState extends State<SignUpPage> {
                         },
                       ),
                       labelText: 'Contraseña',
-                      // hintText: 'Crear Contraseña',
                       hintStyle: TextStyle(
                         color: Color(0xFF837E93),
                         fontSize: 10,
                         fontWeight: FontWeight.w400,
                       ),
                       labelStyle: TextStyle(
-                        color: theme.textPrimary().withOpacity(0.5),
+                        color: _passController.text.length < 6 &&
+                                _passController.text.length != 0
+                            ? Colors
+                                .transparent // Ocupa el mismo espacio pero es invisible
+                            : theme.textPrimary().withOpacity(0.5),
                         fontSize: 15,
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
                           width: 1,
                           color: Color(0xFF837E93),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
                           width: 1,
                           color: Color(0xFF9F7BFF),
                         ),
                       ),
+                      errorText: _passController.text.length < 6 &&
+                              _passController.text.length != 0
+                          ? 'Mínimo 6 Caracteres'
+                          : null,
+                      errorStyle: TextStyle(fontSize: 12),
                     ),
                   ),
                 ),
@@ -250,48 +257,56 @@ class _SignUpPageState extends State<SignUpPage> {
                       fontWeight: FontWeight.w400,
                     ),
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
-                      prefixIconColor: theme.textPrimary(),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                            _isRePasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: _isRePasswordVisible
-                                ? Configure.ultraRed
-                                : theme.textPrimary().withOpacity(0.5)),
-                        onPressed: () {
-                          setState(() {
-                            _isRePasswordVisible = !_isRePasswordVisible;
-                          });
-                        },
-                      ),
-                      labelText: 'Confirmar Contraseña',
-                      // hintText: 'Confirmando',
-                      hintStyle: TextStyle(
-                        color: Color(0xFF837E93),
-                        fontSize: 10,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      labelStyle: TextStyle(
-                        color: theme.textPrimary().withOpacity(0.5),
-                        fontSize: 15,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(
-                          width: 1,
+                        prefixIcon: Icon(Icons.lock),
+                        prefixIconColor: theme.textPrimary(),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                              _isRePasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: _isRePasswordVisible
+                                  ? Configure.ultraRed
+                                  : theme.textPrimary().withOpacity(0.5)),
+                          onPressed: () {
+                            setState(() {
+                              _isRePasswordVisible = !_isRePasswordVisible;
+                            });
+                          },
+                        ),
+                        labelText: 'Confirmar Contraseña',
+                        // hintText: 'Confirmando',
+                        hintStyle: TextStyle(
                           color: Color(0xFF837E93),
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400,
                         ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Color(0xFF9F7BFF),
+                        labelStyle: TextStyle(
+                          color: _repassController.text.length < 6 &&
+                                  _repassController.text.length != 0
+                              ? Colors
+                                  .transparent // Ocupa el mismo espacio pero es invisible
+                              : theme.textPrimary().withOpacity(0.5),
+                          fontSize: 15,
                         ),
-                      ),
-                    ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: Color(0xFF837E93),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: Color(0xFF9F7BFF),
+                          ),
+                        ),
+                        errorText: _repassController.text.length < 6 &&
+                                _repassController.text.length != 0
+                            ? 'Mínimo 6 Caracteres'
+                            : null,
+                        errorStyle: TextStyle(fontSize: 12)),
                   ),
                 ),
                 SizedBox(height: 25),

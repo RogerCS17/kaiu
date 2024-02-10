@@ -40,8 +40,7 @@ class AdminPageViewState extends State<AdminPageView> {
           });
         },
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.pageview), label: 'Formulario'),
+          BottomNavigationBarItem(icon: Icon(Icons.pageview), label: 'Formulario'),
           BottomNavigationBarItem(icon: Icon(Icons.image), label: 'Imagen'),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Habilidades'),
         ],

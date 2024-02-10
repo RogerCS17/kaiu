@@ -87,8 +87,14 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error de inicio de sesión'),
-            content: Text(errorMessage),
+            title: Text(
+              'Error al Iniciar Sesión',
+              style: TextStyle(fontSize: 20),
+            ),
+            content: Text(
+              '¡Por favor, revisa tus credenciales e inténtalo de nuevo!',
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
             actions: [
               TextButton(
                 onPressed: () {
@@ -144,11 +150,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(
-                      0), // Ajusta el relleno según tus necesidades
+                      10), // Ajusta el relleno según tus necesidades
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                  prefixIcon: Icon(Icons.email, color: theme.textPrimary().withOpacity(0.5)),
+                  prefixIcon: Icon(Icons.email,
+                      color: theme.textPrimary().withOpacity(0.5)),
                   labelText: 'Correo',
                   labelStyle: TextStyle(
                     color: theme.textPrimary().withOpacity(0.5),
@@ -183,6 +190,8 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.w400,
                 ),
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(
+                      10), // Ajusta el relleno según tus necesidades
                   prefixIcon: Icon(
                     Icons.lock,
                     color: theme.textPrimary().withOpacity(0.5),

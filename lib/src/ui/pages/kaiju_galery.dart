@@ -44,6 +44,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
     // filterKaijuNames = selectedKaiju;
   }
 
+  //Obtener Datos Generales para Mostrar
   Future<List<Kaiju>> _loadKaijuData() async {
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
@@ -52,24 +53,11 @@ class _KaijuGaleryState extends State<KaijuGalery> {
         List<Kaiju> kaijuList = snapshot.docs.map((doc) {
           Map<String, dynamic> data = doc.data();
           return Kaiju(
-            id: data["id"],
-            name: data["name"],
-            subtitle: data["subtitle"] ?? "-",
-            description: data["description"] ?? "-",
+            id: data["id"] ?? "-",
+            name: data["name"] ?? "-",
             img: data["img"] ?? [],
-            colorHex: data["colorHex"] ?? "-",
-            aliasOf: data["aliasOf"] ?? "-",
-            height: data["height"] ?? "-",
-            weight: data["weight"] ?? "-",
-            planet: data["planet"] ?? "-",
-            ultra: data["ultra"],
-            comentary: data["comentary"] ?? "-",
-            imgDrawer: data["imgDrawer"] ?? "-",
-            kaijuHabs: data["kaijuHabs"] ?? {},
-            usersPremium: data["usersPremium"] ?? [],
-            vote: data["vote"] ?? 0,
-            //Si no hay description en Firebase recibe -
-            //description: data["description"]
+            ultra: data["ultra"] ?? "-",
+            colorHex: data["colorHex"] ?? "#bf0705",
           );
         }).toList();
 
@@ -84,6 +72,8 @@ class _KaijuGaleryState extends State<KaijuGalery> {
       return [];
     }
   }
+
+
 
   void _filterContainers(String query) {
     setState(() {
@@ -141,7 +131,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                 final imageIndex = generateRandomNumberOneToNine();
                 return Center(
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       ConnectivityWrapper.instance.isConnected
                           .then((isConnected) {
                         if (isConnected) {
@@ -198,7 +188,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
                                       10), //Editar borde de imagen superior derecho
                                 ),
                                 child: Image.network(
-                                  filterKaijuNames[index].img![0],
+                                  filterKaijuNames[index].img!.first,
                                   fit: BoxFit.cover,
                                   loadingBuilder: (BuildContext context,
                                       Widget child,

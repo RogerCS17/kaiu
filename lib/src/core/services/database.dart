@@ -6,7 +6,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 
 class DatabaseMethods {
-  //Constructor Privado
   DatabaseMethods._();
 
   static final instance = DatabaseMethods._();
@@ -47,6 +46,7 @@ class DatabaseMethods {
     return await ref.getDownloadURL();
   }
 
+  //Subir Imágenes a Firebase Storage
   Future<String> uploadImageToFirebaseStorage(File imageFile) async {
     try {
       String fileName = basename(imageFile.path);
@@ -57,15 +57,16 @@ class DatabaseMethods {
       await uploadTask.whenComplete(() => null);
 
       String downloadURL = await storageReference.getDownloadURL();
-      print('Image uploaded. Download URL: $downloadURL');
+      // print('Image uploaded. Download URL: $downloadURL');
 
       return downloadURL; // Devuelve la URL de descarga
     } catch (e) {
-      print('Error uploading image to Firebase Storage: $e');
+      // print('Error uploading image to Firebase Storage: $e');
       return ''; // Devuelve una cadena vacía si hay un error
     }
   }
 
+  //Obtener los Links de las Imagenes de un directorio
   Future<List<String>> getStorageLinkFiles(String path) async {
     List<String> filesLinks = [];
 
@@ -82,7 +83,7 @@ class DatabaseMethods {
         filesLinks.add(imageUrl);
       }
     } catch (error) {
-      print('Error al obtener archivos: $error');
+      // print('Error al obtener archivos: $error');
     }
 
     return filesLinks;
@@ -96,7 +97,7 @@ class DatabaseMethods {
         .set({});
   }
 
-  //Comprobar que el voto existe
+  //Comprobar que el voto "Favoritos" existe
   Future<bool> hasUserLikedPost(String kaijuId) async {
     final DocumentSnapshot voteDoc = await FirebaseFirestore.instance
         .collection('Votes')
@@ -117,7 +118,7 @@ class DatabaseMethods {
   //Eliminar todos los votos al eliminar la cuenta
   Future<void> deleteAllVotesForUser(String userId) async {
     try {
-      final String upperBound = userId + 'z';
+      final String upperBound = "${userId}z";
 
       final votesToDelete = await FirebaseFirestore.instance
           .collection('Votes')
@@ -129,7 +130,7 @@ class DatabaseMethods {
         await doc.reference.delete();
       }
     } catch (error) {
-      print('Error al eliminar votos: $error');
+      // print('Error al eliminar votos: $error');
     }
   }
 }

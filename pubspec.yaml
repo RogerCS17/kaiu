@@ -55,6 +55,7 @@ dependencies:
   connectivity_wrapper: ^1.1.4
   youtube_player_flutter: ^8.1.2
   image_gallery_saver: ^2.0.3
+  connectivity_plus: ^5.0.2
 
 dev_dependencies:
   flutter_test:

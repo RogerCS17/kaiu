@@ -13,7 +13,7 @@ class ThemeController {
   //¿Que es Value Notifier?
   ValueNotifier<bool> brightness = ValueNotifier<bool>(true);
 
-  //Getter
+  //Getter Bool
   bool get brightnessValue => brightness.value;
 
   //Métodos que Cambiar el Color Dinámicamente
@@ -24,6 +24,7 @@ class ThemeController {
       !brightnessValue ? Configure.backgroundLight : Configure.backgroundDark;
 
   Color textPrimary() => brightnessValue ? Colors.black : Colors.white;
+  
   Color exTextPrimary() => !brightnessValue ? Colors.black : Colors.white;
 
   Color backgroundSecondary() => brightnessValue

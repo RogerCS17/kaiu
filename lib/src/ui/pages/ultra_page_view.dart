@@ -5,7 +5,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/core/services/database.dart';
-import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
 import 'package:kaiu/src/ui/pages/kaiju_galery.dart';
 import 'package:kaiu/src/ui/pages/ultra_selector.dart';
@@ -31,10 +30,10 @@ class _UltraPageViewState extends State<UltraPageView> {
 
   Widget _buildLoadingScreen() {
     return Scaffold(
-      backgroundColor: Configure.ultraRedBackground,
+      backgroundColor: ThemeController.instance.background(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Expanded(
             child: Center(
               child: Column(
@@ -42,7 +41,8 @@ class _UltraPageViewState extends State<UltraPageView> {
                 children: [
                   SpinKitCubeGrid(
                     size: 100,
-                    color: Colors.white,
+                    color: ThemeController.instance.exBackground(),
+                    duration: Duration(milliseconds: 500)
                   ),
                 ],
               ),

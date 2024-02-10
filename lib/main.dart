@@ -1,27 +1,24 @@
-import 'package:connectivity_wrapper/connectivity_wrapper.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:kaiu/firebase_options.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
-import 'package:kaiu/src/ui/widget/Logo/logo.dart';
-import 'firebase_options.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kaiu/src/ui/widget/Logo/logo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await ThemeController.instance.initTheme();
-
   ErrorWidget.builder =
       (FlutterErrorDetails details) => ErrorPage(details: details);
 
-  // Verifica la conexión a Internet antes de iniciar la aplicación
-  if (!await ConnectivityWrapper.instance.isConnected) {
-    // No hay conexión, muestra el mensaje y cierra la aplicación
+  var connectivityResult = await Connectivity().checkConnectivity();
+  if (connectivityResult == ConnectivityResult.none) {
     runApp(_buildNoConnectionApp());
   } else {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -44,7 +41,6 @@ Widget _buildNoConnectionApp() {
           actions: [
             ElevatedButton(
               onPressed: () {
-                // Cierra la aplicación
                 SystemNavigator.pop();
               },
               child: Text('Aceptar'),
@@ -57,8 +53,7 @@ Widget _buildNoConnectionApp() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
-
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -111,9 +106,9 @@ class MyApp extends StatelessWidget {
             child: SpinKitCubeGrid(
               size: 75,
               color: ThemeController.instance.exBackground(),
+              duration: Duration(milliseconds: 500)
             ),
           ),
-          // Widget que contiene el logo de tu aplicación
           Logo(),
           SizedBox(
             height: 10,

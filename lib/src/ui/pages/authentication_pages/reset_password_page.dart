@@ -13,8 +13,9 @@ class ResetPasswordPage extends StatefulWidget {
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  
   final theme = ThemeController.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
 
   bool _isLoading = false;
@@ -39,9 +40,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
     try {
       var methods =
-          await _auth.fetchSignInMethodsForEmail(_emailController.text);
+          await auth.fetchSignInMethodsForEmail(_emailController.text);
       assert(methods.isNotEmpty, "El Correo no se encuentra Registrado");
-      await _auth.sendPasswordResetEmail(email: _emailController.text);
+      await auth.sendPasswordResetEmail(email: _emailController.text);
       _showResetPasswordSuccessDialog();
     } catch (error) {
       _showErrorDialog(error.toString());
@@ -80,8 +81,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Error de Restablecimiento de Contraseña'),
-          content: Text(errorMessage),
+          title: Text('Error al Restablecer Contraseña',style: TextStyle(fontSize: 20),),
+          content: Text('El Correo Ingresado es Incorrecto o no está Registrado'),
           actions: [
             TextButton(
               onPressed: () {
@@ -98,6 +99,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       backgroundColor: theme.background(),
       appBar: AppBar(
         title: Text(
@@ -113,92 +115,97 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   Widget _buildResetPasswordForm() {
     final heightSelector = MediaQuery.of(context).size.height / 2.5;
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              Text(
-                "Restablece tu Contraseña",
-                style: TextStyle(color: theme.textPrimary(), fontSize: 20),
-              ),
-              Logo(),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100.0),
-                  child: Image.asset(
-                    "assets/ultra_reset.webp",
-                    height: heightSelector,
+    return SingleChildScrollView( // Envuelve los widgets con SingleChildScrollView
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    "Restablece tu Contraseña",
+                    style: TextStyle(color: theme.textPrimary(), fontSize: 20),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 30, left: 30),
-                child: TextField(
-                  controller: _emailController,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: theme.textPrimary(),
-                    fontSize: 15,
-                  ),
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.email,
-                      color: theme.textPrimary(),
+                Logo(),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: Image.asset(
+                      "assets/ultra_reset.webp",
+                      height: heightSelector,
                     ),
-                    labelText: 'Correo',
-                    labelStyle: TextStyle(
-                      color: theme.textPrimary().withOpacity(0.5),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 30, left: 30),
+                  child: TextField(
+                    controller: _emailController,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: theme.textPrimary(),
                       fontSize: 15,
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: Color(0xFF837E93),
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.email,
+                        color: theme.textPrimary(),
                       ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: Color(0xFF9F7BFF),
+                      labelText: 'Correo',
+                      labelStyle: TextStyle(
+                        color: theme.textPrimary().withOpacity(0.5),
+                        fontSize: 15,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Color(0xFF837E93),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Color(0xFF9F7BFF),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  _resetPassword();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Configure.ultraRed,
+                SizedBox(
+                  height: 30,
                 ),
-                child: Text(
-                  'Enviar Solicitud',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
+                ElevatedButton(
+                  onPressed: () {
+                    _resetPassword();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Configure.ultraRed,
+                  ),
+                  child: Text(
+                    'Enviar Solicitud',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

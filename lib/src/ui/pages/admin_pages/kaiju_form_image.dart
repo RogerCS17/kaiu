@@ -367,7 +367,7 @@ class KaijuFormImageState extends State<KaijuFormImage> {
               onPressed: () async {
                 print(await FirebaseStorage.instance
                     .ref(
-                        "gs://kaiu-8295c.appspot.com/UltraImages/Info/ultraman_info.webp")
+                        "gs://kaiu-8295c.appspot.com/UltraImages/Logo/ultraman-jack.webp")
                     .getDownloadURL());
               },
               child: Text('Obtener Link de Imagen'),
