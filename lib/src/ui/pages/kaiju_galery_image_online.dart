@@ -188,6 +188,13 @@ class _FullScreenImageState extends State<FullScreenImage> {
           IconButton(
             icon: Icon(Icons.download),
             onPressed: () {
+              Fluttertoast.showToast(
+                msg: "Descargando...",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                backgroundColor: Colors.black,
+                textColor: Colors.white,
+              );
               _downloadImage(widget.imageUrls[currentPageIndex]);
             },
           ),
