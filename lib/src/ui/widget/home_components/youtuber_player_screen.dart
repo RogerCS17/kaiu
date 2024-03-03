@@ -1,11 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class YoutubePlayerScreen extends StatelessWidget {
+class YoutubePlayerScreen extends StatefulWidget {
   final String documentId;
 
-  YoutubePlayerScreen({Key? key, required this.documentId}) : super(key: key);
+  const YoutubePlayerScreen({Key? key, required this.documentId}) : super(key: key);
+
+  @override
+  State<YoutubePlayerScreen> createState() => _YoutubePlayerScreenState();
+}
+
+class _YoutubePlayerScreenState extends State<YoutubePlayerScreen>
+    with AutomaticKeepAliveClientMixin {
+  
+  late Future<String> _videoIdFuture;
+  late YoutubePlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _videoIdFuture = getVideoId(widget.documentId);
+  }
 
   Future<String> getVideoId(String documentId) async {
     try {
@@ -20,26 +38,33 @@ class YoutubePlayerScreen extends StatelessWidget {
         return ""; // Puedes manejar este caso de acuerdo a tus necesidades
       }
     } catch (e) {
-      print('Error al obtener el ID del video: $e');
+      // print('Error al obtener el ID del video: $e');
       throw e; // Propagar el error para que se maneje en fetchVideoId
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Importante llamar a super.build(context)
+
     return FutureBuilder(
-      future: getVideoId(documentId),
+      future: _videoIdFuture,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Mientras se carga el futuro, puedes mostrar un indicador de carga u otra cosa
-          return Center(child: CircularProgressIndicator(color: Colors.blue,));
+          return Center(
+            child: SpinKitCubeGrid(
+                size: 30,
+                color: ThemeController.instance.exBackground(),
+                duration: Duration(milliseconds: 1000)),
+          );
         } else if (snapshot.hasError) {
           // Si hay un error, puedes mostrar un mensaje de error o manejarlo de otra manera
           return Text('Error: ${snapshot.error}');
         } else {
           // Si todo está bien, obtén el videoId y crea el reproductor de YouTube
           String videoId = snapshot.data ?? "";
-          YoutubePlayerController controller = YoutubePlayerController(
+          _controller = YoutubePlayerController(
             initialVideoId: videoId,
             flags: YoutubePlayerFlags(
               autoPlay: false,
@@ -49,22 +74,22 @@ class YoutubePlayerScreen extends StatelessWidget {
 
           return Container(
             decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.circular(12.0), // Ajusta el radio según sea necesario
+              borderRadius: BorderRadius.circular(
+                  12.0), // Ajusta el radio según sea necesario
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 2,
                   blurRadius: 7,
-                  offset: Offset(
-                      0, 3), // Cambia el desplazamiento de la sombra según sea necesario
+                  offset: Offset(0,
+                      3), // Cambia el desplazamiento de la sombra según sea necesario
                 ),
               ],
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
               child: YoutubePlayer(
-                controller: controller,
+                controller: _controller,
                 showVideoProgressIndicator: true,
                 progressIndicatorColor: Colors.blueAccent,
               ),
@@ -74,4 +99,8 @@ class YoutubePlayerScreen extends StatelessWidget {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true; // Mantén el estado del widget
+
 }

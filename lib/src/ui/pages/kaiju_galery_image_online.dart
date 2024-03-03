@@ -1,20 +1,21 @@
-import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'package:connectivity_wrapper/connectivity_wrapper.dart';
+// import 'dart:io';
+// import 'package:http/http.dart' as http;
+// import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:image_gallery_saver/image_gallery_saver.dart';
+
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:kaiu/src/core/constants/functions.dart';
-import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
-import 'package:kaiu/src/core/services/database.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:kaiu/src/core/services/database.dart';
+import 'package:kaiu/src/core/constants/functions.dart';
+import 'package:connectivity_wrapper/connectivity_wrapper.dart';
+import 'package:kaiu/src/core/controllers/theme_controller.dart';
 
 class KaijuGaleryImageOnline extends StatefulWidget {
   final Kaiju kaiju;
 
-  KaijuGaleryImageOnline({super.key, required this.kaiju});
+  const KaijuGaleryImageOnline({super.key, required this.kaiju});
 
   @override
   State<KaijuGaleryImageOnline> createState() => _KaijuGaleryImageOnlineState();
@@ -68,6 +69,7 @@ class _KaijuGaleryImageOnlineState extends State<KaijuGaleryImageOnline> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => FullScreenImage(
+                                  kaijuName: widget.kaiju.name,
                                   imageUrls: imageUrls,
                                   initialIndex: index,
                                 )));
@@ -107,15 +109,19 @@ class _KaijuGaleryImageOnlineState extends State<KaijuGaleryImageOnline> {
 }
 
 class FullScreenImage extends StatefulWidget {
+  final String kaijuName;
   final List<String> imageUrls;
   final int initialIndex;
 
-  FullScreenImage(
-      {Key? key, required this.imageUrls, required this.initialIndex})
+  const FullScreenImage(
+      {Key? key,
+      required this.imageUrls,
+      required this.initialIndex,
+      required this.kaijuName})
       : super(key: key);
 
   @override
-  _FullScreenImageState createState() => _FullScreenImageState();
+  State<FullScreenImage> createState() => _FullScreenImageState();
 }
 
 class _FullScreenImageState extends State<FullScreenImage> {
@@ -130,44 +136,44 @@ class _FullScreenImageState extends State<FullScreenImage> {
     _pageController = PageController(initialPage: widget.initialIndex);
   }
 
-  Future<void> _downloadImage(String imageUrl) async {
-    final response = await http.get(Uri.parse(imageUrl));
-    final bytes = response.bodyBytes;
+  // Future<void> _downloadImage(String imageUrl) async {
+  //   final response = await http.get(Uri.parse(imageUrl));
+  //   final bytes = response.bodyBytes;
 
-    final appDir = await getExternalStorageDirectory();
-    final fileName = imageUrl.split('/').last;
-    final localFilePath = '${appDir!.path}/$fileName';
+  //   final appDir = await getExternalStorageDirectory();
+  //   final fileName = imageUrl.split('/').last;
+  //   final localFilePath = '${appDir!.path}/$fileName';
 
-    final file = File(localFilePath);
-    await file.writeAsBytes(bytes);
+  //   final file = File(localFilePath);
+  //   await file.writeAsBytes(bytes);
 
-    // Guardar la imagen en la galería
-    final result = await ImageGallerySaver.saveFile(localFilePath);
+  //   // Guardar la imagen en la galería
+  //   final result = await ImageGallerySaver.saveFile(localFilePath);
 
-    if (result != null && result.isNotEmpty) {
-      Fluttertoast.showToast(
-        msg: 'Imagen descargada y guardada en la galería',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-      print('Imagen descargada y guardada en la galería: $result');
-    } else {
-      Fluttertoast.showToast(
-        msg: 'Error al guardar la imagen en la galería',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-      print('Error al guardar la imagen en la galería');
-    }
-  }
+  //   if (result != null && result.isNotEmpty) {
+  //     Fluttertoast.showToast(
+  //       msg: 'Imagen descargada y guardada en la galería',
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.BOTTOM,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.black,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0,
+  //     );
+  //     // print('Imagen descargada y guardada en la galería: $result');
+  //   } else {
+  //     Fluttertoast.showToast(
+  //       msg: 'Error al guardar la imagen en la galería',
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.BOTTOM,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.black,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0,
+  //     );
+  //     // print('Error al guardar la imagen en la galería');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +183,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.black,
         title: Text(
-          'Imagen Completa',
+          widget.kaijuName,
           style: TextStyle(
             color: Colors.white,
             fontStyle: FontStyle.italic,
@@ -185,19 +191,19 @@ class _FullScreenImageState extends State<FullScreenImage> {
           ),
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.download),
-            onPressed: () {
-              Fluttertoast.showToast(
-                msg: "Descargando...",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.black,
-                textColor: Colors.white,
-              );
-              _downloadImage(widget.imageUrls[currentPageIndex]);
-            },
-          ),
+          // IconButton(
+          //   icon: Icon(Icons.download),
+          //   onPressed: () {
+          //     Fluttertoast.showToast(
+          //       msg: "Descargando...",
+          //       toastLength: Toast.LENGTH_SHORT,
+          //       gravity: ToastGravity.CENTER,
+          //       backgroundColor: Colors.black,
+          //       textColor: Colors.white,
+          //     );
+          //     _downloadImage(widget.imageUrls[currentPageIndex]);
+          //   },
+          // ),
         ],
       ),
       body: GestureDetector(

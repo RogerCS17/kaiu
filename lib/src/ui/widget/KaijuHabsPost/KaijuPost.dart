@@ -90,6 +90,19 @@ class KaijuPost extends StatelessWidget {
           Image.network(
             kaijuHabsInfo["image"] ?? "-", // Cambia la URL de la imagen
             fit: BoxFit.cover,
+            loadingBuilder: (BuildContext context, Widget child,
+                ImageChunkEvent? loadingProgress) {
+              if (loadingProgress == null) {
+                // Si la imagen se ha cargado completamente, simplemente muestra la imagen
+                return child;
+              } else {
+                // Si la imagen aún se está cargando, muestra un indicador de carga
+                return Center(
+                  child: CircularProgressIndicator(
+                  ),
+                );
+              }
+            },
           ),
 
           // Contenido del post

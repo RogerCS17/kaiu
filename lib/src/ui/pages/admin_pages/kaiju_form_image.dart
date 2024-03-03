@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -54,7 +55,7 @@ class KaijuFormImageState extends State<KaijuFormImage> {
   Future<List<Kaiju>> _loadKaijuData() async {
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
-          await databaseMethod.getKaijuDetails();
+          await databaseMethod.getKaijuDetailsComplete();
       if (snapshot.docs.isNotEmpty) {
         List<Kaiju> kaijuList = snapshot.docs.map((doc) {
           Map<String, dynamic> data = doc.data();
@@ -365,9 +366,10 @@ class KaijuFormImageState extends State<KaijuFormImage> {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               onPressed: () async {
+                // print(FirebaseMessaging.instance.getToken());
                 print(await FirebaseStorage.instance
                     .ref(
-                        "gs://kaiu-8295c.appspot.com/UltraImages/Logo/ultraman-jack.webp")
+                        "gs://kaiu-8295c.appspot.com/UltraImages/Logo/Shin_Ultraman.webp")
                     .getDownloadURL());
               },
               child: Text('Obtener Link de Imagen'),

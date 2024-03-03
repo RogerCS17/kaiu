@@ -40,9 +40,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
     try {
       var methods =
-          await auth.fetchSignInMethodsForEmail(_emailController.text);
+          await auth.fetchSignInMethodsForEmail(_emailController.text.trim());
       assert(methods.isNotEmpty, "El Correo no se encuentra Registrado");
-      await auth.sendPasswordResetEmail(email: _emailController.text);
+      await auth.sendPasswordResetEmail(email: _emailController.text.trim());
       _showResetPasswordSuccessDialog();
     } catch (error) {
       _showErrorDialog(error.toString());

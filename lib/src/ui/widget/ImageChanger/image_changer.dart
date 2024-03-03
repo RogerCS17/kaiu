@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/core/services/database.dart';
+import 'package:kaiu/src/ui/configure.dart';
 
 class ImageChanger extends StatefulWidget {
   //Pasamos la referencia del enemigo actual
   final Kaiju kaiju;
-  const ImageChanger({required this.kaiju});
+  const ImageChanger({super.key, required this.kaiju});
 
   @override
-  _ImageChangerState createState() => _ImageChangerState();
+  State<ImageChanger> createState() => _ImageChangerState();
 }
 
 class _ImageChangerState extends State<ImageChanger> {
@@ -135,6 +136,28 @@ class _ImageChangerState extends State<ImageChanger> {
                                 ),
                         )),
                   ),
+                  widget.kaiju.yLink != "-" ? Positioned(
+                    bottom: 10,
+                    right: 10,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white70,
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          applaunchUrl(widget.kaiju.yLink);
+                        },
+                        icon: Icon(
+                          Icons
+                              .smart_display, // Reemplaza "new_icon" con el icono que desees usar
+                          color: Color.fromARGB(255, 221, 13, 13), // Color del icono
+                          size: 25, // Tamaño del icono
+                        ),
+                      ),
+                    ),
+                  )
+                  : Container(),
                 ],
               ),
             ),

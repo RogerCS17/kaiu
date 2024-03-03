@@ -46,22 +46,22 @@ class _SignUpPageState extends State<SignUpPage> {
     });
 
     try {
-      assert(_passController.text == _repassController.text,
+      assert(_passController.text.trim() == _repassController.text.trim(),
           "Las Contraseñas no Coinciden");
 
       await PreferencesService.instance
-          .setString("email", _emailController.text);
+          .setString("email", _emailController.text.trim());
 
       await PreferencesService.instance
-          .setString("password", _passController.text);
+          .setString("password", _passController.text.trim());
 
       // Crear usuario después de verificar el código SMS
       await auth.createUserWithEmailAndPassword(
-          email: _emailController.text, password: _passController.text);
+          email: _emailController.text.trim(), password: _passController.text.trim());
 
       //Iniciar Sesión después de verificar el código SMS
       await auth.signInWithEmailAndPassword(
-          email: _emailController.text, password: _passController.text);
+          email: _emailController.text.trim(), password: _passController.text.trim());
 
       _navigateToHome(); // Ir al Home
 
@@ -215,8 +215,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         fontWeight: FontWeight.w400,
                       ),
                       labelStyle: TextStyle(
-                        color: _passController.text.length < 6 &&
-                                _passController.text.length != 0
+                        color: _passController.text.trim().length < 6 &&
+                                _passController.text.trim().length != 0
                             ? Colors
                                 .transparent // Ocupa el mismo espacio pero es invisible
                             : theme.textPrimary().withOpacity(0.5),
@@ -236,8 +236,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           color: Color(0xFF9F7BFF),
                         ),
                       ),
-                      errorText: _passController.text.length < 6 &&
-                              _passController.text.length != 0
+                      errorText: _passController.text.trim().length < 6 &&
+                              _passController.text.trim().length != 0
                           ? 'Mínimo 6 Caracteres'
                           : null,
                       errorStyle: TextStyle(fontSize: 12),
@@ -281,8 +281,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           fontWeight: FontWeight.w400,
                         ),
                         labelStyle: TextStyle(
-                          color: _repassController.text.length < 6 &&
-                                  _repassController.text.length != 0
+                          color: _repassController.text.trim().length < 6 &&
+                                  _repassController.text.trim().length != 0
                               ? Colors
                                   .transparent // Ocupa el mismo espacio pero es invisible
                               : theme.textPrimary().withOpacity(0.5),
@@ -302,8 +302,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             color: Color(0xFF9F7BFF),
                           ),
                         ),
-                        errorText: _repassController.text.length < 6 &&
-                                _repassController.text.length != 0
+                        errorText: _repassController.text.trim().length < 6 &&
+                                _repassController.text.trim().length != 0
                             ? 'Mínimo 6 Caracteres'
                             : null,
                         errorStyle: TextStyle(fontSize: 12)),

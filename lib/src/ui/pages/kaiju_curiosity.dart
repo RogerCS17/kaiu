@@ -1,9 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
+import 'package:youtube_shorts/youtube_shorts.dart';
 
-class KaijuCuriosity extends StatelessWidget {
-  KaijuCuriosity({super.key});
+class KaijuCuriosity extends StatefulWidget {
+  //Puede ser un Link o "-"
+  final String shortLink;
+  const KaijuCuriosity({Key? key, required this.shortLink}) : super(key: key);
+
+  @override
+  State<KaijuCuriosity> createState() => _KaijuCuriosityState();
+}
+
+class _KaijuCuriosityState extends State<KaijuCuriosity> {
   final theme = ThemeController.instance;
+  late final ShortsController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = ShortsController(
+      settings: ShortsControllerSettings(startWithAutoplay: false),
+      youtubeVideoSourceController: VideosSourceController.fromUrlList(
+        videoIds: [widget.shortLink],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,40 +53,25 @@ class KaijuCuriosity extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
           ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Agrega una imagen o icono curioso y elegante
-                Icon(
-                  Icons.hourglass_empty,
-                  size: 80,
-                  color: theme.backgroundUltraRed(),
-                ),
-                SizedBox(height: 20),
-                // Texto "Próximamente" con un estilo elegante
-                Text(
-                  'Próximamente',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: theme.backgroundUltraRed(),
+          widget.shortLink == "-"
+              ? Center(
+                  child: Text(
+                    'No hay video disponible',
+                    style: TextStyle(color: Colors.white),
                   ),
+                )
+              : YoutubeShortsPage(
+                  controller: controller,
                 ),
-                SizedBox(height: 10),
-                // Un mensaje adicional o descripción
-                Text(
-                  'Estamos trabajando en algo genial.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          //Aquí puedes agregar más widgets para mostrar contenido sobre el fondo
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // controller.dispose();
+    super.dispose();
   }
 }

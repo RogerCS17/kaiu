@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,9 +11,12 @@ import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
+import 'package:youtube_shorts/youtube_shorts.dart';
+// import 'package:youtube_shorts/youtube_shorts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MediaKit.ensureInitialized();
   await ThemeController.instance.initTheme();
   ErrorWidget.builder =
       (FlutterErrorDetails details) => ErrorPage(details: details);
@@ -26,6 +30,18 @@ void main() async {
       runApp(MyApp());
     });
   }
+}
+
+
+Future<void> initializeFirebase() async {
+  // 1. Inicializa Firebase primero
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+
+  // 2. Luego configura el caché de Firestore
+  FirebaseFirestore.instance.settings = Settings(
+    cacheSizeBytes: 10485760,
+    persistenceEnabled: true,
+  );
 }
 
 Widget _buildNoConnectionApp() {
@@ -60,7 +76,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: GoogleFonts.poppins().fontFamily),
       home: FutureBuilder(
-        future: Firebase.initializeApp(options: DefaultFirebaseOptions.android),
+        future: initializeFirebase(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return LoginPage();

@@ -112,7 +112,7 @@ class KaijuFormHabsState extends State<KaijuFormHabs> {
   Future<List<Kaiju>> _loadKaijuData() async {
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
-          await databaseMethod.getKaijuDetails();
+          await databaseMethod.getKaijuDetailsComplete();
       if (snapshot.docs.isNotEmpty) {
         List<Kaiju> kaijuList = snapshot.docs.map((doc) {
           Map<String, dynamic> data = doc.data();

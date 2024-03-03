@@ -1,112 +1,63 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
+import 'package:kaiu/src/ui/pages/home.dart';
 import 'package:kaiu/src/ui/widget/CarrouselText/CarrouselText.dart';
 import 'package:kaiu/src/ui/widget/ImageChanger/image_changer.dart';
 import 'package:kaiu/src/ui/widget/KaijuDrawer/kaiju_drawer.dart';
 import 'package:kaiu/src/ui/widget/MoreDetailsDrawer/more_details_kaiju.dart';
 
-class KaijuDetails extends StatelessWidget {
+class KaijuDetails extends StatefulWidget {
   final Kaiju kaiju;
   final Ultra ultra;
   final theme = ThemeController.instance;
 
-  KaijuDetails({super.key, required this.kaiju, required this.ultra});
+  KaijuDetails({Key? key, required this.kaiju, required this.ultra})
+      : super(key: key);
 
-  // Añadir un ScrollController
+  @override
+  _KaijuDetailsState createState() => _KaijuDetailsState();
+}
+
+class _KaijuDetailsState extends State<KaijuDetails>
+    with SingleTickerProviderStateMixin {
+  
   final ScrollController _scrollController = ScrollController();
+  late AnimationController _opacityController;
+  late Animation<double> _opacityAnimation;
 
-  //Obtener Datos Específicos
-  Future<Kaiju> fetchKaijuData(Kaiju document) async {
-    try {
-      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-          .collection('Kaiju')
-          .doc(document.id)
-          .get();
+  @override
+  void initState() {
+    super.initState();
+    _opacityController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+    _opacityAnimation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_opacityController);
+    _opacityController.forward();
+  }
 
-      if (documentSnapshot.exists) {
-        Map<String, dynamic> data =
-            documentSnapshot.data() as Map<String, dynamic>;
-
-        // Crea una instancia de Kaiju utilizando el constructor desdeMap
-        Kaiju kaiju = Kaiju(
-          
-          //Reutilizar Datos Cargados Anteriormente
-          id: document.id,
-          name: document.name,
-          img: document.img,
-          ultra: document.ultra,
-          colorHex: document.colorHex,
-
-          //Datos Cargados de Firebase (Detalles)
-          subtitle: data["subtitle"] ?? "-",
-          description: data["description"] ?? "-",
-          aliasOf: data["aliasOf"] ?? "-",
-          height: data["height"] ?? "-",
-          weight: data["weight"] ?? "-",
-          planet: data["planet"] ?? "-",
-          comentary: data["comentary"] ?? "-",
-          imgDrawer: data["imgDrawer"] ?? "-",
-          kaijuHabs: data["kaijuHabs"] ?? {},
-          usersPremium: data["usersPremium"] ?? [],
-          vote: data["vote"] ?? 0,
-        );
-
-        return kaiju; // Devuelve el objeto Kaiju
-      } else {
-        return Kaiju();
-      }
-    } catch (e) {
-      return Kaiju();
-    }
+  @override
+  void dispose() {
+    _opacityController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: theme.background(),
-      body: FutureBuilder<Kaiju>(
-        future: fetchKaijuData(kaiju),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Muestra un círculo de carga mientras se obtienen los datos
-            return Center(
-              child: SpinKitCubeGrid(
-                size: 75,
-                color: ThemeController.instance.exBackground(),
-                duration: Duration(milliseconds: 500)
-              ),
-            );
-          } else if (snapshot.hasError) {
-            // Muestra un mensaje de error si ocurrió algún problema al obtener los datos
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else {
-            // Muestra la información del Kaiju una vez que se haya obtenido
-            final kaijuData = snapshot.data!;
-            return _buildKaijuDetails(context, kaijuData);
-          }
-        },
-      ),
-    );
-  }
-
-  Widget _buildKaijuDetails(BuildContext context, Kaiju kaiju) {
     var statusHeight = MediaQuery.of(context).viewPadding.top;
     var size = MediaQuery.of(context).size;
     var screenHeight = size.height - (statusHeight);
     var screenWidth = size.width;
 
     return Scaffold(
-      drawer: KaijuDrawer(kaiju: kaiju, ultra: ultra),
-      backgroundColor: theme.background(),
+      drawer: KaijuDrawer(kaiju: widget.kaiju, ultra: widget.ultra),
+      backgroundColor: widget.theme.background(),
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
@@ -131,14 +82,52 @@ class KaijuDetails extends StatelessWidget {
           color: Colors.white,
         ),
         title: Text(
-          kaiju.name,
+          widget.kaiju.name,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
-        backgroundColor: colorFromHex(kaiju.colorHex),
-        actions: const [],
+        backgroundColor: colorFromHex(widget.kaiju.colorHex),
+        actions: [
+          InkWell(
+            onTap: () {
+              ConnectivityWrapper.instance.isConnected.then((isConnected) {
+                if (isConnected) {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Home()));
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ErrorPage(), // Redirige a la página de error
+                    ),
+                  );
+                }
+              });
+            },
+            child: FadeTransition(
+              opacity: _opacityAnimation,
+              child: Padding(
+                padding: const EdgeInsets.all(7.0),
+                child: Container(
+                  padding: const EdgeInsets.only(right: 7, left: 7),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  height: 45,
+                  width: 90,
+                  child: Image.network(
+                    widget.ultra.imgLogo!,
+                    height: 50,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -153,19 +142,20 @@ class KaijuDetails extends StatelessWidget {
                   SizedBox(
                     height: screenHeight / 2.85,
                     width: screenWidth,
-                    child: ImageChanger(kaiju: kaiju),
+                    child: ImageChanger(kaiju: widget.kaiju),
                   ),
-                  CarrouselText(userNames: kaiju.usersPremium!.cast<String>())
+                  CarrouselText(
+                      userNames: widget.kaiju.usersPremium!.cast<String>())
                 ],
               ),
             ),
             SizedBox(height: screenHeight / 50),
             Text(
-              'Alias: ${kaiju.subtitle}',
+              'Alias: ${widget.kaiju.subtitle}',
               style: TextStyle(
                 fontSize: 15,
                 fontStyle: FontStyle.italic,
-                color: theme.textPrimary(),
+                color: widget.theme.textPrimary(),
               ),
               textAlign: TextAlign.center,
             ),
@@ -174,7 +164,7 @@ class KaijuDetails extends StatelessWidget {
               height: screenHeight / 2.85,
               width: screenWidth,
               decoration: BoxDecoration(
-                color: theme.backgroundSecondary(),
+                color: widget.theme.backgroundSecondary(),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: Colors.white,
@@ -182,11 +172,9 @@ class KaijuDetails extends StatelessWidget {
                 ),
               ),
               child: Scrollbar(
-                controller:
-                    _scrollController, // Asigna el ScrollController al Scrollbar
+                controller: _scrollController,
                 child: ListView(
-                  controller:
-                      _scrollController, // Asigna el ScrollController al ListView
+                  controller: _scrollController,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(15),
@@ -194,10 +182,10 @@ class KaijuDetails extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            kaiju.description,
+                            widget.kaiju.description,
                             style: TextStyle(
                               fontSize: 19,
-                              color: theme.textPrimary(),
+                              color: widget.theme.textPrimary(),
                             ),
                             textAlign: TextAlign.start,
                           ),
@@ -209,7 +197,7 @@ class KaijuDetails extends StatelessWidget {
               ),
             ),
             Expanded(child: Container()),
-            MoreDetailsKaiju(kaiju: kaiju),
+            MoreDetailsKaiju(kaiju: widget.kaiju),
             Expanded(child: Container()),
           ],
         ),

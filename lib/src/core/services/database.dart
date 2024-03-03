@@ -24,8 +24,17 @@ class DatabaseMethods {
         .set(kaijuInfoMap);
   }
 
-  // Implementado en InitState
-  Future<QuerySnapshot<Map<String, dynamic>>> getKaijuDetails() async {
+  // Implementado en InitState Trae los detalles de cada Kaiju por Ultra Definido
+  Future<QuerySnapshot<Map<String, dynamic>>> getKaijuDetails(
+      String ultraName) async {
+    return await FirebaseFirestore.instance
+        .collection("Kaiju")
+        .where("ultra", isEqualTo: ultraName)
+        .get();
+  }
+
+  // Implementado en InitState Trae a todos los Kaijus
+  Future<QuerySnapshot<Map<String, dynamic>>> getKaijuDetailsComplete() async {
     return await FirebaseFirestore.instance
         .collection("Kaiju")
         .orderBy("episode")

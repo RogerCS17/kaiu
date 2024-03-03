@@ -53,12 +53,12 @@ class _LoginPageState extends State<LoginPage> {
     try {
       //Iniciar Sesión en Firebase
       await auth.signInWithEmailAndPassword(
-          email: _emailController.text, password: _passController.text);
+          email: _emailController.text.trim(), password: _passController.text.trim());
       //Setear Preferencias
       await PreferencesService.instance
-          .setString("email", _emailController.text);
+          .setString("email", _emailController.text.trim());
       await PreferencesService.instance
-          .setString("password", _passController.text);
+          .setString("password", _passController.text.trim());
       //Redirige al Home
       _navigateToHome();
     } catch (error) {
