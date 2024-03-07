@@ -72,26 +72,29 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen>
             ),
           );
 
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                  12.0), // Ajusta el radio según sea necesario
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 7,
-                  offset: Offset(0,
-                      3), // Cambia el desplazamiento de la sombra según sea necesario
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: YoutubePlayer(
-                controller: _controller,
-                showVideoProgressIndicator: true,
-                progressIndicatorColor: Colors.blueAccent,
+          return Center(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                    12.0), // Ajusta el radio según sea necesario
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color.fromARGB(255, 250, 0, 0).withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 10,
+                    offset: Offset(0,
+                        3), // Cambia el desplazamiento de la sombra según sea necesario
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                child: Text("En Mantenimiento",style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),),
+                // child: YoutubePlayer(
+                //   controller: _controller,
+                //   showVideoProgressIndicator: true,
+                //   progressIndicatorColor: Colors.blueAccent,
+                // ),
               ),
             ),
           );

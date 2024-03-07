@@ -25,7 +25,6 @@ class KaijuDetails extends StatefulWidget {
 
 class _KaijuDetailsState extends State<KaijuDetails>
     with SingleTickerProviderStateMixin {
-  
   final ScrollController _scrollController = ScrollController();
   late AnimationController _opacityController;
   late Animation<double> _opacityAnimation;
@@ -94,8 +93,11 @@ class _KaijuDetailsState extends State<KaijuDetails>
             onTap: () {
               ConnectivityWrapper.instance.isConnected.then((isConnected) {
                 if (isConnected) {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Home()));
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                    (Route<dynamic> route) => false,
+                  );
                 } else {
                   Navigator.push(
                     context,

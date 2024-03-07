@@ -19,7 +19,7 @@ class _KaijuCuriosityState extends State<KaijuCuriosity> {
   void initState() {
     super.initState();
     controller = ShortsController(
-      settings: ShortsControllerSettings(startWithAutoplay: false),
+      settings: ShortsControllerSettings(startWithAutoplay: true),
       youtubeVideoSourceController: VideosSourceController.fromUrlList(
         videoIds: [widget.shortLink],
       ),
@@ -55,9 +55,35 @@ class _KaijuCuriosityState extends State<KaijuCuriosity> {
           ),
           widget.shortLink == "-"
               ? Center(
-                  child: Text(
-                    'No hay video disponible',
-                    style: TextStyle(color: Colors.white),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Agrega una imagen o icono curioso y elegante
+                      Icon(
+                        Icons.videocam_off,
+                        size: 80,
+                        color: theme.backgroundUltraRed(),
+                      ),
+                      SizedBox(height: 20),
+                      // Texto "Próximamente" con un estilo elegante
+                      Text(
+                        'No hay video disponible',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: theme.backgroundUltraRed(),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      // Un mensaje adicional o descripción
+                      Text(
+                        '@UltraBrother esta trabajando.',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
                 )
               : YoutubeShortsPage(
@@ -71,7 +97,7 @@ class _KaijuCuriosityState extends State<KaijuCuriosity> {
 
   @override
   void dispose() {
-    // controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 }

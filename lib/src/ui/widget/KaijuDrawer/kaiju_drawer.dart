@@ -116,7 +116,7 @@ class KaijuDrawer extends StatelessWidget {
           ListTile(
             title: KaijuOptionDrawer(
                 color: Colors.purple,
-                text: 'Curiosidades',
+                text: kaiju.shortLink == "-" ? 'Curiosidades ❌' : "Curiosidades ✅",
                 optionColor: Configure.ultraOption),
             onTap: () {
               // Acción al tocar la opción para mostrar las debilidades.

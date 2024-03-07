@@ -1,9 +1,11 @@
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/services/database.dart';
-import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
+// import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
 import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -17,16 +19,23 @@ class SettingsPage extends StatelessWidget {
 
   bool adminConfirmation() {
     User? user = FirebaseAuth.instance.currentUser;
-    return user?.email == "yakomo3132@gmail.com" && user?.uid == "rlBwBVg9h8RkF9kLYrwEVxpM5DF3";
+    return user?.email == "yakomo3132@gmail.com" &&
+        user?.uid == "rlBwBVg9h8RkF9kLYrwEVxpM5DF3";
   }
 
-  // Funcion Cerrar Sesión
+  String? emailUser() {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user?.email;
+  }
+
+// Funcion Cerrar Sesión
   Future<void> signOut(BuildContext context) async {
     await _auth.signOut();
     // ignore: use_build_context_synchronously
-    Navigator.pushReplacement(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => LoginPage()),
+      (Route<dynamic> route) => false,
     );
   }
 
@@ -73,9 +82,10 @@ class SettingsPage extends StatelessWidget {
         log('Error al eliminar la cuenta: $e');
       }
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),
+        (Route<dynamic> route) => false,
       );
     }
   }
@@ -96,52 +106,128 @@ class SettingsPage extends StatelessWidget {
       ),
       body: Stack(
         children: [
+          // Fondo de la imagen
+          Image.asset(
+            'assets/ultraman_background.webp',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          // Filtro obscuro
+          Container(
+            color: Colors.black.withOpacity(0.75),
+            width: double.infinity,
+            height: double.infinity,
+          ),
           ListView(
             children: [
               ListTile(
+                leading: Icon(Icons.email, color: Colors.white),
+                title: Text(
+                  emailUser() ?? "-",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 15,
+                  ),
+                ),
+                onTap: () {
+                  // Cierra la aplicación
+                  Fluttertoast.showToast(
+                      msg: "@UltraBrother M78 te envía saludos",
+                      toastLength: Toast.LENGTH_SHORT); // Show toast
+                },
+              ),
+              Divider(height: 4),
+              ListTile(
+                leading: Icon(Icons.exit_to_app, color: Colors.white),
+                title: Text(
+                  'Cerrar Aplicación',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 15,
+                  ),
+                ),
+                onTap: () {
+                  // Cierra la aplicación
+                  SystemNavigator.pop();
+                },
+              ),
+              Divider(height: 4),
+              ListTile(
+                leading: Icon(Icons.logout, color: Colors.white),
                 title: Text(
                   'Cerrar Sesión',
                   style: TextStyle(
-                    color: theme.textPrimary(),
+                    color: Colors.white,
                     fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w300
+                    fontWeight: FontWeight.w300,
+                    fontSize: 15,
                   ),
                 ),
                 onTap: () => signOut(context),
               ),
-              Divider(),
+              Divider(height: 4),
               ListTile(
+                leading: Icon(Icons.delete, color: Colors.white),
                 title: Text(
                   'Eliminar Cuenta',
                   style: TextStyle(
-                    color: theme.textPrimary(),
+                    color: Colors.white,
                     fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w300
+                    fontWeight: FontWeight.w300,
+                    fontSize: 15,
                   ),
                 ),
                 onTap: () => deleteAccount(context),
               ),
-              Divider(),
-              adminConfirmation()
-                  ? ListTile(
-                      title: Text(
-                        'Modo Admin',
-                        style: TextStyle(
-                          color: theme.textPrimary(),
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w300
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AdminPageView(),
-                          ),
-                        );
-                      },
-                    )
-                  : ListTile(),
+              // Divider(height:4),
+              // adminConfirmation()
+              //     ? ListTile(
+              //         leading: Icon(Icons.admin_panel_settings,
+              //             color: Colors.white),
+              //         title: Text(
+              //           'Modo Admin',
+              //           style: TextStyle(
+              //             color: Colors.white,
+              //             fontStyle: FontStyle.italic,
+              //             fontWeight: FontWeight.w300,
+              //             fontSize: 15,
+              //           ),
+              //         ),
+              //         onTap: () {
+              //           Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //               builder: (context) => AdminPageView(),
+              //             ),
+              //           );
+              //         },
+              //       )
+              //     : ListTile(),
+              Divider(height: 4),
+              ListTile(
+                title: Text(
+                  'Versión de la aplicación: ',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 12,
+                  ),
+                ),
+                subtitle: Text(
+                  'Kaiu v.1.1.2',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
             ],
           ),
           Positioned(

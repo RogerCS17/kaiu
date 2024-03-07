@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -16,12 +17,18 @@ import 'package:youtube_shorts/youtube_shorts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeFirebase(); // Inicializa Firebase primero
+
+  // Configurar Firebase Messaging para manejar notificaciones en segundo plano
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   MediaKit.ensureInitialized();
   await ThemeController.instance.initTheme();
   ErrorWidget.builder =
       (FlutterErrorDetails details) => ErrorPage(details: details);
 
   var connectivityResult = await Connectivity().checkConnectivity();
+
   if (connectivityResult == ConnectivityResult.none) {
     runApp(_buildNoConnectionApp());
   } else {
@@ -32,17 +39,25 @@ void main() async {
   }
 }
 
-
 Future<void> initializeFirebase() async {
-  // 1. Inicializa Firebase primero
+  // Inicializa Firebase primero
   await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
 
-  // 2. Luego configura el caché de Firestore
+  // Configura el caché de Firestore
   FirebaseFirestore.instance.settings = Settings(
     cacheSizeBytes: 10485760,
     persistenceEnabled: true,
   );
 }
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+  // Aquí puedes agregar la lógica para manejar las notificaciones en segundo plano
+  // Puedes mostrar una notificación local o realizar cualquier otra acción necesaria.
+}
+
+
 
 Widget _buildNoConnectionApp() {
   return MaterialApp(

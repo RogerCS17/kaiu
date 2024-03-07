@@ -37,6 +37,35 @@ class _KaijuGaleryState extends State<KaijuGalery> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          Builder(
+            // Usamos Builder para obtener un contexto dentro del Scaffold
+            builder: (context) => IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer(); // Abre el Drawer
+              },
+              icon: Icon(Icons.search),
+            ),
+          ),
+        ],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            ConnectivityWrapper.instance.isConnected.then((isConnected) {
+              if (isConnected) {
+                Navigator.pop(context);
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ErrorPage(), // Redirige a la página de error
+                  ),
+                );
+              }
+            });
+          },
+        ),
         backgroundColor: theme.backgroundUltraRed(),
         title: Text(
           widget.ultra.name!,
@@ -48,38 +77,43 @@ class _KaijuGaleryState extends State<KaijuGalery> {
       ),
 
       //COMENTAR
-      drawer: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              style: TextStyle(color: theme.textPrimary()),
-              onChanged: (query) {
-                setState(() {
-                  searchKaiju = query;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: "Buscar Kaiju",
-                labelStyle: TextStyle(color: theme.textPrimary()),
-                prefixIcon: Icon(Icons.search),
-                prefixIconColor: theme.textPrimary(),
-                suffixIconColor: theme.textPrimary().withOpacity(0.5),
+      drawer: Drawer(
+        width: MediaQuery.of(context).size.width,
+        backgroundColor: Colors.transparent,
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                style: TextStyle(color: Colors.white),
+                onChanged: (query) {
+                  setState(() {
+                    searchKaiju = query;
+                  });
+                },
+                decoration: InputDecoration(
+                  labelText: "Buscar Kaiju",
+                  labelStyle: TextStyle(color: Colors.white),
+                  prefixIcon: Icon(Icons.search), // Icono de búsqueda
+                  prefixIconColor: Colors.white,
+                  suffixIconColor: Colors.white.withOpacity(0.5),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
                   onPressed: () {
                     setState(() {
                       searchKaiju = "";
                       Navigator.pop(context);
                     });
                   },
-                  child: Text("Ver todos")),
-            )
-          ],
+                  child: Text("Ver todos"),
+                ),
+              )
+            ],
+          ),
         ),
       ),
 

@@ -4,6 +4,7 @@ import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/services/database.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
 import 'package:kaiu/src/ui/pages/settings_page.dart';
+import 'package:kaiu/src/ui/widget/PermissionStatus/PermissionStatusWidget.dart';
 import 'package:kaiu/src/ui/widget/home_components/banner_button.dart';
 import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
 import 'package:kaiu/src/ui/widget/home_components/youtuber_player_screen.dart';
@@ -34,6 +35,7 @@ class _HomeState extends State<Home> {
             ),
             backgroundColor: theme.backgroundUltraRed(),
             actions: [
+              PermissionStatusWidget(),
               IconButton(
                 icon: Icon(
                   theme.brightnessValue
