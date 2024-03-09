@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_wrapper/connectivity_wrapper.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
@@ -26,16 +26,36 @@ class _KaijuGaleryState extends State<KaijuGalery> {
 
   String searchKaiju = ""; //Cadena Escrita que Filtra el Kaiju
 
-  @override
-  void initState() {
-    super.initState();
-    // Inicia la carga de datos de Kaijus cuando se inicia el widget
-    _kaijuListFuture = _loadKaijuData();
+  bool _isConnected = true;
+
+  // Método para verificar la conexión a Internet
+  Future<void> _checkInternetConnection() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      // No hay conexión
+      setState(() {
+        _isConnected = false;
+      });
+    } else {
+      // Hay conexión
+      setState(() {
+        _isConnected = true;
+      });
+    }
   }
 
   @override
+  void initState() {
+    super.initState();
+    _checkInternetConnection().then((value){
+      _kaijuListFuture = _loadKaijuData();
+    });
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _isConnected ? Scaffold(
       appBar: AppBar(
         actions: [
           Builder(
@@ -51,19 +71,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            ConnectivityWrapper.instance.isConnected.then((isConnected) {
-              if (isConnected) {
-                Navigator.pop(context);
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        ErrorPage(), // Redirige a la página de error
-                  ),
-                );
-              }
-            });
+            Navigator.pop(context);
           },
         ),
         backgroundColor: theme.backgroundUltraRed(),
@@ -143,7 +151,7 @@ class _KaijuGaleryState extends State<KaijuGalery> {
           }
         },
       ),
-    );
+    ):ErrorPage();
   }
 
   Widget _buildKaijuGrid(List<Kaiju> kaijuList) {
@@ -169,27 +177,15 @@ class _KaijuGaleryState extends State<KaijuGalery> {
               return Center(
                 child: InkWell(
                   onTap: () async {
-                    ConnectivityWrapper.instance.isConnected
-                        .then((isConnected) {
-                      if (isConnected) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => KaijuDetails(
-                              kaiju: kaiju,
-                              ultra: widget.ultra,
-                            ),
-                          ),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ErrorPage(),
-                          ),
-                        );
-                      }
-                    });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => KaijuDetails(
+                          kaiju: kaiju,
+                          ultra: widget.ultra,
+                        ),
+                      ),
+                    );
                   },
                   child: Padding(
                     padding: EdgeInsets.all(9.0),

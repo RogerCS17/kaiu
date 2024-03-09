@@ -4,12 +4,12 @@
 // import 'package:path_provider/path_provider.dart';
 // import 'package:image_gallery_saver/image_gallery_saver.dart';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
 import 'package:kaiu/src/core/services/database.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
-import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 
 class KaijuGaleryImageOnline extends StatefulWidget {
@@ -29,82 +29,91 @@ class _KaijuGaleryImageOnlineState extends State<KaijuGaleryImageOnline> {
 
   // Agrega más URL de imágenes según sea necesario  ];
 
+  bool _isConnected = true;
+
+  // Método para verificar la conexión a Internet
+  Future<void> _checkInternetConnection() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      // No hay conexión
+      setState(() {
+        _isConnected = false;
+      });
+    } else {
+      // Hay conexión
+      setState(() {
+        _isConnected = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    //Then - De la Función asíncrona
-    database
-        .getStorageLinkFiles('GalleryImages/${widget.kaiju.name}/')
-        .then((listLinks) {
-      //Cambio de Estado.
-      setState(() {
-        imageUrls = listLinks;
+    _checkInternetConnection().then((value) {
+      database
+          .getStorageLinkFiles('GalleryImages/${widget.kaiju.name}/')
+          .then((listLinks) {
+        //Cambio de Estado.
+        setState(() {
+          imageUrls = listLinks;
+        });
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: theme.background(),
-      appBar: AppBar(
-        backgroundColor: colorFromHex(widget.kaiju.colorHex),
-        iconTheme: IconThemeData(color: Colors.white),
-        title: Text(
-          "Galería Kaiju",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      body: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-          ),
-          itemCount: imageUrls.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                ConnectivityWrapper.instance.isConnected.then((isConnected) {
-                  if (isConnected) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FullScreenImage(
-                                  kaijuName: widget.kaiju.name,
-                                  imageUrls: imageUrls,
-                                  initialIndex: index,
-                                )));
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ErrorPage(), // Redirige a la página de error
-                      ),
-                    );
-                  }
-                });
-              },
-              child: Card(
-                elevation: 3,
-                margin: EdgeInsets.all(8.0),
-                child: Image.network(
-                  imageUrls[index],
-                  fit: BoxFit.cover,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                ),
+    return _isConnected
+        ? Scaffold(
+            backgroundColor: theme.background(),
+            appBar: AppBar(
+              backgroundColor: colorFromHex(widget.kaiju.colorHex),
+              iconTheme: IconThemeData(color: Colors.white),
+              title: Text(
+                "Galería Kaiju",
+                style: TextStyle(color: Colors.white),
               ),
-            );
-          }),
-    );
+            ),
+            body: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                itemCount: imageUrls.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FullScreenImage(
+                                    kaijuName: widget.kaiju.name,
+                                    imageUrls: imageUrls,
+                                    initialIndex: index,
+                                  )));
+                    },
+                    child: Card(
+                      elevation: 3,
+                      margin: EdgeInsets.all(8.0),
+                      child: Image.network(
+                        imageUrls[index],
+                        fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  );
+                }),
+          )
+        : ErrorPage();
   }
 }
 

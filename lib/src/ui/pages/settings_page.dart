@@ -1,21 +1,53 @@
 import 'dart:developer';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/services/database.dart';
 // import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
 import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
+import 'package:kaiu/src/ui/pages/error_page.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   SettingsPage({
     super.key,
   });
 
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   final _auth = FirebaseAuth.instance;
+
   final database = DatabaseMethods.instance;
+
   final theme = ThemeController.instance;
+
+  bool _isConnected = true;
+
+  // Método para verificar la conexión a Internet
+  Future<void> _checkInternetConnection() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      // No hay conexión
+      setState(() {
+        _isConnected = false;
+      });
+    } else {
+      // Hay conexión
+      setState(() {
+        _isConnected = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkInternetConnection();
+  }
 
   bool adminConfirmation() {
     User? user = FirebaseAuth.instance.currentUser;
@@ -23,10 +55,7 @@ class SettingsPage extends StatelessWidget {
         user?.uid == "rlBwBVg9h8RkF9kLYrwEVxpM5DF3";
   }
 
-  String? emailUser() {
-    User? user = FirebaseAuth.instance.currentUser;
-    return user?.email;
-  }
+
 
 // Funcion Cerrar Sesión
   Future<void> signOut(BuildContext context) async {
@@ -92,7 +121,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _isConnected? Scaffold(
       backgroundColor: theme.background(),
       appBar: AppBar(
         backgroundColor: theme.backgroundUltraRed(),
@@ -121,25 +150,6 @@ class SettingsPage extends StatelessWidget {
           ),
           ListView(
             children: [
-              ListTile(
-                leading: Icon(Icons.email, color: Colors.white),
-                title: Text(
-                  emailUser() ?? "-",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 15,
-                  ),
-                ),
-                onTap: () {
-                  // Cierra la aplicación
-                  Fluttertoast.showToast(
-                      msg: "@UltraBrother M78 te envía saludos",
-                      toastLength: Toast.LENGTH_SHORT); // Show toast
-                },
-              ),
-              Divider(height: 4),
               ListTile(
                 leading: Icon(Icons.exit_to_app, color: Colors.white),
                 title: Text(
@@ -211,7 +221,7 @@ class SettingsPage extends StatelessWidget {
               Divider(height: 4),
               ListTile(
                 title: Text(
-                  'Versión de la aplicación: ',
+                  'Versión de la App: ',
                   style: TextStyle(
                     color: Colors.white,
                     fontStyle: FontStyle.italic,
@@ -220,7 +230,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
                 subtitle: Text(
-                  'Kaiu v.1.1.2',
+                  'Kaiu v.1.1.5',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -241,6 +251,6 @@ class SettingsPage extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ):ErrorPage();
   }
 }

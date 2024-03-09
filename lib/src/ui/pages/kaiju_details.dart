@@ -1,4 +1,4 @@
-import 'package:connectivity_wrapper/connectivity_wrapper.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/constants/functions.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
@@ -29,16 +29,38 @@ class _KaijuDetailsState extends State<KaijuDetails>
   late AnimationController _opacityController;
   late Animation<double> _opacityAnimation;
 
+  bool _isConnected = true;
+
+  // Método para verificar la conexión a Internet
+  Future<void> _checkInternetConnection() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      // No hay conexión
+      setState(() {
+        _isConnected = false;
+      });
+    } else {
+      // Hay conexión
+      setState(() {
+        _isConnected = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    _opacityController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 500),
-    );
-    _opacityAnimation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_opacityController);
-    _opacityController.forward();
+    _checkInternetConnection().then((value) {
+      if (_isConnected) {
+        _opacityController = AnimationController(
+          vsync: this,
+          duration: Duration(milliseconds: 500),
+        );
+        _opacityAnimation =
+            Tween<double>(begin: 0.0, end: 1.0).animate(_opacityController);
+        _opacityController.forward();
+      }
+    });
   }
 
   @override
@@ -54,7 +76,7 @@ class _KaijuDetailsState extends State<KaijuDetails>
     var screenHeight = size.height - (statusHeight);
     var screenWidth = size.width;
 
-    return Scaffold(
+    return _isConnected? Scaffold(
       drawer: KaijuDrawer(kaiju: widget.kaiju, ultra: widget.ultra),
       backgroundColor: widget.theme.background(),
       resizeToAvoidBottomInset: false,
@@ -62,19 +84,7 @@ class _KaijuDetailsState extends State<KaijuDetails>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            ConnectivityWrapper.instance.isConnected.then((isConnected) {
-              if (isConnected) {
-                Navigator.pop(context);
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        ErrorPage(), // Redirige a la página de error
-                  ),
-                );
-              }
-            });
+            Navigator.pop(context);
           },
         ),
         iconTheme: IconThemeData(
@@ -91,23 +101,11 @@ class _KaijuDetailsState extends State<KaijuDetails>
         actions: [
           InkWell(
             onTap: () {
-              ConnectivityWrapper.instance.isConnected.then((isConnected) {
-                if (isConnected) {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                    (Route<dynamic> route) => false,
-                  );
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ErrorPage(), // Redirige a la página de error
-                    ),
-                  );
-                }
-              });
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+                (Route<dynamic> route) => false,
+              );
             },
             child: FadeTransition(
               opacity: _opacityAnimation,
@@ -204,6 +202,6 @@ class _KaijuDetailsState extends State<KaijuDetails>
           ],
         ),
       ),
-    );
+    ):ErrorPage();
   }
 }

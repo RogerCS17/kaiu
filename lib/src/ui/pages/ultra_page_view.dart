@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_wrapper/connectivity_wrapper.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
@@ -28,8 +28,32 @@ class _UltraPageViewState extends State<UltraPageView> {
   final databaseMethod = DatabaseMethods.instance;
   final theme = ThemeController.instance;
 
+  bool _isConnected = true;
+
+  // Método para verificar la conexión a Internet
+  Future<void> _checkInternetConnection() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      // No hay conexión
+      setState(() {
+        _isConnected = false;
+      });
+    } else {
+      // Hay conexión
+      setState(() {
+        _isConnected = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkInternetConnection();
+  }
+
   Widget _buildLoadingScreen() {
-    return Scaffold(
+    return _isConnected ? Scaffold(
       backgroundColor: ThemeController.instance.background(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -40,10 +64,9 @@ class _UltraPageViewState extends State<UltraPageView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SpinKitCubeGrid(
-                    size: 100,
-                    color: ThemeController.instance.exBackground(),
-                    duration: Duration(milliseconds: 500)
-                  ),
+                      size: 100,
+                      color: ThemeController.instance.exBackground(),
+                      duration: Duration(milliseconds: 500)),
                 ],
               ),
             ),
@@ -55,7 +78,7 @@ class _UltraPageViewState extends State<UltraPageView> {
           )
         ],
       ),
-    );
+    ):ErrorPage();
   }
 
   @override
@@ -112,27 +135,14 @@ class _UltraPageViewState extends State<UltraPageView> {
                       return UltraSelector(
                         ultra: ultras[index],
                         onPressed: () {
-                          ConnectivityWrapper.instance.isConnected
-                              .then((isConnected) {
-                            if (isConnected) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => KaijuGalery(
-                                    ultra: ultras[index],
-                                  ),
-                                ),
-                              );
-                            } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ErrorPage(), // Redirige a la página de error
-                                ),
-                              );
-                            }
-                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => KaijuGalery(
+                                ultra: ultras[index],
+                              ),
+                            ),
+                          );
                         },
                         isSelected: isSelected,
                         currentPageFake: _currentPageFake,

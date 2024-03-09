@@ -1,9 +1,6 @@
 import 'dart:ui';
-import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
-import 'package:kaiu/src/ui/pages/error_page.dart';
-import 'package:kaiu/src/ui/pages/kaiju_galery.dart';
 
 class UltraSelector extends StatelessWidget {
   final Ultra? ultra;
@@ -15,7 +12,7 @@ class UltraSelector extends StatelessWidget {
       this.ultra,
       required this.isSelected,
       required this.currentPageFake,
-      this.onPressed});
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -31,26 +28,7 @@ class UltraSelector extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    ConnectivityWrapper.instance.isConnected
-                        .then((isConnected) {
-                      if (isConnected) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    KaijuGalery(ultra: ultra!)));
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ErrorPage(), // Redirige a la página de error
-                          ),
-                        );
-                      }
-                    });
-                  },
+                  onTap: onPressed,
                   child: Stack(
                     children: [
                       Card(

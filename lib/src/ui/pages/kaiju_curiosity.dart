@@ -1,5 +1,7 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
+import 'package:kaiu/src/ui/pages/error_page.dart';
 import 'package:youtube_shorts/youtube_shorts.dart';
 
 class KaijuCuriosity extends StatefulWidget {
@@ -14,21 +16,42 @@ class KaijuCuriosity extends StatefulWidget {
 class _KaijuCuriosityState extends State<KaijuCuriosity> {
   final theme = ThemeController.instance;
   late final ShortsController controller;
+  bool _isConnected = true;
+
+  // Método para verificar la conexión a Internet
+  Future<void> _checkInternetConnection() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      // No hay conexión
+      setState(() {
+        _isConnected = false;
+      });
+    } else {
+      // Hay conexión
+      setState(() {
+        _isConnected = true;
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    controller = ShortsController(
-      settings: ShortsControllerSettings(startWithAutoplay: true),
-      youtubeVideoSourceController: VideosSourceController.fromUrlList(
-        videoIds: [widget.shortLink],
-      ),
-    );
+    _checkInternetConnection().then((value) {
+      if (_isConnected) {
+        controller = ShortsController(
+          settings: ShortsControllerSettings(startWithAutoplay: true),
+          youtubeVideoSourceController: VideosSourceController.fromUrlList(
+            videoIds: [widget.shortLink],
+          ),
+        );
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _isConnected ? Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
@@ -92,7 +115,7 @@ class _KaijuCuriosityState extends State<KaijuCuriosity> {
           //Aquí puedes agregar más widgets para mostrar contenido sobre el fondo
         ],
       ),
-    );
+    ): ErrorPage();
   }
 
   @override

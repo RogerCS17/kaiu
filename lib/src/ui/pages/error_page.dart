@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kaiu/src/core/constants/data.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/ui/configure.dart';
-import 'package:kaiu/src/ui/pages/home.dart';
 
 class ErrorPage extends StatelessWidget {
   final FlutterErrorDetails? details;
@@ -25,7 +25,10 @@ class ErrorPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.background(),
       appBar: AppBar(
-        leading: Icon(Icons.wifi_off, color: theme.textPrimary(),),
+        leading: Icon(
+          Icons.wifi_off,
+          color: theme.textPrimary(),
+        ),
         elevation: 0,
         centerTitle: true,
         automaticallyImplyLeading: false,
@@ -65,18 +68,15 @@ class ErrorPage extends StatelessWidget {
                   )
                 : Text(
                     "¡Revisa tu Conexión a Internet!",
-                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
                   ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => Home()),
-                  (Route<dynamic> route) => false,
-                );
+                SystemNavigator.pop();
               },
-              child: Text("Regresar al Inicio"),
+              child: Text("Salir"),
             ),
           ],
         ),
