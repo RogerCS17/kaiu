@@ -29,7 +29,8 @@ class _BannerButtonState extends State<BannerButton>
 
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 2500), // Ajusta la duración según sea necesario
+      duration: Duration(
+          milliseconds: 2500), // Ajusta la duración según sea necesario
     );
 
     _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -48,8 +49,15 @@ class _BannerButtonState extends State<BannerButton>
     final heightSelector = MediaQuery.of(context).size.height / 6;
     final widthSelector = MediaQuery.of(context).size.width / 1.1;
 
-    return GestureDetector(
-      onTap: widget.onTap,
+    return InkWell(
+      splashColor: Colors.blue,
+      splashFactory: InkRipple.splashFactory,
+      onTap: () {
+        // Ejecuta la función onTap y luego espera 500 milisegundos antes de cambiar de página
+        Future.delayed(Duration(milliseconds: 550), () {
+          widget.onTap?.call();
+        });
+      },
       child: Container(
         alignment: Alignment.center,
         margin: const EdgeInsets.symmetric(vertical: 10),
@@ -72,7 +80,6 @@ class _BannerButtonState extends State<BannerButton>
                     height: heightSelector,
                     width: widthSelector,
                     child: Image.asset(
-                      
                       widget.image,
                       fit: BoxFit.cover,
                       width: double.infinity,

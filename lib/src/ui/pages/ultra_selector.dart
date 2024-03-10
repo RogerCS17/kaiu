@@ -7,12 +7,14 @@ class UltraSelector extends StatelessWidget {
   final bool isSelected;
   final int currentPageFake;
   final Function()? onPressed;
-  const UltraSelector(
-      {super.key,
-      this.ultra,
-      required this.isSelected,
-      required this.currentPageFake,
-      required this.onPressed});
+
+  const UltraSelector({
+    Key? key,
+    this.ultra,
+    required this.isSelected,
+    required this.currentPageFake,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +29,15 @@ class UltraSelector extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                GestureDetector(
-                  onTap: onPressed,
+                InkWell(
+                  splashFactory: InkSparkle.splashFactory,
+                  splashColor: Colors.blue,
+                  onTap: () {
+                    // Ejecuta la función onTap y luego espera 500 milisegundos antes de cambiar de página
+                    Future.delayed(Duration(milliseconds: 550), () {
+                      onPressed?.call();
+                    });
+                  },
                   child: Stack(
                     children: [
                       Card(

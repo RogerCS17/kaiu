@@ -7,6 +7,7 @@ import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/models/kaiju.dart';
 import 'package:kaiu/src/core/models/ultra.dart';
 import 'package:kaiu/src/core/services/database.dart';
+import 'package:kaiu/src/ui/configure.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
 import 'package:kaiu/src/ui/pages/kaiju_details.dart';
 
@@ -47,111 +48,131 @@ class _KaijuGaleryState extends State<KaijuGalery> {
   @override
   void initState() {
     super.initState();
-    _checkInternetConnection().then((value){
+    _checkInternetConnection().then((value) {
       _kaijuListFuture = _loadKaijuData();
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return _isConnected ? Scaffold(
-      appBar: AppBar(
-        actions: [
-          Builder(
-            // Usamos Builder para obtener un contexto dentro del Scaffold
-            builder: (context) => IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer(); // Abre el Drawer
-              },
-              icon: Icon(Icons.search),
-            ),
-          ),
-        ],
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: theme.backgroundUltraRed(),
-        title: Text(
-          widget.ultra.name!,
-          style: TextStyle(color: Colors.white),
-        ),
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
-      ),
-
-      //COMENTAR
-      drawer: Drawer(
-        width: MediaQuery.of(context).size.width,
-        backgroundColor: Colors.transparent,
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                style: TextStyle(color: Colors.white),
-                onChanged: (query) {
-                  setState(() {
-                    searchKaiju = query;
-                  });
+    return _isConnected
+        ? Scaffold(
+            appBar: AppBar(
+              actions: [
+                Builder(
+                  // Usamos Builder para obtener un contexto dentro del Scaffold
+                  builder: (context) => IconButton(
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer(); // Abre el Drawer
+                    },
+                    icon: Icon(Icons.search),
+                  ),
+                ),
+              ],
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  Navigator.pop(context);
                 },
-                decoration: InputDecoration(
-                  labelText: "Buscar Kaiju",
-                  labelStyle: TextStyle(color: Colors.white),
-                  prefixIcon: Icon(Icons.search), // Icono de búsqueda
-                  prefixIconColor: Colors.white,
-                  suffixIconColor: Colors.white.withOpacity(0.5),
-                ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      searchKaiju = "";
-                      Navigator.pop(context);
-                    });
-                  },
-                  child: Text("Ver todos"),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+              backgroundColor: theme.backgroundUltraRed(),
+              title: Text(
+                widget.ultra.name!,
+                style: TextStyle(color: Colors.white),
+              ),
+              iconTheme: IconThemeData(
+                color: Colors.white,
+              ),
+            ),
 
-      //COMENTAR
-      backgroundColor: theme.background(),
-      body: FutureBuilder<List<Kaiju>>(
-        future: _kaijuListFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Muestra un círculo de carga mientras se obtienen los datos
-            return Center(
-              child: SpinKitCubeGrid(
-                size: 100,
-                color: ThemeController.instance.exBackground(),
-                duration: Duration(milliseconds: 500),
+            //COMENTAR
+            drawer: Drawer(
+              width: MediaQuery.of(context).size.width,
+              backgroundColor: Colors.transparent,
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextField(
+                      style: TextStyle(color: Colors.white),
+                      onChanged: (query) {
+                        setState(() {
+                          searchKaiju = query;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: "Buscar Kaiju",
+                        labelStyle: TextStyle(color: Colors.white),
+                        prefixIcon: Icon(Icons.search), // Icono de búsqueda
+                        prefixIconColor: Colors.white,
+                        suffixIconColor: Colors.white.withOpacity(0.5),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Configure.ultraRedBackground,
+                                foregroundColor: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: Text("Aceptar"),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Configure.ultraRedBackground,
+                                foregroundColor: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                searchKaiju = "";
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: Text("Ver todos"),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            );
-          } else if (snapshot.hasError) {
-            // Muestra un mensaje de error si ocurrió algún problema al obtener los datos
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else {
-            // Muestra la lista de Kaijus una vez que se hayan obtenido los datos
-            final kaijuList = snapshot.data!;
-            return _buildKaijuGrid(kaijuList);
-          }
-        },
-      ),
-    ):ErrorPage();
+            ),
+
+            //COMENTAR
+            backgroundColor: theme.background(),
+            body: FutureBuilder<List<Kaiju>>(
+              future: _kaijuListFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // Muestra un círculo de carga mientras se obtienen los datos
+                  return Center(
+                    child: SpinKitCubeGrid(
+                      size: 100,
+                      color: ThemeController.instance.exBackground(),
+                      duration: Duration(milliseconds: 500),
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  // Muestra un mensaje de error si ocurrió algún problema al obtener los datos
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else {
+                  // Muestra la lista de Kaijus una vez que se hayan obtenido los datos
+                  final kaijuList = snapshot.data!;
+                  return _buildKaijuGrid(kaijuList);
+                }
+              },
+            ),
+          )
+        : ErrorPage();
   }
 
   Widget _buildKaijuGrid(List<Kaiju> kaijuList) {

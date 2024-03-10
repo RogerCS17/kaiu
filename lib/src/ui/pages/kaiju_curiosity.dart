@@ -2,7 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
-import 'package:youtube_shorts/youtube_shorts.dart';
+// import 'package:youtube_shorts/youtube_shorts.dart';
 
 class KaijuCuriosity extends StatefulWidget {
   //Puede ser un Link o "-"
@@ -15,7 +15,7 @@ class KaijuCuriosity extends StatefulWidget {
 
 class _KaijuCuriosityState extends State<KaijuCuriosity> {
   final theme = ThemeController.instance;
-  late final ShortsController controller;
+  // late final ShortsController controller;
   bool _isConnected = true;
 
   // Método para verificar la conexión a Internet
@@ -39,12 +39,12 @@ class _KaijuCuriosityState extends State<KaijuCuriosity> {
     super.initState();
     _checkInternetConnection().then((value) {
       if (_isConnected) {
-        controller = ShortsController(
-          settings: ShortsControllerSettings(startWithAutoplay: true),
-          youtubeVideoSourceController: VideosSourceController.fromUrlList(
-            videoIds: [widget.shortLink],
-          ),
-        );
+        // controller = ShortsController(
+        //   settings: ShortsControllerSettings(startWithAutoplay: true),
+        //   youtubeVideoSourceController: VideosSourceController.fromUrlList(
+        //     videoIds: [widget.shortLink],
+        //   ),
+        // );
       }
     });
   }
@@ -109,9 +109,11 @@ class _KaijuCuriosityState extends State<KaijuCuriosity> {
                     ],
                   ),
                 )
-              : YoutubeShortsPage(
-                  controller: controller,
-                ),
+              : Container(),
+
+                // YoutubeShortsPage(
+                //   controller: controller,
+                // ),
           //Aquí puedes agregar más widgets para mostrar contenido sobre el fondo
         ],
       ),
@@ -120,7 +122,7 @@ class _KaijuCuriosityState extends State<KaijuCuriosity> {
 
   @override
   void dispose() {
-    controller.dispose();
+    // controller.dispose();
     super.dispose();
   }
 }

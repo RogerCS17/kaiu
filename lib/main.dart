@@ -12,8 +12,8 @@ import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
-import 'package:youtube_shorts/youtube_shorts.dart';
 // import 'package:youtube_shorts/youtube_shorts.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +22,7 @@ void main() async {
   // Configurar Firebase Messaging para manejar notificaciones en segundo plano
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  MediaKit.ensureInitialized();
+  // MediaKit.ensureInitialized();
   await ThemeController.instance.initTheme();
   ErrorWidget.builder =
       (FlutterErrorDetails details) => ErrorPage(details: details);
@@ -53,8 +53,6 @@ Future<void> initializeFirebase() async {
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
-  // Aquí puedes agregar la lógica para manejar las notificaciones en segundo plano
-  // Puedes mostrar una notificación local o realizar cualquier otra acción necesaria.
 }
 
 
