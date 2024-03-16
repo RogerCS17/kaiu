@@ -128,7 +128,7 @@ class _HomeState extends State<Home> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ThreadsWidget(),
+                          child: ThreadsWidget(documentId: "k64WtpMUvfMUvcJ0fAOv"),
                         ),
                       ],
                     ),

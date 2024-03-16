@@ -12,8 +12,7 @@ import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiu/src/ui/widget/Logo/logo.dart';
-// import 'package:youtube_shorts/youtube_shorts.dart';
-
+import 'package:youtube_shorts/youtube_shorts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +21,7 @@ void main() async {
   // Configurar Firebase Messaging para manejar notificaciones en segundo plano
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  // MediaKit.ensureInitialized();
+  MediaKit.ensureInitialized();
   await ThemeController.instance.initTheme();
   ErrorWidget.builder =
       (FlutterErrorDetails details) => ErrorPage(details: details);
@@ -54,8 +53,6 @@ Future<void> initializeFirebase() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
 }
-
-
 
 Widget _buildNoConnectionApp() {
   return MaterialApp(
@@ -133,10 +130,9 @@ class MyApp extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: 100),
             child: SpinKitCubeGrid(
-              size: 75,
-              color: ThemeController.instance.exBackground(),
-              duration: Duration(milliseconds: 500)
-            ),
+                size: 75,
+                color: ThemeController.instance.exBackground(),
+                duration: Duration(milliseconds: 500)),
           ),
           Logo(),
           SizedBox(

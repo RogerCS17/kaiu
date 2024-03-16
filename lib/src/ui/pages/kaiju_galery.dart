@@ -197,16 +197,20 @@ class _KaijuGaleryState extends State<KaijuGalery> {
               final imageIndex = generateRandomNumberOneToNine();
               return Center(
                 child: InkWell(
+                  splashFactory: InkSparkle.splashFactory,
+                  splashColor: Colors.blue,
                   onTap: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => KaijuDetails(
-                          kaiju: kaiju,
-                          ultra: widget.ultra,
+                    Future.delayed(Duration(milliseconds: 250), () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => KaijuDetails(
+                            kaiju: kaiju,
+                            ultra: widget.ultra,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    });
                   },
                   child: Padding(
                     padding: EdgeInsets.all(9.0),

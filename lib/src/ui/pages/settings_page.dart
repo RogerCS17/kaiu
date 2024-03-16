@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kaiu/src/core/controllers/theme_controller.dart';
 import 'package:kaiu/src/core/services/database.dart';
-// import 'package:kaiu/src/ui/pages/admin_pages/admin_page_view.dart';
 import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
 
@@ -194,7 +193,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 onTap: () => deleteAccount(context),
               ),
-              // Divider(height:4),
+              Divider(height:4),
               // adminConfirmation()
               //     ? ListTile(
               //         leading: Icon(Icons.admin_panel_settings,
@@ -218,7 +217,7 @@ class _SettingsPageState extends State<SettingsPage> {
               //         },
               //       )
               //     : ListTile(),
-              Divider(height: 4),
+              // Divider(height: 4),
               ListTile(
                 title: Text(
                   'Versión de la App: ',
@@ -230,7 +229,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 subtitle: Text(
-                  'Kaiu v.1.1.5',
+                  'Kaiu v.1.1.6',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

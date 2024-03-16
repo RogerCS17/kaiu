@@ -34,6 +34,10 @@ class ThemeController {
   Color backgroundUltraRed() => brightnessValue
       ? Configure.ultraRed
       : Configure.ultraRedDark;
+  
+  Color backgroundThreads() => brightnessValue
+      ? Configure.backgroundWhiteThreads
+      : Configure.backgroundDarkThreads;
 
   //Funcion que permite cambiar de tema entre claro y obscuro
   void changeTheme() async {

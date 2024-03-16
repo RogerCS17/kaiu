@@ -10,4 +10,7 @@ class Configure{
 
   static const backgroundDarkSecondary = Color.fromARGB(255, 55, 71, 79);
   static const backgrountLightSecondary = Color.fromARGB(255, 245, 245, 245);
+
+  static const backgroundDarkThreads = Color.fromARGB(255, 53, 53, 53);
+  static const backgroundWhiteThreads =Color.fromARGB(255, 238, 236, 236);
 }

@@ -34,7 +34,7 @@ class UltraSelector extends StatelessWidget {
                   splashColor: Colors.blue,
                   onTap: () {
                     // Ejecuta la función onTap y luego espera 500 milisegundos antes de cambiar de página
-                    Future.delayed(Duration(milliseconds: 550), () {
+                    Future.delayed(Duration(milliseconds: 450), () {
                       onPressed?.call();
                     });
                   },
