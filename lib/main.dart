@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -15,19 +16,25 @@ import 'package:kaiu/src/ui/widget/Logo/logo.dart';
 import 'package:youtube_shorts/youtube_shorts.dart';
 
 void main() async {
+  //Asegurar la Inicialización de Flutter
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeFirebase(); // Inicializa Firebase primero
+
+  // Asegura la Inicialización de Firebase
+  await initializeFirebase();
 
   // Configurar Firebase Messaging para manejar notificaciones en segundo plano
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
+  //Driver de MediaKit
   MediaKit.ensureInitialized();
-  await ThemeController.instance.initTheme();
-  ErrorWidget.builder =
-      (FlutterErrorDetails details) => ErrorPage(details: details);
 
+  // Asegurar inicialización de MediaKit y configuración de temas
+  await _initializeAppDependencies();
+
+  // Verificar la conectividad antes de ejecutar la aplicación
   var connectivityResult = await Connectivity().checkConnectivity();
 
+  // Ejecutar la aplicación basado en el estado de conectividad
   if (connectivityResult == ConnectivityResult.none) {
     runApp(_buildNoConnectionApp());
   } else {
@@ -38,6 +45,14 @@ void main() async {
   }
 }
 
+//Inicializar Dependencias
+Future<void> _initializeAppDependencies() async {
+  await ThemeController.instance.initTheme();
+  ErrorWidget.builder =
+      (FlutterErrorDetails details) => ErrorPage(details: details);
+}
+
+//Inicializar Firebase
 Future<void> initializeFirebase() async {
   // Inicializa Firebase primero
   await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
@@ -51,7 +66,7 @@ Future<void> initializeFirebase() async {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
+  log("Handling a background message: ${message.messageId}");
 }
 
 Widget _buildNoConnectionApp() {

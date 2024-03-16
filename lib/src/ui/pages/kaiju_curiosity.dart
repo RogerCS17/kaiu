@@ -5,7 +5,6 @@ import 'package:kaiu/src/ui/pages/error_page.dart';
 import 'package:youtube_shorts/youtube_shorts.dart';
 
 class KaijuCuriosity extends StatefulWidget {
-  //Puede ser un Link o "-"
   final String shortLink;
   const KaijuCuriosity({Key? key, required this.shortLink}) : super(key: key);
 
@@ -14,6 +13,7 @@ class KaijuCuriosity extends StatefulWidget {
 }
 
 class _KaijuCuriosityState extends State<KaijuCuriosity> {
+  
   final theme = ThemeController.instance;
   late final ShortsController controller;
   bool _isConnected = true;

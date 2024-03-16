@@ -20,7 +20,7 @@ class KaijuDetails extends StatefulWidget {
       : super(key: key);
 
   @override
-  _KaijuDetailsState createState() => _KaijuDetailsState();
+  State<KaijuDetails> createState() => _KaijuDetailsState();
 }
 
 class _KaijuDetailsState extends State<KaijuDetails>

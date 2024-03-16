@@ -9,7 +9,7 @@ import 'package:kaiu/src/ui/pages/authentication_pages/login_page.dart';
 import 'package:kaiu/src/ui/pages/error_page.dart';
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage({
+  const SettingsPage({
     super.key,
   });
 

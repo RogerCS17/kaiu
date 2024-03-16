@@ -12,7 +12,7 @@ import 'package:kaiu/src/ui/pages/ultra_page_view.dart';
 // import 'package:kaiu/src/ui/widget/home_components/youtuber_player_screen.dart';
 
 class Home extends StatefulWidget {
-  Home({Key? key});
+  const Home({super.key,});
 
   @override
   State<Home> createState() => _HomeState();
@@ -128,7 +128,8 @@ class _HomeState extends State<Home> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ThreadsWidget(documentId: "k64WtpMUvfMUvcJ0fAOv"),
+                          child:
+                              ThreadsWidget(documentId: "k64WtpMUvfMUvcJ0fAOv"),
                         ),
                       ],
                     ),

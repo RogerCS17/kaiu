@@ -9,7 +9,7 @@ import 'package:kaiu/src/ui/widget/KaijuHabsPost/KaijuPost.dart';
 class KaijuHabs extends StatefulWidget {
   final Kaiju kaiju;
 
-  KaijuHabs({super.key, required this.kaiju});
+  const KaijuHabs({super.key, required this.kaiju});
 
   @override
   State<KaijuHabs> createState() => _KaijuHabsState();
