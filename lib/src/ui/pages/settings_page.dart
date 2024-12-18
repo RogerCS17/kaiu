@@ -229,7 +229,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 subtitle: Text(
-                  'Kaiu v.1.1.6',
+                  'Kaiu v.1.2.0',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
